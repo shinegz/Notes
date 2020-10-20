@@ -1,7 +1,7 @@
 ## JavaScript
 
-> javascript是一门单线程语言
-> Event Loop是javascript的执行机制
+> javascript是一门单线程语言，所谓单线程，是指在JS引擎中负责解释和执行JavaScript代码的线程只有一个。
+> Event Loop是Javascript的执行机制。
 
 ### JavaScript的定义
 
@@ -46,6 +46,13 @@ foo;
 null
 ```
 
++ 6种`falsy`值
+  + undefined
+  + null
+  + NaN
+  + 0
+  + ''(empty string)
+  + false
 + `null` 与 `undefined` 的不同点：
 
 当检测 `null` 或 `undefined` 时，注意[相等（==）与全等（===）两个操作符的区别) ，前者会执行类型转换：
@@ -108,7 +115,7 @@ isNaN(1 + undefined) // true
 
 + 作用域链
 
-> 当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途，是保证对执行环境有权访问的所有变量和函数的有序访问。当前执行的代码所在环境的变量对象始终是作用域链的始端，作用域链中的下一个变量对象来自前一个变量对象的包含环境，依次类推，一直到全局执行环境的变量对象；全局执行环境的变量对象始终是作用域链中的最后一个对象。
+> 当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途，是保证对执行环境有权访问的所有变量和函数的有序访问。当前执行的代码所在环境的变量对象始终是作用域链的始端，作用域链中的下一个变量对象来自前一个变量对象的父执行环境，依次类推，一直到全局执行环境的变量对象；全局执行环境的变量对象始终是作用域链中的最后一个对象。
 
 ## 关于强类型和弱类型；动态类型检查和静态类型检查；编译型和解释型
 
@@ -139,34 +146,40 @@ isNaN(1 + undefined) // true
   + 属性名
 
     一个对象的属性名可以是任何有效的 JavaScript 字符串，或者可以被转换为字符串的任何类型，包括空字符串。
-  
+
     **然而，一个属性的名称如果不是一个有效的 JavaScript 标识符（例如，一个由空格或连字符，或者以数字开头的属性名），就只能通过方括号标记访问。**
-  
+
     注意：方括号中的所有键都将转换为字符串类型。
-  
-  ECMAScript定义的对象中有两种属性：数据属性和访问器属性。
-  
-  + 数据属性是键值对， 并且每个数据属性拥有下列特性: 
-  
-  **数据属性的特性(Attributes of a data property)**
-  
-  | 特性             | 数据类型           | 描述                                                         | 默认值    |
-  | :--------------- | :----------------- | :----------------------------------------------------------- | :-------- |
-  | [[Value]]        | 任何Javascript类型 | 包含这个属性的数据值。                                       | undefined |
-  | [[Writable]]     | Boolean            | 如果该值为 `false，`则该属性的 [[Value]] 特性 不能被改变。   | false     |
-  | [[Enumerable]]   | Boolean            | 如果该值为 `true，`则该属性可以用 [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) 循环来枚举。 | false     |
-  | [[Configurable]] | Boolean            | 如果该值为 `false，`则该属性不能被删除，并且 除了 [[Value]] 和 [[Writable]] 以外的特性都不能被改变。 | false     |
-  
-  + 访问器属性有一个或两个访问器函数 (get 和 set) 来存取数值。
-  
-  | 特性             | 类型                   | 描述                                                         | 默认值    |
-  | :--------------- | :--------------------- | :----------------------------------------------------------- | :-------- |
-  | [[Get]]          | 函数对象或者 undefined | 该函数使用一个空的参数列表，能够在有权访问的情况下读取属性值。另见 `get。` | undefined |
-  | [[Set]]          | 函数对象或者 undefined | 该函数有一个参数，用来写入属性值，另见 `set。`               | undefined |
-  | [[Enumerable]]   | Boolean                | 如果该值为 `true，则该属性可以用` [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) 循环来枚举。 | false     |
-  | [[Configurable]] | Boolean                | 如果该值为 `false，则该属性不能被删除，并且不能被转变成一个数据属性。` | false     |
-  
-  以上这些特性只有 JavaScript 引擎才用到，因此不能直接访问它们。所以特性被放在两对方括号中，而不是一对。
+
+  + ECMAScript定义的对象中有两种属性：数据属性和访问器属性。
+
+    + 数据属性是键值对， 并且每个数据属性拥有下列特性: 
+
+    **数据属性的特性(Attributes of a data property)**
+
+    | 特性             | 数据类型           | 描述                                                         | 默认值    |
+    | :--------------- | :----------------- | :----------------------------------------------------------- | :-------- |
+    | [[Value]]        | 任何Javascript类型 | 包含这个属性的数据值。                                       | undefined |
+    | [[Writable]]     | Boolean            | 如果该值为 `false，`则该属性的 [[Value]] 特性 不能被改变。   | false     |
+    | [[Enumerable]]   | Boolean            | 如果该值为 `true，`则该属性可以用 [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) 循环来枚举。 | false     |
+    | [[Configurable]] | Boolean            | 如果该值为 `false，`则该属性不能被删除，并且 除了 [[Value]] 和 [[Writable]] 以外的特性都不能被改变。 | false     |
+
+    + 访问器属性有一个或两个访问器函数 (get 和 set) 来存取数值。
+
+    | 特性             | 类型                   | 描述                                                         | 默认值    |
+    | :--------------- | :--------------------- | :----------------------------------------------------------- | :-------- |
+    | [[Get]]          | 函数对象或者 undefined | 该函数使用一个空的参数列表，能够在有权访问的情况下读取属性值。另见 `get。` | undefined |
+    | [[Set]]          | 函数对象或者 undefined | 该函数有一个参数，用来写入属性值，另见 `set。`               | undefined |
+    | [[Enumerable]]   | Boolean                | 如果该值为 `true，则该属性可以用` [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) 循环来枚举。 | false     |
+    | [[Configurable]] | Boolean                | 如果该值为 `false，则该属性不能被删除，并且不能被转变成一个数据属性。` | false     |
+
+    以上这些特性只有 JavaScript 引擎才用到，因此不能直接访问它们。所以特性被放在两对方括号中，而不是一对。
+
+  + 删除属性
+
+    可以用 [delete](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/delete) 操作符删除一个**不是继承而来**和Configurable不为false的属性，如果删除成功，返回true，反之为false。
+
+    注：通过 `var`, `const` 或 `let` 关键字声明的变量无法用 `delete` 操作符来删除
 
 **使用new关键字和构造函数创建对象的过程**
 
@@ -193,12 +206,51 @@ let obj = new Test()
 
 在JavaScript中，没有类的机制，而是通过构造函数定义对象，同时，它的继承机制是基于原型链实现的，每个对象都有一个隐藏属性`__proto__`指向原型对象（与生成该对象的构造函数中的隐藏属性`prototype`指向的对象是同一个），并继承原型对象的所有特征，原型对象也可能继承于另一个对象，这就形成了一条原型链，每条原型链的最顶端是Object构造函数的原型对象。
 
-## JavaScript执行机制
+### JavaScript执行机制
 
-+ 浏览器环境下的JavaScript执行机制
-  JavaScript执行是单线程执行，一行一行的顺序执行，（如果将待执行的代码看做任务的话，我们将代码分为同步任务和异步任务）当遇到同步任务时立即执行代码，遇到异步任务时，则将该任务对应的事件放入事件列表并为其注册对应的回调函数，当事件发生时，将回调函数放入事件队列（Event Queue），当同步任务执行完后，执行线程会查询事件队列中是否有待执行的回调函数（按照先入先出的原则顺序执行）
-  Event Queue又分为宏任务队列和微任务队列，当执行到事件队列时会先将微任务队列里的任务全部执行完后，再去执行宏任务队列；当事件循环中的每个宏任务执行后，便会将微任务队列中的任务全部执行完，以此为一个循环，按照上述规则执行，我们将这样的执行过程称为事件循环（Event Loop）
-+ 在不同环境下，JavaScript的执行机制是不同，主要体现在事件队列的分类和各事件队列的执行顺序上。
+#### 浏览器环境下的JavaScript执行机制
+
+主线程从"任务队列"中读取事件，这个过程是循环不断的，所以整个的这种运行机制又称为Event Loop（事件循环）。
+
+![](.\TS\event_loop.png)
+
++ **事件循环（Event Loop）**
+
+  事件循环是一个在 JavaScript 引擎等待任务，执行任务和进入休眠状态等待更多任务这几个状态之间转换的无限循环。事件循环模型有效的避免了阻塞的发生。
+
+   JS引擎在进入事件循环时，首先会将宏任务队列中的第一个宏任务（即整体代码）放到执行栈中执行（全局执行环境进栈），在执行过程中如果遇到同步任务会立即执行，遇到异步任务（分为宏任务和微任务）则会先将其挂起（异步任务派生出对应事件和事件处理程序），继续执行执行栈中的其他任务。当一个异步事件发生时，JS引擎需要执行该事件的处理程序，如果此时引擎繁忙，会根据事件类型将事件放入宏任务事件队列或微任务事件队列。当执行栈中的所有任务都执行完毕， 主线程处于闲置状态时，主线程会依次执行当前微任务事件队列中事件所对应的处理程序，执行完后再去查找宏任务事件队列是否有任务，如果有，那么主线程会从中取出排在第一位的事件，并把这个事件对应的回调（事件处理程序）放入执行栈中，然后执行其中的同步任务...，如此反复，这样就形成了一个无限的循环。这就是这个过程被称为“事件循环（Event Loop）”的原因。
+
+  **事件循环简化算法：**
+
+  1. 从 **宏任务** 队列（例如 “script”）中出队（dequeue）并执行最早的任务。
+  2. 执行所有微任务：
+     - 当微任务队列非空时：
+       - 出队（dequeue）并执行最早的微任务。
+  3. 执行渲染，如果有。
+  4. 如果宏任务队列为空，则休眠直到出现宏任务。
+  5. 转到步骤 1。
+
++ **执行（环境）栈**
+
+  当我们执行函数的时候，js会生成一个与这个函数对应的执行环境（context），又叫执行上下文。这个执行环境中存在着这个函数的私有作用域，上层作用域的指向，函数的参数，这个作用域中定义的变量以及这个作用域的this对象。 而当一系列函数被嵌套依次调用的时候，对应的函数的执行环境会被依次压入一个栈中，在函数执行完后再将该执行环境弹出栈。这个栈被称为执行（环境）栈。
+
++ **宏任务（macrotask）和微任务（microtask）**
+
+  + 宏任务
+
+    宏任务包含：script(整体代码)、setTimeout、setInterval、I/O、UI交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)
+
+  + 微任务
+
+    在宏任务执行期间如果遇到微任务，并不会立刻执行它们，而是依次将它们放到一个队列（称为微任务队列microtask queue）中，在当前宏任务执行完后，再将微任务队列中的微任务依次全部执行完。
+
+    常见微任务有：Promise.then\catch\finally、MutaionObserver、process.nextTick(Node.js 环境)
+
++ **注意**
+
+  + 在不同环境下，JavaScript的执行机制是不同，主要体现在事件队列的分类和各事件队列的执行顺序上。
+  + 引擎执行任务时永远不会进行渲染（render）。如果任务执行需要很长一段时间也没关系。仅在任务完成后才会绘制对 DOM 的更改。
+  + 如果一项任务执行花费的时间过长，浏览器将无法执行其他任务，无法处理用户事件，因此，在一定时间后浏览器会在整个页面抛出一个如“页面未响应”之类的警报，建议你终止这个任务。这种情况常发生在有大量复杂的计算或导致死循环的程序错误时。
 
 ### 小语法
 
@@ -228,11 +280,11 @@ let obj = new Test()
 
 2.变量提升
 
-​	与`var`不同，`let`和`const`声明的变量，不会发生“变量提升”现象，即变量不能在声明之前使用，一旦使用就会报错。
+​	与`var`不同，`let`和`const`声明的变量，虽然会被提升，但不会被初始化（var声明的变量被提升并初始化为undefined），即变量不能在声明之前使用，一旦使用就会报错。
 
 3.暂时性死区
 
-​	被`let`和`const`命令声明的变量，它们不能在被声明之前读或写。 虽然这些变量始终“存在”于它们的作用域里，但在直到声明它的代码之前的区域都属于 *暂时性死区*。
+​	被`let`和`const`命令声明的变量，它们不能在被声明之前读或写。 **虽然这些变量始终“存在”于它们的作用域里，但在直到声明它的代码之前的区域都属于 *暂时性死区***。
 
 4.重复声明
 
@@ -331,11 +383,11 @@ fs.readFile('/etc/passwd', 'utf-8', function (err, data) {
 
 `async`函数内部`return`语句返回的值，会成为`then`方法回调函数的参数。`async`函数内部抛出错误，会导致返回的 Promise 对象变为`reject`状态。抛出的错误对象会被`catch`方法回调函数接收到。
 
-**注意：**`async`函数返回的 Promise 对象，必须等到内部所有`await`命令后面的 Promise 对象执行完，才会发生状态改变，除非遇到`return`语句或者抛出错误（任何一个`await`语句后面的 Promise 对象变为`reject`状态，那么整个`async`函数都会中断执行。）。也就是说，只有`async`函数内部的异步操作执行完，才会执行`then`方法指定的回调函数。
+**注意：**`async`函数返回的 Promise 对象，**必须等到内部所有`await`命令后面的 Promise 对象执行完，才会发生状态改变**，除非遇到`return`语句或者抛出错误（任何一个`await`语句后面的 Promise 对象变为`reject`状态，那么整个`async`函数都会中断执行。）。也就是说，只有`async`函数内部的异步操作执行完，才会执行`then`方法指定的回调函数。
 
 **所以async的使用要注意错误处理，可将await命令放入 try{}catch当中**
 
-* `await` 操作符用于等待一个`Promise` 对象。它只能在异步函数 `async function` 中使用。如果不是则会报错。（`await`其实是`Promise`的`then`方法的语法糖）
+* `await` 操作符用于等待一个`Promise` 对象。它只能在异步函数 `async function` 中使用。如果不是则会报错。（`await`其实是`Promise`的`then`方法的语法糖，await表达式的返回值相当于then方法接收的第一个参数，await后面剩余的代码被放到then回调函数体内）
 
 语法：
 
@@ -347,11 +399,11 @@ expression为 一个 `Promise` 对象或者任何要等待的值。
 
 如果等待的不是 `Promise `对象，则返回该值本身。（如果该值不是一个 `Promise`，`await` 会把该值转换为已正常处理的`Promise`，然后等待其处理结果。和返回值本身是一样的效果）
 
-执行逻辑：
+**执行逻辑：**
 
 await 表达式会暂停当前 `async function`的执行，等待 Promise 处理完成。若 Promise 正常处理(fulfilled)，其回调的resolve函数参数作为 await 表达式的值，继续执行 `async function`。若 Promise 处理异常(rejected)，await 表达式会把 Promise 的异常原因抛出。另外，如果 await 操作符后的表达式的值不是一个 Promise，则返回该值本身。
 
-**注意：**多个`await`命令后面的异步操作，如果不存在继发关系，最好让它们同时触发。写法     如下。
+**注意：**多个`await`命令后面的异步操作，如果不存在继发关系，最好让它们同时触发。写法如下。
 
 ```javascript
 let [foo, bar] = await Promise.all([getFoo(), getBar()]);
@@ -519,7 +571,7 @@ export {ns};
 
 因为`import`命令会被JavaScript引擎静态分析，先于模块内的其他语句执行，所有 `import`和`export`命令只能在模块的顶层，不能在代码块之中 。
 
-这样的设计是的条件加载不可能实现。因此， [ES2020提案](https://github.com/tc39/proposal-dynamic-import) 引入`import()`函数，支持动态加载模块。 
+这样的设计使得条件加载不可能实现。因此， [ES2020提案](https://github.com/tc39/proposal-dynamic-import) 引入`import()`函数，支持动态加载模块。 
 
 `import()`返回一个 Promise 对象。下面是一个例子。
 
@@ -692,8 +744,24 @@ JavaScript高级程序设计解释：当在函数内部定义了其它函数时�
 ### JS中的数据类型检测
 
 - typeof [val]: 用于检测数据类型的运算符
+
+  | 类型                                                         | 结果                                                         |
+  | :----------------------------------------------------------- | :----------------------------------------------------------- |
+  | [Undefined](https://developer.mozilla.org/zh-CN/docs/Glossary/undefined) | `"undefined"`                                                |
+  | [Null](https://developer.mozilla.org/zh-CN/docs/Glossary/Null) | `"object"` (见[下文](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof#null)) |
+  | [Boolean](https://developer.mozilla.org/zh-CN/docs/Glossary/Boolean) | `"boolean"`                                                  |
+  | [Number](https://developer.mozilla.org/zh-CN/docs/Glossary/Number) | `"number"`                                                   |
+  | [BigInt](https://developer.mozilla.org/zh-CN/docs/Glossary/BigInt)(ECMAScript 2020 新增) | `"bigint"`                                                   |
+  | [String](https://developer.mozilla.org/zh-CN/docs/Glossary/字符串) | `"string"`                                                   |
+  | [Symbol](https://developer.mozilla.org/zh-CN/docs/Glossary/Symbol) (ECMAScript 2015 新增) | `"symbol"`                                                   |
+  | 宿主对象（由 JS 环境提供）                                   | *取决于具体实现*                                             |
+  | [Function](https://developer.mozilla.org/zh-CN/docs/Glossary/Function) 对象 (按照 ECMA-262 规范实现 [[Call]]) | `"function"`                                                 |
+  | 其他任何对象                                                 | `"object"`                                                   |
+
 - instanceof ： 用来检测当前实例是否隶属于某个类
+
 - constructor ： 基于构造函数检测数据类型
+
 - Object.prototype.toString.call() : 检测数据类型最好的方法
 
 ### JS中的各类型值运算时的默认转换规则
@@ -758,7 +826,7 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
 - for in 循环 （主要为遍历{}而设计）
 
-  obj中有多少个属性**（自身以及从原型对象那里继承的可枚举属性，不包含不可枚举属性如：constructor、__proto__等）**就循环多少次
+  obj中有多少个属性**（自身以及从原型对象那里继承的除Symbol以外的可枚举属性）**就循环多少次
 
   for(let key in obj){
 
@@ -792,7 +860,7 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
 + 编写pure function的准则
 
-  函数的功能是提供input到output的映射，除此之外，不应该再有其他对外部程序状态的影响（如函数在执行过后，改变了函数外的变量的值）；对于相同的输入，永远输出相同的结果；函数内部的任何计算都不应该影响到外部作用域的变量；函数计算所需要的外部值只能通过形参获取，并且不能改变向形参传递值的实参的值。
+  函数的功能是提供input到output的映射，除此之外，不应该再有其他对外部程序状态的影响（如函数在执行过后，改变了函数外的变量的值）；**对于相同的输入，永远输出相同的结果**；函数内部的任何计算都不应该影响到外部作用域的变量；函数计算所需要的外部值只能通过形参获取，并且不能改变向形参传递值的实参的值。
 
   一个pure function的输出仅仅取决于它的输入。
 
