@@ -1,6 +1,6 @@
-## JavaScript
+# JavaScript
 
-> javascript是一门单线程语言，所谓单线程，是指在JS引擎中负责解释和执行JavaScript代码的线程只有一个。
+> Javascript是一门单线程语言，所谓单线程，是指在JS引擎中负责解释和执行JavaScript代码的线程只有一个。
 > Event Loop是Javascript的执行机制。
 
 ### JavaScript的定义
@@ -31,7 +31,62 @@ String、Number、Boolean、Undefined、Null、BigInt、Symbol
 
   除 Object 以外的所有类型都是不可变的（值本身无法被改变）。例如，与 C 语言不同，JavaScript 中字符串是不可变的（译注：如，JavaScript 中对字符串的操作一定返回了一个新字符串，原始字符串并没有被改变）。我们称这些类型的值为“原始值”。
 
-**null与undefined**
+### JS中的数据类型检测
+
+- typeof [val]: 用于检测数据类型的运算符
+
+  | 类型                                                         | 结果                                                         |
+  | :----------------------------------------------------------- | :----------------------------------------------------------- |
+  | [Undefined](https://developer.mozilla.org/zh-CN/docs/Glossary/undefined) | `"undefined"`                                                |
+  | [Null](https://developer.mozilla.org/zh-CN/docs/Glossary/Null) | `"object"` (见[下文](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof#null)) |
+  | [Boolean](https://developer.mozilla.org/zh-CN/docs/Glossary/Boolean) | `"boolean"`                                                  |
+  | [Number](https://developer.mozilla.org/zh-CN/docs/Glossary/Number) | `"number"`                                                   |
+  | [BigInt](https://developer.mozilla.org/zh-CN/docs/Glossary/BigInt)(ECMAScript 2020 新增) | `"bigint"`                                                   |
+  | [String](https://developer.mozilla.org/zh-CN/docs/Glossary/字符串) | `"string"`                                                   |
+  | [Symbol](https://developer.mozilla.org/zh-CN/docs/Glossary/Symbol) (ECMAScript 2015 新增) | `"symbol"`                                                   |
+  | 宿主对象（由 JS 环境提供）                                   | *取决于具体实现*                                             |
+  | [Function](https://developer.mozilla.org/zh-CN/docs/Glossary/Function) 对象 (按照 ECMA-262 规范实现 [[Call]]) | `"function"`                                                 |
+  | 其他任何对象                                                 | `"object"`                                                   |
+
+- instanceof ： 用来检测当前实例是否隶属于某个类
+
+- constructor ： 基于构造函数检测数据类型
+
+- Object.prototype.toString.call() : 检测数据类型最好的方法
+
+### JS中的各类型值运算时的默认转换规则
+
+JS中做`+`运算时，若运算值有string类型值时，则运算值默认转换为字符串并进行拼接，其中简单对象转换为[object Object]，其他类型的值转换的字符串引号内为其字面量
+
+true做数学运算时，自动转换为1；false在做数学运算时，自动转换为0
+
+null在做数学运算时，自动转换为0
+
+undefined在做数学运算时，自动转换为NaN，任何数学运算中出现了NaN，运算结果为NaN
+
+数字字符串在数学运算时，自动转换为对应number类型的值；其他字符串在做数学运算时，表达式的运算结果都为NaN
+
+'1'*'2'  //2
+
+’5‘-1  //4
+
+'a'-5  // NaN
+
+true + 1 + typeof undefined  // '2undefined'
+
+[1,3]-5 //NaN
+[1,3]+5  //"1,35"
+
+0、NaN、null、undefined、'' 在运用Boolean()转换为Boolean类型的值时是false，其他为true
+
+
+### null与undefined
+
+null与undefined是JavaScript的两个基本数据类型，都表示没有。
+
+null表示变量没有值，不指向任何地方，不与任何值相关联，它的出现是往往是人为设定给某个变量的。
+
+undefined表示变量没有值，表明一个变量应该与某个值相关联，但没有赋值，它的出现往往不是有意为之，是意料之外的。
 
 值 `null` 是一个字面量，不像 `undefined`，它不是全局对象的一个属性。`null` 是表示缺少的标识，指示变量未指向任何对象，而`undefined`表示变量应该有关联的值，但却没有。把 `null` 作为尚未创建的对象，也许更好理解。在 API 中，`null` 常在返回类型应是一个对象，但没有关联的值的地方使用。
 
@@ -68,6 +123,202 @@ null == null // true
 isNaN(1 + null) // false
 isNaN(1 + undefined) // true
 ```
+
+## 运算符
+
++ 相等运算符
+
+  ==：相等（如果左右两边数据值类型不同，默认先转换为相同的类型，然后比较；如果为引用类型的值，则比较是否为同一个对象）
+
+  ===：绝对相等（如果类型不一样，肯定不相等，不会默认转换数据类型；如果类型相同，基本数据类型的如果值是相同的，则相等，引用数据类型的如果引用同一个对象，则相等）
+
++ 逻辑运算符
+
+  逻辑运算符如下表所示 (其中*expr*可能是任何一种类型, 不一定是布尔值):
+
+  | 运算符              | 语法                 | 说明                                                         |
+  | :------------------ | :------------------- | :----------------------------------------------------------- |
+  | 逻辑与，AND（`&&`） | *expr1* && *expr2*   | 若 expr**1** 可转换为 `true`，则返回 expr**2**；否则，返回 expr**1**。 |
+  | 逻辑或，OR（`||`）  | *expr1* \|\| *expr2* | 若 expr**1** 可转换为 `true`，则返回 expr**1**；否则，返回 expr**2**。 |
+  | 逻辑非，NOT（`!`）  | !*expr*              | 若 `expr` 可转换为 `true`，则返回 `false`；否则，返回 `true`。 |
+
+  由于逻辑表达式的运算顺序是从左到右，也可以用以下规则进行"短路"计算：
+
+  - (some falsy expression) && (*expr)* 短路计算的结果为假。
+  - (some truthy expression) || *(expr)* 短路计算的结果为真。
+
+  短路意味着上述表达式中的expr部分**不会被执行**，因此expr的任何副作用都不会生效（举个例子，如果expr是一次函数调用，这次调用就不会发生）。造成这种现象的原因是，整个表达式的值在第一个操作数被计算后已经确定了。
+
++ 算数运算符
+
+  幂运算符返回第一个操作数做底数，第二个操作数做指数的乘方。即，`var1` `var2`，其中 `var1` 和 `var2` 是其两个操作数。幂运算符是右结合的。`a ** b ** c` 等同于 `a ** (b ** c)`。
+
+  注：底数前不能紧跟一元运算符（`+/-/~/!/delete/void/typeof`）
+
++ 一元运算符
+
+  + void
+
+    **`void` 运算符** 对给定的表达式进行求值，然后返回 undefined。
+
+    注：主要防止一个期望值为undefined的表达式产生副作用。
+  
+
+
+
++ 运算符优先级
+
+  下面的表将所有运算符按照优先级的不同从高（21）到低（0）排列。
+
+| 优先级 | 运算类型                    | 关联性        | 运算符           |
+| :----- | :-------------------------- | :------------ | :--------------- |
+| 21     | `圆括号`                    | n/a（不相关） | `( … )`          |
+| 20     | `成员访问`                  | 从左到右      | `… . …`          |
+|        | `需计算的成员访问`          | 从左到右      | `… [ … ]`        |
+|        | `new` (带参数列表)          | n/a           | `new … ( … )`    |
+|        | 函数调用                    | 从左到右      | `… ( … )`        |
+|        | 可选链（Optional chaining） | 从左到右      | `?.`             |
+| 19     | new (无参数列表)            | 从右到左      | `new …`          |
+| 18     | 后置递增(运算符在后)        | n/a           | `… ++`           |
+|        | 后置递减(运算符在后)        |               | `… --`           |
+| 17     | 逻辑非                      | 从右到左      | `! …`            |
+|        | 按位非                      |               | `~ …`            |
+|        | 一元加法                    |               | `+ …`            |
+|        | 一元减法                    |               | `- …`            |
+|        | 前置递增                    |               | `++ …`           |
+|        | 前置递减                    |               | `-- …`           |
+|        | typeof                      |               | typeof …         |
+|        | void                        |               | `void …`         |
+|        | delete                      |               | `delete …`       |
+|        | await                       |               | `await …`        |
+| 16     | 幂                          | 从右到左      | `… ** …`         |
+| 15     | 乘法                        | 从左到右      | `… * …`          |
+|        | 除法                        |               | `… / …`          |
+|        | 取模                        |               | `… % …`          |
+| 14     | 加法                        | 从左到右      | `… + …`          |
+|        | 减法                        |               | `… - …`          |
+| 13     | 按位左移                    | 从左到右      | `… << …`         |
+|        | 按位右移                    |               | `… >> …`         |
+|        | 无符号右移                  |               | `… >>> …`        |
+| 12     | 小于                        | 从左到右      | `… < …`          |
+|        | 小于等于                    |               | `… <= …`         |
+|        | 大于                        |               | `… > …`          |
+|        | 大于等于                    |               | `… >= …`         |
+|        | in                          |               | `… in …`         |
+|        | instanceof                  |               | `… instanceof …` |
+| 11     | 等号                        | 从左到右      | `… == …`         |
+|        | 非等号                      |               | `… != …`         |
+|        | 全等号                      |               | `… === …`        |
+|        | 非全等号                    |               | `… !== …`        |
+| 10     | 按位与                      | 从左到右      | `… & …`          |
+| 9      | 按位异或                    | 从左到右      | `… ^ …`          |
+| 8      | 按位或                      | 从左到右      | `… | …`          |
+| 7      | 逻辑与                      | 从左到右      | `… && …`         |
+| 6      | 逻辑或                      | 从左到右      | `… || …`         |
+| 5      | 空值合并                    | 从左到右      | `… ?? …`         |
+| 4      | 条件运算符                  | 从右到左      | `… ? … : …`      |
+| 3      | 赋值                        | 从右到左      | `… = …`          |
+|        |                             |               | `… += …`         |
+|        |                             |               | `… -= …`         |
+|        |                             |               | `… **= …`        |
+|        |                             |               | `… *= …`         |
+|        |                             |               | `… /= …`         |
+|        |                             |               | `… %= …`         |
+|        |                             |               | `… <<= …`        |
+|        |                             |               | `… >>= …`        |
+|        |                             |               | `… >>>= …`       |
+|        |                             |               | `… &= …`         |
+|        |                             |               | `… ^= …`         |
+|        |                             |               | `…|=`…`          |
+|        |                             |               | `… &&= …`        |
+|        |                             |               | `…||=…`          |
+|        |                             |               | `… ??= …`        |
+| 2      | yield                       | 从右到左      | `yield …`        |
+|        | yield*                      |               | `yield* …`       |
+| 1      | 展开运算符                  | n/a           | `...` …          |
+| 0      | 逗号                        | 从左到右      | `… , …`          |
+
+## 语句
+
+### 声明
+
+#### let和const命令
+
+> 在JS中，有六种声明变量的方式 var、let、const、function、import、Class、Symbol
+
+`let`和`const`命令是ES6新增的命令，用来声明变量，它的用法类似于var。
+
+1.作用域
+
+​	被`let`和`const`命令声明的变量，只在let命令所在的代码块内生效，代码块外无法访问；
+
+​	每次进入一个作用域时，会创建一个变量的 *环境*。当`let`声明出现在循环体里时拥有完全不同的行为。 不仅是在循环里引入了一个新的变量环境，而是针对 *每次迭代*都会创建这样一个新作用域。
+
+2.变量提升
+
+​	与`var`不同，`let`和`const`声明的变量，虽然会被提升，但不会被初始化（var声明的变量被提升并初始化为undefined），即变量不能在声明之前使用，一旦使用就会报错。
+
+3.暂时性死区
+
+​	被`let`和`const`命令声明的变量，它们不能在被声明之前读或写。 **虽然这些变量始终“存在”于它们的作用域里，但在直到声明它的代码之前的区域都属于 *暂时性死区***。
+
+4.重复声明
+
+​	在同一个块级作用域中，被`let`和`const`声明的变量不可重复声明。
+
+在ES6之前，JavaScript只有全局作用域和函数作用域，`let`命令实际上增加了块级作用域。块级作用域的应用场景：
+
+​	1.在函数作用域内声明变量
+
+​    2.在for循环中声明循环变量
+
+`const`声明一个只读的常量。一旦声明，常量的值就不能改变。 
+
+`const`实际上保证的，并不是变量的值不得改动，而是变量指向的那个栈内存地址所保存的数据不得改动。对于简单类型的数据（数值、字符串、布尔值），值就保存在变量指向的那个栈内存地址，因此等同于常量。但对于复合类型的数据（主要是对象和数组），变量指向的栈内存地址，保存的只是一个指向实际数据的指针，`const`只能保证这个指针是固定的（即总是指向另一个固定的地址），至于它指向的数据结构是不是可变的，就完全不能控制了。
+
+### 判断
+
+- if  else
+- expression ？ A  ： B
+- switch  case ；其中switch与case的比较是`===`
+
+### 控制流、迭代
+
+重复执行某些操作
+
+循环体中的两个关键字：
+
+continue：结束当前这轮循环（continue后面的代码不再执行），继续执行下一轮循环
+
+break：强制结束整个循环（break后面的代码也不再执行）
+
+- for 循环
+
+- for in 循环 （主要为遍历{}而设计）
+
+  obj中有多少个属性**（自身以及从原型对象那里继承的除Symbol以外的可枚举属性）**就循环多少次
+
+  for(let key in obj){
+
+  // 每次循环key变量存储的是当前对象的属性名
+
+  // 获取属性值的方法  obj[key]
+
+  // for in 在循环时优先循环数字属性名的属性（数字按照从小到大的顺序）
+
+  }
+
+- for of 循环（ES6新增）
+
+  一个数据结构只要部署了`Symbol.iterator`属性，就被视为具有 iterator 接口，就可以用`for...of`循环遍历它的成员**(对象自身属性，不包含原型对象上的属性)**。也就是说，`for...of`循环内部调用的是数据结构的`Symbol.iterator`方法。
+
+  `for...of`循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如`arguments`对象、DOM NodeList 对象）、后文的 Generator 对象，以及字符串。
+
+- while循环
+
+- do while循环
+
+
 
 ## 变量
 
@@ -115,7 +366,7 @@ isNaN(1 + undefined) // true
 
 + 作用域链
 
-> 当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途，是保证对执行环境有权访问的所有变量和函数的有序访问。当前执行的代码所在环境的变量对象始终是作用域链的始端，作用域链中的下一个变量对象来自前一个变量对象的父执行环境，依次类推，一直到全局执行环境的变量对象；全局执行环境的变量对象始终是作用域链中的最后一个对象。
+> 当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途，是**保证对执行环境有权访问的所有变量和函数的有序访问**。当**前执行的代码所在环境的变量对象**始终是**作用域链**的**始端**，作用域链中的下一个变量对象来自前一个变量对象的父执行环境，依次类推，一直到全局执行环境的变量对象；**全局执行环境的变量对象**始终是**作用域链**中的**最后**一个对象。
 
 ## 关于强类型和弱类型；动态类型检查和静态类型检查；编译型和解释型
 
@@ -129,7 +380,9 @@ isNaN(1 + undefined) // true
 >
 > **区分强弱类型的关键在于：是否容忍隐式类型转换**
 
-### JS中的对象
+
+
+## JS中的对象
 
 > 在计算机科学中，对象是指内存中可以被标识符所引用的一块区域
 
@@ -175,10 +428,14 @@ isNaN(1 + undefined) // true
 
     以上这些特性只有 JavaScript 引擎才用到，因此不能直接访问它们。所以特性被放在两对方括号中，而不是一对。
 
+    注：当配置对象属性时，并不一定是该对象的自身属性，有可能是继承来的属性。
+
+    ​		set 和 get 函数中的this对象为赋值时的this对象，不一定为定义该属性的对象。
+
   + 删除属性
-
+  
     可以用 [delete](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/delete) 操作符删除一个**不是继承而来**和Configurable不为false的属性，如果删除成功，返回true，反之为false。
-
+  
     注：通过 `var`, `const` 或 `let` 关键字声明的变量无法用 `delete` 操作符来删除
 
 **使用new关键字和构造函数创建对象的过程**
@@ -198,6 +455,26 @@ let obj = new Test()
 //3. Test.call(obj)
 ```
 
+### 内置对象
+
++ parseInt(string, radix)
+
+  解析一个字符串并返回指定基数的十进制整数， `radix` 是2-36之间的整数，表示被解析字符串的基数。
+
+  注：如果 `parseInt `遇到的字符不是指定 `radix `参数中的数字，它将忽略该字符以及所有后续字符，并返回到该点为止已解析的整数值。 `parseInt` 将数字截断为整数值。 允许前导和尾随空格。
+
++ parseFloat(string)
+
+  给定值被解析成浮点数。如果给定值不能被转换成数值，则会返回 `NaN`。
+
++ isNaN()
+
+  如果给定值为 `NaN`（not a number）则返回值为`true`；否则为`false`。
+
+  **`Number.isNaN()`** 方法确定传递的值是否为 `NaN`，并且检查其类型是否为 `Number`。
+
+  注：和全局函数 `isNaN()`相比，`Number.isNaN()` 不会自行将参数转换成数字，只有在参数值为 `NaN` 的数字时，才会返回 `true`。
+
 ### 基于原型链实现的Object Oriented
 
 面向对象编程是一种编程方法，正如它的名字所表达的意思，面向对象编程将代码组织到对象的定义当中，或者说类的定义当中，将具有相关行为的数据分组在一起，其中，数据是对象的属性，行为（或者函数）是对象的方法。面向对象的精髓在于消息的传递和处理。
@@ -206,7 +483,9 @@ let obj = new Test()
 
 在JavaScript中，没有类的机制，而是通过构造函数定义对象，同时，它的继承机制是基于原型链实现的，每个对象都有一个隐藏属性`__proto__`指向原型对象（与生成该对象的构造函数中的隐藏属性`prototype`指向的对象是同一个），并继承原型对象的所有特征，原型对象也可能继承于另一个对象，这就形成了一条原型链，每条原型链的最顶端是Object构造函数的原型对象。
 
-### JavaScript执行机制
+
+
+## JavaScript执行机制
 
 #### 浏览器环境下的JavaScript执行机制
 
@@ -252,55 +531,9 @@ let obj = new Test()
   + 引擎执行任务时永远不会进行渲染（render）。如果任务执行需要很长一段时间也没关系。仅在任务完成后才会绘制对 DOM 的更改。
   + 如果一项任务执行花费的时间过长，浏览器将无法执行其他任务，无法处理用户事件，因此，在一定时间后浏览器会在整个页面抛出一个如“页面未响应”之类的警报，建议你终止这个任务。这种情况常发生在有大量复杂的计算或导致死循环的程序错误时。
 
-### 小语法
-
-+ JS中的`\`
-
-在JavaScript中，\表示转义字符，若想用\符号，需要用\\表示,不能单独使用，否则会导致解析错误。
-
-+ 字符串中使用变量
-
-在Ecmascript6 的``字符串中，可以使用${}来引用变量
 
 
-
-## ECMAScript
-
-### let和const命令
-
-> 在JS中，有六种声明变量的方式 var、let、const、function、import、Class、Symbol
-
-`let`和`const`命令是ES6新增的命令，用来声明变量，它的用法类似于var。
-
-1.作用域
-
-​	被`let`和`const`命令声明的变量，只在let命令所在的代码块内生效，代码块外无法访问；
-
-​	每次进入一个作用域时，会创建一个变量的 *环境*。当`let`声明出现在循环体里时拥有完全不同的行为。 不仅是在循环里引入了一个新的变量环境，而是针对 *每次迭代*都会创建这样一个新作用域。
-
-2.变量提升
-
-​	与`var`不同，`let`和`const`声明的变量，虽然会被提升，但不会被初始化（var声明的变量被提升并初始化为undefined），即变量不能在声明之前使用，一旦使用就会报错。
-
-3.暂时性死区
-
-​	被`let`和`const`命令声明的变量，它们不能在被声明之前读或写。 **虽然这些变量始终“存在”于它们的作用域里，但在直到声明它的代码之前的区域都属于 *暂时性死区***。
-
-4.重复声明
-
-​	在同一个块级作用域中，被`let`和`const`声明的变量不可重复声明。
-
-在ES6之前，JavaScript只有全局作用域和函数作用域，`let`命令实际上增加了块级作用域。块级作用域的应用场景：
-
-​	1.在函数作用域内声明变量
-
-​    2.在for循环中声明循环变量
-
-`const`声明一个只读的常量。一旦声明，常量的值就不能改变。 
-
-`const`实际上保证的，并不是变量的值不得改动，而是变量指向的那个栈内存地址所保存的数据不得改动。对于简单类型的数据（数值、字符串、布尔值），值就保存在变量指向的那个栈内存地址，因此等同于常量。但对于复合类型的数据（主要是对象和数组），变量指向的栈内存地址，保存的只是一个指向实际数据的指针，`const`只能保证这个指针是固定的（即总是指向另一个固定的地址），至于它指向的数据结构是不是可变的，就完全不能控制了。
-
-### 异步
+## 异步
 
 所谓"异步"，简单说就是一个任务不是连续完成的，可以理解成该任务被人为分成两段，先执行第一段，然后转而执行其他任务，等做好了准备，再回过头执行第二段。
 
@@ -342,7 +575,9 @@ fs.readFile('/etc/passwd', 'utf-8', function (err, data) {
 
 原因是执行分成两段，第一段执行完以后，任务所在的上下文环境就已经结束了。在这以后抛出的错误，原来的上下文环境已经无法捕捉，只能当作参数，传入第二段。
 
-# Promise
+
+
+### Promise
 
 * **出现的背景**
 
@@ -409,7 +644,9 @@ await 表达式会暂停当前 `async function`的执行，等待 Promise 处理
 let [foo, bar] = await Promise.all([getFoo(), getBar()]);
 ```
 
-### Module
+
+
+## Module
 
 历史上，JavaScript 一直没有模块（module）体系，无法将一个大程序拆分成互相依赖的小文件，再用简单的方法拼装起来。其他语言都有这项功能，比如 Ruby 的`require`、Python 的`import`，甚至就连 CSS 都有`@import`，但是 JavaScript 任何这方面的支持都没有，这对开发大型的、复杂的项目形成了巨大障碍。
 
@@ -598,8 +835,9 @@ import(`./section-modules/${someVariable}.js`)
     因为 CommonJS 加载的是一个对象（即`module.exports`属性），该对象只有在脚本运行完才会生成 。 而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。 
 
   - CommonJS 模块的`require()`是同步加载模块，ES6 模块的`import`命令是异步加载，有一个独立的模块依赖的解析阶段。
+  
 
-### this
+## this
 
 `this`是 JavaScript 语言的一个关键字。
 
@@ -700,7 +938,9 @@ import(`./section-modules/${someVariable}.js`)
 
 总结一下，`this`是动态变化的，是在运行时才能确定的。
 
-### 闭包
+
+
+## 闭包
 
 > 在JavaScript中，函数总是可以访问创建它的上下文环境，这就叫做闭包。
 
@@ -740,113 +980,6 @@ JavaScript高级程序设计解释：当在函数内部定义了其它函数时�
 **闭包的用处**
 
 闭包可以用在许多地方。它的最大用处有两个，一个是可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。
-
-### JS中的数据类型检测
-
-- typeof [val]: 用于检测数据类型的运算符
-
-  | 类型                                                         | 结果                                                         |
-  | :----------------------------------------------------------- | :----------------------------------------------------------- |
-  | [Undefined](https://developer.mozilla.org/zh-CN/docs/Glossary/undefined) | `"undefined"`                                                |
-  | [Null](https://developer.mozilla.org/zh-CN/docs/Glossary/Null) | `"object"` (见[下文](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/typeof#null)) |
-  | [Boolean](https://developer.mozilla.org/zh-CN/docs/Glossary/Boolean) | `"boolean"`                                                  |
-  | [Number](https://developer.mozilla.org/zh-CN/docs/Glossary/Number) | `"number"`                                                   |
-  | [BigInt](https://developer.mozilla.org/zh-CN/docs/Glossary/BigInt)(ECMAScript 2020 新增) | `"bigint"`                                                   |
-  | [String](https://developer.mozilla.org/zh-CN/docs/Glossary/字符串) | `"string"`                                                   |
-  | [Symbol](https://developer.mozilla.org/zh-CN/docs/Glossary/Symbol) (ECMAScript 2015 新增) | `"symbol"`                                                   |
-  | 宿主对象（由 JS 环境提供）                                   | *取决于具体实现*                                             |
-  | [Function](https://developer.mozilla.org/zh-CN/docs/Glossary/Function) 对象 (按照 ECMA-262 规范实现 [[Call]]) | `"function"`                                                 |
-  | 其他任何对象                                                 | `"object"`                                                   |
-
-- instanceof ： 用来检测当前实例是否隶属于某个类
-
-- constructor ： 基于构造函数检测数据类型
-
-- Object.prototype.toString.call() : 检测数据类型最好的方法
-
-### JS中的各类型值运算时的默认转换规则
-
-JS中做`+`运算时，若运算值有string类型值时，则运算值默认转换为字符串并进行拼接，其中简单对象转换为[object Object]，其他类型的值转换的字符串引号内为其字面量
-
-true做数学运算时，自动转换为1；false在做数学运算时，自动转换为0
-
-null在做数学运算时，自动转换为0
-
-undefined在做数学运算时，自动转换为NaN，任何数学运算中出现了NaN，运算结果为NaN
-
-数字字符串在数学运算时，自动转换为对应number类型的值；其他字符串在做数学运算时，表达式的运算结果都为NaN
-
-'1'*'2'  //2
-
-’5‘-1  //4
-
-'a'-5  // NaN
-
-true + 1 + typeof undefined  // '2undefined'
-
-[1,3]-5 //NaN
-[1,3]+5  //"1,35"
-
-0、NaN、null、undefined、'' 在运用Boolean()转换为Boolean类型的值时是false，其他为true
-
-
-### null与undefined
-
-null与undefined是JavaScript的两个基本数据类型，都表示没有。
-
-null表示变量没有值，不指向任何地方，不与任何值相关联，它的出现是往往是人为设定给某个变量的。
-
-undefined表示变量没有值，表明一个变量应该与某个值相关联，但没有赋值，它的出现往往不是有意为之，是意料之外的。
-
-### =与== 与 ===
-
-= : 赋值，使变量与值相关联
-
-==：相等（如果左右两边数据值类型不同，默认先转换为相同的类型，然后比较；如果为引用类型的值，则比较是否为同一个对象）
-
-===：绝对相等（如果类型不一样，肯定不相等，不会默认转换数据类型；如果类型相同，基本数据类型的如果值是相同的，则相等，引用数据类型的如果引用同一个对象，则相等）
-
-### 判断
-
-- if  else
-- expression ？ A  ： B
-- switch  case ；其中switch与case的比较是`===`
-
-### 循环
-
-重复执行某些操作
-
-循环体中的两个关键字：
-
-continue：结束当前这轮循环（continue后面的代码不再执行），继续执行下一轮循环
-
-break：强制结束整个循环（break后面的代码也不再执行）
-
-- for 循环
-
-- for in 循环 （主要为遍历{}而设计）
-
-  obj中有多少个属性**（自身以及从原型对象那里继承的除Symbol以外的可枚举属性）**就循环多少次
-
-  for(let key in obj){
-
-  // 每次循环key变量存储的是当前对象的属性名
-
-  // 获取属性值的方法  obj[key]
-
-  // for in 在循环时优先循环数字属性名的属性（数字按照从小到大的顺序）
-
-  }
-
-- for of 循环（ES6新增）
-
-  一个数据结构只要部署了`Symbol.iterator`属性，就被视为具有 iterator 接口，就可以用`for...of`循环遍历它的成员**(对象自身属性，不包含原型对象上的属性)**。也就是说，`for...of`循环内部调用的是数据结构的`Symbol.iterator`方法。
-
-  `for...of`循环可以使用的范围包括数组、Set 和 Map 结构、某些类似数组的对象（比如`arguments`对象、DOM NodeList 对象）、后文的 Generator 对象，以及字符串。
-
-- while循环
-
-- do while循环
 
 
 
@@ -938,216 +1071,7 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
 
 
-### 数组中常用的方法
-
-- 方法的作用和含义
-- 方法的实参（类型和含义）
-- 方法的返回值
-- 原来的数组是否会发生改变
-
-**1、实现数组增删改的方法**
-
-> 这一部分方法都会改变原有的数据
-
-`push`
-
-> push:向数组末尾增加内容
->
-> @params
->
-> ​	多个任意类型
->
-> @return
->
-> ​	新增后数组的长度
-
-其他方法：arr[length] = item
-
-`pop`
-
-> pop:删除数组末尾位置的元素
->
-> @params
->
-> @return
->
-> ​	删除的那一项
-
-其他方法： arr.length = arr.length - 1; 使数组长度减一，默认删除数组的最后一项
-
-`unshift`
-
-> unshift:向数组开始位置增加内容
->
-> @params
->
-> ​	多个任意类型
->
-> @return
->
-> ​	新增后数组的长度
-
-其他方法：arr = [item, ...arr]，把原来的数组克隆一份，在新的数组中开始位置添加新元素
-
-`shift`
-
-> shift:删除数组开始位置的元素
->
-> @params
->
-> @return
->
-> ​	删除的那一项
-
-`splice`
-
-> splice: 实现数组的增加、删除、修改
->
-> @params
->
-> ​	start，num 都是数字，从索引start开始删除num个元素（num没有默认一直删除到末尾）
->
-> ​	start , num，x ... 从索引start开始，删除num个，然后将x从索引start开始依次插入数组
->
-> ​	eg: 1,1,'item1',‘item2’ 表示从索引1开始删除两个元素，然后将‘item1’、‘item2’依次插入
->
-> @return
->
-> ​	把删除的部分用新数组存储起来返回
-
-删除最后一项
-
-> arr.splice(arr.length-1)
-
-删除第一项
-
-> arr.splice(0,1)
-
-向指定索引位置处增加
-
-> arr.splice(index,0,item...)
-
-向数组末尾增加
-
-> arr.splice(arr.length,0,item)
-
-向数组开始增加
-
-> arr.splice(0,0,item)
-
-
-
-**2、数组的查询和拼接**
-
-> 以下方法，原来数组不会改变
-
-`slice`
-
-> slice：实现数组的查询
->
-> @params
->
-> ​	n,m 都是数字  从索引n开始，取到索引为m的项（不包括m这一项）
->
-> @return
->
-> ​	把找到的内容以一个新数组的形式返回
-
-`concat`
-
-> concat：实现数组的拼接
->
-> @params
->
-> ​	多个任意类型
->
-> @return
->
-> ​	拼接后的新数组（原来数组不变）
-
-
-
-**3、把数组转换为字符串**
-
-> 原有数组不变
-
-`join`
-
-> join：把数组转换为字符串
->
-> @params
->
-> ​	指定的分隔符（字符串格式）
->
-> @return
->
-> ​	转换后的字符串（原来数组不变）
-
-**4、验证数组中是否包含某一项**
-
-`indexof/lastIndexof/includes`
-
-> indexof：
->
-> @params
->
-> ​	单个任意类型
->
-> @return
->
-> ​	检验项的索引（没有则为-1）
-
-includes返回true or false
-
-**5、数组的排序或者排列**
-
-`reverse`
-
-> reverse：把数组倒过来排列
->
-> @params
->
-> @return
->
-> ​	排列后的新数组
->
-> 原来数组改变
-
-`sort`
-
-> sort：实现数组排序
->
-> @params
->
-> ​	可以没有，也可以是个函数
->
-> @return
->
-> ​	排序后的新数组
->
-> 原来数组改变
-
-SORT方法如果不传递参数，是无法处理10以上数字排序的
-
-**6、遍历数组中的每一项的方法**
-
-`forEach`
-
-`map`
-
-`filter`
-
-`find`
-
-`reduce`
-
-`some`
-
-`every`
-
-
-
-## DOM
+# DOM
 
 > DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript.
 > The root of the tree is the "[Document](http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#i-Document)" object.
@@ -1192,7 +1116,7 @@ SORT方法如果不传递参数，是无法处理10以上数字排序的
   + nodeType：9
   + nodeName：‘#document’
   + nodeValue：null
-- 文档类型节点和顶层元素节点HTML为文档根节点的两个子节点
+- 文档类型（DocumentType）节点和顶层元素节点HTML为文档（Document）根节点的两个子节点
 
 描述这些节点之间的关系的属性
 
@@ -1339,7 +1263,5 @@ styleObj['属性名']
 styleObj.属性名
 ```
 
-
-
-### BOM
+# BOM
 

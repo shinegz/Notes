@@ -2,9 +2,9 @@
 
 > 层叠样式表（**C**ascading **S**tyle **S**heet，简称：CSS），它是一门样式表语言，可以用它来选择性地为网页中的 HTML 元素添加样式。它描述的是HTML元素的布局和表现。
 
-### “CSS 规则集”详解
+### 语法和基本数据类型
 
-![](D:\GitProjects\notes\前端\JS笔记图\css图\css-declaration.png)
+![](\css图\css-declaration.png)
 
 整个结构称为 **规则集**（通常简称“规则”），各部分释义如下：
 
@@ -34,36 +34,176 @@
 
 ### 选择器
 
-| Selector                                                     | Example             | Learn CSS tutorial                                           |
-| :----------------------------------------------------------- | :------------------ | :----------------------------------------------------------- |
-| [Type selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Type_selectors) | `h1 { }`            | [Type selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors#Type_selectors) |
-| [Universal selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Universal_selectors) | `* { }`             | [The universal selector](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors#The_universal_selector) |
-| [Class selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Class_selectors) | `.box { }`          | [Class selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors#Class_selectors) |
-| [id selector](https://developer.mozilla.org/en-US/docs/Web/CSS/ID_selectors) | `#unique { }`       | [ID selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Type_Class_and_ID_Selectors#ID_Selectors) |
-| [Attribute selector](https://developer.mozilla.org/en-US/docs/Web/CSS/Attribute_selectors) | `a[title] { }`      | [Attribute selectors](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Attribute_selectors) |
-| [Pseudo-class selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-classes) | `p:first-child { }` | [Pseudo-classes](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pseuso-classes_and_Pseudo-elements#What_is_a_pseudo-class) |
-| [Pseudo-element selectors](https://developer.mozilla.org/en-US/docs/Web/CSS/Pseudo-elements) | `p::first-line { }` | [Pseudo-elements](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Pseuso-classes_and_Pseudo-elements#What_is_a_pseudo-element) |
-| [Descendant combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/Descendant_combinator) | `article p`         | [Descendant combinator](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Combinators#Descendant_Selector) |
-| [Child combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/Child_combinator) | `article > p`       | [Child combinator](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Combinators#Child_combinator) |
-| [Adjacent sibling combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/Adjacent_sibling_combinator) | `h1 + p`            | [Adjacent sibling](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Combinators#Adjacent_sibling) |
-| [General sibling combinator](https://developer.mozilla.org/en-US/docs/Web/CSS/General_sibling_combinator) | `h1 ~ p`            | [General sibling](https://developer.mozilla.org/en-US/docs/Learn/CSS/Building_blocks/Selectors/Combinators#General_sibling) |
+> 在CSS中，模式匹配规则确定哪些样式规则适用于文档树中的元素。 这些模式称为选择器，从简单的元素名称模式到丰富的上下文模式。 如果模式中的所有条件对于某个元素都为真，则选择器匹配该元素。
+
+| Pattern                  | Meaning                                                      | Described in section                                         | First defined in CSS level |
+| :----------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- | :------------------------: |
+| *                        | any element                                                  | [Universal selector](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#universal-selector) |             2              |
+| E                        | an element of type E                                         | [Type selector](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#type-selectors) |             1              |
+| E[foo]                   | an E element with a "foo" attribute                          | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             2              |
+| E[foo="bar"]             | an E element whose "foo" attribute value is exactly equal to "bar" | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             2              |
+| E[foo~="bar"]            | an E element whose "foo" attribute value is a list of whitespace-separated values, one of which is exactly equal to "bar" | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             2              |
+| E[foo^="bar"]            | an E element whose "foo" attribute value begins exactly with the string "bar" | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             3              |
+| E[foo$="bar"]            | an E element whose "foo" attribute value ends exactly with the string "bar" | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             3              |
+| E[foo*="bar"]            | an E element whose "foo" attribute value contains the substring "bar" | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             3              |
+| E[foo\|="en"]            | an E element whose "foo" attribute has a hyphen-separated list of values beginning (from the left) with "en" | [Attribute selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#attribute-selectors) |             2              |
+| E:root                   | an E element, root of the document                           | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:nth-child(n)           | an E element, the n-th child of its parent                   | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:nth-last-child(n)      | an E element, the n-th child of its parent, counting from the last one | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:nth-of-type(n)         | an E element, the n-th sibling of its type                   | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:nth-last-of-type(n)    | an E element, the n-th sibling of its type, counting from the last one | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:first-child            | an E element, first child of its parent                      | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             2              |
+| E:last-child             | an E element, last child of its parent                       | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:first-of-type          | an E element, first sibling of its type                      | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:last-of-type           | an E element, last sibling of its type                       | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:only-child             | an E element, only child of its parent                       | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:only-of-type           | an E element, only sibling of its type                       | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:empty                  | an E element that has no children (including text nodes)     | [Structural pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#structural-pseudos) |             3              |
+| E:link E:visited         | an E element being the source anchor of a hyperlink of which the target is not yet visited (:link) or already visited (:visited) | [The link pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#link) |             1              |
+| E:active E:hover E:focus | an E element during certain user actions                     | [The user action pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#useraction-pseudos) |          1 and 2           |
+| E:target                 | an E element being the target of the referring URI           | [The target pseudo-class](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#target-pseudo) |             3              |
+| E:lang(fr)               | an element of type E in language "fr" (the document language specifies how language is determined) | [The :lang() pseudo-class](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#lang-pseudo) |             2              |
+| E:enabled E:disabled     | a user interface element E which is enabled or disabled      | [The UI element states pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#UIstates) |             3              |
+| E:checked                | a user interface element E which is checked (for instance a radio-button or checkbox) | [The UI element states pseudo-classes](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#UIstates) |             3              |
+| E::first-line            | the first formatted line of an E element                     | [The ::first-line pseudo-element](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#first-line) |             1              |
+| E::first-letter          | the first formatted letter of an E element                   | [The ::first-letter pseudo-element](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#first-letter) |             1              |
+| E::before                | generated content before an E element                        | [The ::before pseudo-element](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#gen-content) |             2              |
+| E::after                 | generated content after an E element                         | [The ::after pseudo-element](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#gen-content) |             2              |
+| E.warning                | an E element whose class is "warning" (the document language specifies how class is determined). | [Class selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#class-html) |             1              |
+| E#myid                   | an E element with ID equal to "myid".                        | [ID selectors](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#id-selectors) |             1              |
+| E:not(s)                 | an E element that does not match simple selector s           | [Negation pseudo-class](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#negation) |             3              |
+| E F                      | an F element descendant of an E element                      | [Descendant combinator](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#descendant-combinators) |             1              |
+| E > F                    | an F element child of an E element                           | [Child combinator](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#child-combinators) |             2              |
+| E + F                    | an F element immediately preceded by an E element            | [Adjacent sibling combinator](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#adjacent-sibling-combinators) |             2              |
+| E ~ F                    | an F element preceded by an E element                        | [General sibling combinator](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#general-sibling-combinators) |             3              |
 
 
 
 ### CSS属性值
 
-CSS的属性值可以是单个值，也可以是值的组合。
++ 整数和实数（Integers and real numbers）
 
-CSS的属性值大概可以分为三大类：
++ 长度（Lengths）
 
-+ 关键字类型：如red、float、relative、auto等。
-+ 数值类型：如1.2、50%、16px、1.5em等。
-  + 数字
-  + 长度
-    + 绝对长度：如px
-    + 相对长度：em（在font-size中表示父元素的字体大小、其他属性中则为自身字体大小）、rem（根元素字体大小）、vw（视窗宽度的1%）、vh（视窗高度的1%）、vmin（视窗较小尺寸的1%）、vmax（视窗较大尺寸的1%）
-  + 百分比：相对的是父元素
-+ 函数类型：如rgb(255,12,0)、rgba(255,12,0.6)a表示透明度、hsl(360,60%,50%)三个值分别表示色调（0-360）饱和度亮度、hsla()、url()、linear-gradient()等。
+  非零长度格式：<number> + unit identifier；如果是零长度的话，后面的单位是可选的。
+
+  + 相对长度单位
+    + em（在font-size中表示父元素的字体大小、其他属性中则为自身字体大小）
+    + rem（根元素字体大小）
+    + vw（视窗宽度的1%）
+    + vh（视窗高度的1%）
+    + vmin（视窗较小尺寸的1%）
+    + vmax（视窗较大尺寸的1%）
+  + 绝对长度单位
+    - **in**: inches — 1in is equal to 2.54cm.
+    - **cm**: centimeters
+    - **mm**: millimeters
+    - **pt**: points — the points used by CSS are equal to 1/72nd of 1in.
+    - **pc**: picas — 1pc is equal to 12pt.
+    - **px**: pixel units — 1px is equal to 0.75pt.
+
++ 百分数（percentages）
+
+  <number>  + %
+
++ URLS and URIs
+
+  url(...)
+
++ Counters
+
++ 颜色（Colors）
+  + 关键字，如：red、blue
+  + 十六进制数值，如#fd32fa，#fa2
+  + 函数，如rgb(255,255,255)、rgb(100%,100%,100%)、rgba(255,255,255,.4)
++ 字符串（strings）
+
++ 不支持的值（unsupported values）
+
+
+
+### 属性赋值，级联和继承
+
+> 浏览器在解析文档并构建文档树之后，它必须为树中的每个元素的每个属性分配一个适用于目标媒体类型的值。
+>
+> 属性的最终值是一个四步计算的结果：
+>
+> 1、指定属性的值（specified value）
+>
+> 2、将指定值解析为用于继承的值（computed value）
+>
+> 3、如果必要的话，将computed value转换为绝对值（used value使用值）
+>
+> 4、根据本地环境的限制进行转换（actual value）
+
+##### specified，computed，and actual values
+
++ specified values
+
+  得出specified value的机制：
+
+  + 如果级联产生了一个值，则使用该值。此外，如果该值为‘inherit’，则：
+
+    每个属性还可以具有“ inherit”的级联值，这意味着对于给定元素，该属性将元素父级的计算值作为指定值。 “inherit”值可用于强制值的继承，也可用于通常不继承的属性。如果在根元素上设置了“继承”值，则会为属性分配其初始值。
+
+  + 否则，如果该属性是继承的，并且该元素不是root元素，则使用父元素的computed value。
+
+  + 否则，使用属性的初始值。每个属性的初始值在属性的定义中指定。
+
++ computed values
+
+  在级联过程中，将指定值(specified values)解析为计算值； 例如，将URI设置为绝对，然后将“ em”和“ ex”单位计算为像素或绝对长度。
+
++ used values
+
+  使用值（used value）是采用计算值（computed value）并将任何剩余依赖项解析为绝对值的结果。
+
++ actual values
+
+  使用值（used value）原则上是用于渲染的值，但是user agent可能无法在给定环境中使用该值，这时需要根据具体环境进行转换。
+
+##### cascade
+
+> 样式表可能有三个不同的来源：author、user、user agent。
+>
+> 这三个来源的样式表在作用域上会重叠，并且会根据级联进行交互。
+>
+> CSS级联为每个样式规则分配权重。 当应用多个规则时，权重最大的规则优先。
+>
+> 默认情况下，作者样式表中的规则比用户样式表中的规则具有更大的权重。 但是，对于“! important”规则，优先级相反。 与UA的默认样式表中的规则相比，所有用户和作者规则的权重都更大。
+
++ cascading order
+
+  要查找元素/属性组合的值，用户代理必须应用以下排序顺序
+
+  + 1.查找适用于目标媒体类型的所有相关元素和属性的声明。 如果关联的选择器与所讨论的元素匹配，并且目标媒体与包含声明的所有@media规则以及到达样式表的路径上的所有链接上的媒体列表相匹配，则声明适用。
+  + 2.根据重要性（normal or important）和来源（author、user、user agent）。按升序排列为：
+    1. user agent declarations
+    2. user normal declarations
+    3. author normal declarations
+    4. author important declarations
+    5. user important declarations
+  + 3.按选择器的特异性对具有相同重要性和起源的规则进行排序：更具体的选择器将覆盖更通用的选择器。 伪元素和伪类分别计为普通元素和类。
+  + 4.最后，按指定的顺序排序：如果两个声明的权重，来源和特异性相同，则以后者为准。 导入的样式表中的声明被视为在样式表本身中的任何声明之前。
+
++ !important rules
+
+  !important 声明的规则优先级高于普通声明，并且user中的‘!important’优先级高于author。
+
++ calculating a selector's specificity
+
+  A selector's specificity is calculated as follows:
+
+  - count 1 if the declaration is from is a 'style' attribute rather than a rule with a selector, 0 otherwise (= a) (In HTML, values of an element's "style" attribute are style sheet rules. These rules have no selectors, so a=1, b=0, c=0, and d=0.)
+  - count the number of ID attributes in the selector (= b)
+  - count the number of other attributes and pseudo-classes in the selector (= c)
+  - count the number of element names and pseudo-elements in the selector (= d)
+
+
+
+### 媒体类型
+
+
 
 
 
@@ -71,56 +211,104 @@ CSS的属性值大概可以分为三大类：
 
 > 完整的 CSS 盒模型应用于块级盒子，内联盒子只使用盒模型中定义的部分内容。模型定义了盒的每个部分 —— margin, border, padding, and content —— 合在一起就可以创建我们在页面上看到的内容。
 
- CSS中组成一个块级盒子需要:
+ ![](\css图\box-model.png)
+
+CSS中组成一个块级盒子需要:
 
 - **Content box**: 这个区域是用来显示内容，大小可以通过设置 `width` 和 `height`.
 - **Padding box**: 包围在内容区域外部的空白区域； 大小通过 `padding`相关属性设置。
 - **Border box**: 边框盒包裹内容和内边距。大小通过 `border`相关属性设置。
 - **Margin box**: 这是最外面的区域，是盒子和其他元素之间的空白区域。大小通过 `margin` 相关属性设置。
 
-CSS的box模型有一个外部显示类型，来决定盒子是块级还是内联。
+**CSS的box模型有一个外部显示类型，来决定盒子是块级还是内联**。
 
-同样盒模型还有内部显示类型，它决定了盒子内部元素是如何布局的。默认情况下是按照 **正常文档流** 布局，也意味着它们和其他块元素以及内联元素一样。
+**同样盒模型还有内部显示类型，它决定了盒子内部元素是如何布局的**。默认情况下是按照 **正常文档流** 布局，也意味着它们和其他块元素以及内联元素一样。
 
 但是，我们可以通过使用类似 `flex` 的 `display` 属性值来更改内部显示类型。 如果设置 `display: flex`，在一个元素上，外部显示类型是 `block`，但是内部显示类型修改为 `flex`。 该盒子的所有直接子元素都会成为flex元素，会根据 弹性盒子（Flexbox）规则进行布局。
 
-### **css属性参考手册：** https://www.w3cschool.cn/cssref/ 
 
-一般常用属性：
 
-+ margin：margin-top（bottom、left、right）
+### 视觉格式化模型
 
-+ padding : padding-top（bottom、left、right）
+> 用来处理和在视觉媒体上显示文档时使用的计算规则（layout）。
 
-+ border ：简写语法 border ： style  color  width（同时为四个边设置三个属性）
+视觉格式化模型会根据css盒子模型将文档中的元素转换为一个个盒子，每个盒子的布局由以下因素决定：
 
-​                 单个边框语法： border-方位-样式
-
-​                 方位属性： -top、-left、-bottom、-right
-
-​                 样式属性： -style、-color、-width
-
-+ boder-radius: 语法： border-*-radius
-
-​                         为 top-left、top-right、bottom-left、bottom-right
-
-+ outline：轮廓线不影响页面布局，轮廓线显示在边框外边
-
-​                语法： 简写语法outline ： style  color  width
-
-​                             一般语法 outline-style、outline-color、outline-width
-
-+ box-sizing：border-box表示元素高度与宽度包括内边距和边框
-
-​                      border-content表示元素高度与宽度只是内容宽度
-
-+ box-shadow：语法 box-shadow: *h-shadow v-shadow blur spread color* inset;  
-
-+ visibility：控制元素的显示隐藏，在隐藏后空间位也保留。 
++ 盒子类型（box type）
+  + 行内盒子（inline）、行内级盒子（inline-level）、原子行内级盒子（atomic inline-level）、块盒子（block）
++ 盒子尺寸（box dimension）
++ 定位方案（position scheme）
++ 文档树中元素之间的关系
++ external information（如照片的大小、视口的大小等）
 
 
 
-### Positioning scheme
+**containing block**
+
+> 元素box的尺寸或位置有时需要根据某个矩形来计算，这个矩形被称为该元素的‘包含块’。（采用百分比来定义元素box的width、height、padding、margin，绝对定位元素的offset属性等）
+>
+> “包含块”的定义
+>
+> + 对于根元素来说，其包含块是一个被称为‘初始包含块’的矩形，对于连续媒体，它具备和视口一样的尺寸，并被固定在画布原点；对于分页媒体，它为页面区域。
+>
+> + 对于其他元素
+>
+>   + position属性值为relative或static
+>
+>   ​       则包含的块由作为块容器或建立格式化上下文的最近祖先框的‘content edge’（盒子模型的内容框）形成。
+>
+>   + position属性值为fixed
+>
+>   ​    在连续媒体里，包含块为视口；在分页媒体里，包含块为页面区域。
+>
+>   + position属性值为absolute
+>
+>     + 有position属性值不为static的祖先元素
+>
+>     ​       **祖先元素为inline元素：**
+>
+>     ​		其他情况：包含块为祖先元素的‘padding edge’形成。
+>
+>     + 没有position属性值不为static的祖先元素
+>
+>       包含块为初始包含块
+
+
+
+#### 盒子的生成
+
+> 盒子具有不同的类型，盒子的类型部分地影响其在视觉格式化模型中的行为。 “ display”属性指定了盒子的类型。
+
++ 块级元素（Block-level ）和块盒子（block box）
+
+  + **块级元素**：被视觉格式化为block的源文档中的元素
+
+  当元素的 `display`为 `block`、`list-item` 或 `table` 时，该元素将成为块级元素。
+
+  + **块级盒子**：block-level box，由块级元素生成。一个块级元素至少会生成一个块级盒子，但也有可能生成多个（例如列表项元素）。参与**块格式化上下文**（block formatting context）（规定了块级盒子的渲染方式）的创建。**描述元素与其父元素和兄弟元素之间的行为**。
+
+  + **块容器盒子**：block container box或block containing box，块容器盒子侧重于当前盒子作为“容器”的这一角色，它不参与当前块的布局和定位，它所描述的仅仅是当前盒子与其后代之间的关系。换句话说，块容器盒子主要用于确定其子元素的定位、布局等。
+
+    **描述元素跟其后代之间的行为**
+
+  + **块盒子**：block box，如果一个块级盒子同时也是一个块容器盒子，则称其为块盒子。
+  + **匿名块盒子**
+
++ 行内级元素（Inline-level）和行内盒子（inline box）
+
+  + **行内级元素**：源文档中不构成内容块的那些元素
+
+  如果一个元素的 `display` 属性为 `inline`、`inline-block` 或 `inline-table`，则称该元素为行内级元素。
+
+  + **行内级盒子**：inline-level box，行内级元素会生成行内级盒子，行内级盒子包括行内盒子和原子行内级盒子两种，区别在于该盒子是否参与行内格式化上下文（inline formatting context）的创建。
+  + **行内盒子**：inline box，参与行内格式化上下文创建的行内级盒子称为行内盒子。
+  + **匿名行内盒子**
+
++ 其他类型盒子
+
+
+
+#### Positioning scheme
 
 > 它们之间的不同在于：1、定位的参照物不同。2、是否脱离正常文档流。
 
@@ -130,50 +318,108 @@ There are three schemes:
 2. Float: the object is first laid out like normal flow, then moved as far left or right as possible
 3. Absolute: the object is put in the render tree in a different place than in the DOM tree
 
-
-
 The positioning scheme is set by the "position" property and the "float" attribute.
 
 - static and relative cause a normal flow
 - absolute and fixed cause absolute positioning
 
-
 In static positioning no position is defined and the default positioning is used. In the other schemes, the author specifies the position: top, bottom, left, right.
 
 
 
-The way the box is laid out is determined by:
+##### 普通文档流（normal flow）
 
-- Box type
-- Box dimensions
-- Positioning scheme
-- External information such as image size and the size of the screen
++ **Block formatting contexts**
+
+> 是块盒子的布局过程发生的区域，也是浮动元素与其他元素交互的区域。
+
+浮动元素、绝对定位元素、不是块盒子（block box）的块容器（block container）（如：inline-block，table-cells，table-captions），以及overflow属性不为visible的块盒子（block box），会为它们的内容建立新的**块格式化上下文**。
+
+在块格式化上下文中，盒子从包含块的顶部开始一个接一个的垂直排列。
+
++ Inline formatting contexts
+
+行内格式上下文由不包含块级盒子（block-level box）的块容器盒子（block container box）建立。 在行内格式上下文中，盒子从一个包含块的顶部开始一个接一个的水平排列。 这些盒子之间应注意水平内边距，边框和外边距，盒子的width、height属性将不起作用。 
+
++ Relative positioning
 
 
 
-### 前端布局中的一些知识
+##### 浮动（float）
 
-float属性只对还处于普通文档流中的元素起作用，例如若元素的position属性为absolute时，元素就脱离文档流了，此时该元素的float属性将会失效；而当position为relative时，float属性依然有效，这是因为relative没有使元素脱离文档流，并且left、top偏移是相对浮动后的位置偏移的，也就是其在文档流中的位置，这说明float的作用可以看做是将元素浮动到了文档流的面上（文档流可以形象的看做是一个大水池（window就是那最大的水池，里面的子元素也可以看做盒子，盒子又可以被看做是小的水池，里面的元素则是更小的水池，这样也就可以帮助理解元素浮动不会超过其父元素），没有浮动时各个元素盒子都是处于水池的底部，盒子的高和水池相同（这可以帮助理解浮动不会超过其上面的块兄弟元素），内联元素则比较特殊，它会被浮动元素所挤开，并且里面的文字会位于浮动元素的后面或四周）浮动后的元素都变成了inline-block元素，可以设置高宽，默认高宽由内容撑开。
+由float属性控制，此属性指定盒子是否应该向左，向右浮动或根本不浮动。 可以为任何元素设置它，但仅作用于非绝对定位的元素。
 
-### 定位
++ clear
 
-* 绝对定位 
+> value: left、right、both、none
+
+此属性指示元素框的哪个边可能不与较早的浮动盒子相邻。clear属性不考虑元素自身内部或其他块格式化上下文中的浮动
+
+**left**
+
+Requires that the top border edge of the box be below the bottom outer edge of any left-floating boxes that resulted from elements earlier in the source document.
+
+**right**
+
+Requires that the top border edge of the box be below the bottom outer edge of any right-floating boxes that resulted from elements earlier in the source document.
+
+**both**
+
+Requires that the top border edge of the box be below the bottom outer edge of any right-floating and left-floating boxes that resulted from elements earlier in the source document.
+
+**none**
+
+No constraint on the box's position with respect to floats.
+
+
+
+##### 绝对定位（absolute positioning）
+
+> 如果一个元素的‘position’属性的值为‘static’外任何值，那么这个元素被称为‘be positioned’，即被定位了。
+
++ **盒子偏移**
+
+> 被定位的元素box，其left、top、right、bottom的大小表示的是
+>
+> + position为absolute或fixed
+>
+>   其**包含块**的边框与其‘margin edge’之间的距离。
+>
+> + position为relative
+>
+>   与其自身原来位置之间的距离。
 
 开启绝对定位的元素，将会脱离普通文档流，处于更高的层级（普通文档流中的元素会占据其在普通文档流中的位置），**如果没有设置top、left、right、bottom属性值**，则默认为auto，而不是left：0；top：0；时的位置，**默认覆盖在其普通文档流中的位置的上方。**
 
-如果所有的父元素都没有显式地定义position属性，那么所有的父元素默认情况下position属性都是static。结果，绝对定位元素会被包含在**初始块容器**中。这个初始块容器有着和浏览器视口一样的尺寸，并且<html>元素也被包含在这个容器里面。简单来说，绝对定位元素会被放在<html>元素的外面，并且根据浏览器视口（注意：不是浏览器窗口）来定位。
 
-若其父元素中有position不为static的元素，则以该元素为参照元素进行定位。
 
-top、left、bottom、right为参照元素盒子模型**padding盒子边框**与定位元素盒子模型的margin外边对应的距离。
+#### overflow
 
-* 相对定位
+> 此属性指定块容器元素的内容溢出元素盒子时是否被裁剪。
 
-开启相对定位的元素，将会提升层级，不过其对普通文档流中的元素没有影响。偏移的参考点为其开启定位前的位置，top、left、right、bottom的值为元素原来位置与定位后的位置之间的对应距离。
+属性值：
 
-+ 固定定位
++ **visible**
 
-其与绝对定位几乎完全相同，唯一不同的是其参照对象为浏览器窗口，这个从我们滚动浏览器窗口的滚动条就可以看出。
+This value indicates that content is not clipped, i.e., it may be rendered outside the block box.
+
++ **hidden**
+
+This value indicates that the content is clipped and that no scrolling user interface should be provided to view the content outside the clipping region.
+
++ **scroll**
+
+This value indicates that the content is clipped and that if the user agent uses a scrolling mechanism that is visible on the screen (such as a scroll bar or a panner), that mechanism should be displayed for a box whether or not any of its content is clipped. This avoids any problem with scrollbars appearing and disappearing in a dynamic environment. When this value is specified and the target medium is 'print', overflowing content may be printed. When used on [table boxes,](https://www.w3.org/TR/CSS22/tables.html#table-box) this value has the same meaning as 'visible'.
+
++ **auto**
+
+The behavior of the 'auto' value is user agent-dependent, but should cause a scrolling mechanism to be provided for overflowing boxes. When used on [table boxes,](https://www.w3.org/TR/CSS22/tables.html#table-box) this value has the same meaning as 'visible'.
+
+
+
+
+
+
 
 ### Flex布局
 
@@ -284,4 +530,8 @@ Flex布局：Flex是Flexible box的缩写，意为“弹性布局”，是W3C在
 
 
 ### 变形动画
+
+
+
+
 
