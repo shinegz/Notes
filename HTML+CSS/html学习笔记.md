@@ -24,10 +24,137 @@
 
 #### HTML元素的类别
 
-大致可分为块级元素和内联元素。
+- 基本
 
-- 块级元素在页面中以块的形式展现 —— 相对于其前面的内容它会出现在新的一行，其后的内容也会被挤到下一行展现。块级元素通常用于展示页面上结构化的内容，例如段落、列表、导航菜单、页脚等等。一个以block形式展现的块级元素不会被嵌套进内联元素中，但可以嵌套在其它块级元素中。
-- 内联元素通常出现在块级元素中并环绕文档内容的一小部分，而不是一整个段落或者一组内容。内联元素不会导致文本换行：它通常出现在一堆文字之间例如超链接元素<a>或者强调元素<em>和 <strong>。
+  | Tag          | Description                                    |
+  | :----------- | :--------------------------------------------- |
+  | <!DOCTYPE>   | Defines the document type                      |
+  | <html>       | Defines an HTML document                       |
+  | <head>       | Contains metadata/information for the document |
+  | <title>      | Defines a title for the document               |
+  | <body>       | Defines the document's body                    |
+  | <h1> to <h6> | Defines HTML headings                          |
+  | <p>          | Defines a paragraph                            |
+  | <br>         | Inserts a single line break                    |
+  | <hr>         | Defines a thematic change in the content       |
+  | <!--...-->   | Defines a comment                              |
+
+- 格式化
+
+- 表单和输入
+
+  | Tag        | Description                                                |
+  | :--------- | :--------------------------------------------------------- |
+  | <from>     | Defines an HTML form for user input                        |
+  | <input>    | Defines an input control                                   |
+  | <textarea> | Defines a multiline input control (text area)              |
+  | <button>   | Defines a clickable button                                 |
+  | <select>   | Defines a drop-down list                                   |
+  | <optgroup> | Defines a group of related options in a drop-down list     |
+  | <option>   | Defines an option in a drop-down list                      |
+  | <label>    | Defines a label for an <input> element                     |
+  | <fieldset> | Groups related elements in a form                          |
+  | <legend>   | Defines a caption for a <fieldset> element                 |
+  | <datalist> | Specifies a list of pre-defined options for input controls |
+  | <output>   | Defines the result of a calculation                        |
+
+- 框架
+
+  | Tag      | Description             |
+  | :------- | :---------------------- |
+  | <iframe> | Defines an inline frame |
+
+- 图片
+
+  | Tag          | Description                                                  |
+  | :----------- | :----------------------------------------------------------- |
+  | <img>        | Defines an image                                             |
+  | <map>        | Defines a client-side image map                              |
+  | <area>       | Defines an area inside an image map                          |
+  | <canvas>     | Used to draw graphics, on the fly, via scripting (usually JavaScript) |
+  | <figcaption> | Defines a caption for a <figure> element                     |
+  | <figure>     | Specifies self-contained content                             |
+  | <picture>    | Defines a container for multiple image resources             |
+  | <svg>        | Defines a container for SVG graphics                         |
+
+- 音视频
+
+  | Tag      | Description                                                  |
+  | :------- | :----------------------------------------------------------- |
+  | <audio>  | Defines sound content                                        |
+  | <source> | Defines multiple media resources for media elements (<video>, <audio> and <picture>) |
+  | <track>  | Defines text tracks for media elements (<video> and <audio>) |
+  | <video>  | Defines a video or movie                                     |
+
+- 链接
+
+  | Tag    | Description                                                  |
+  | :----- | :----------------------------------------------------------- |
+  | <a>    | Defines a hyperlink                                          |
+  | <link> | Defines the relationship between a document and an external resource (most used to link to style sheets) |
+  | <nav>  | Defines navigation links                                     |
+
+- 列表
+
+  | Tag  | Description                                                |
+  | :--- | :--------------------------------------------------------- |
+  | <ul> | Defines an unordered list                                  |
+  | <ol> | Defines an ordered list                                    |
+  | <li> | Defines a list item                                        |
+  | <dl> | Defines a description list                                 |
+  | <dt> | Defines a term/name in a description list                  |
+  | <dd> | Defines a description of a term/name in a description list |
+
+- 表格
+
+  | Tag        | Description                                                  |
+  | :--------- | :----------------------------------------------------------- |
+  | <table>    | Defines a table                                              |
+  | <caption>  | Defines a table caption                                      |
+  | <th>       | Defines a header cell in a table                             |
+  | <tr>       | Defines a row in a table                                     |
+  | <td>       | Defines a cell in a table                                    |
+  | <thead>    | Groups the header content in a table                         |
+  | <tbody>    | Groups the body content in a table                           |
+  | <tfoot>    | Groups the footer content in a table                         |
+  | <col>      | Specifies column properties for each column within a <colgroup> element |
+  | <colgroup> | Specifies a group of one or more columns in a table for formatting |
+
+- 样式和语义化
+
+  | Tag       | Description                                               |
+  | :-------- | :-------------------------------------------------------- |
+  | <style>   | Defines style information for a document                  |
+  | <div>     | Defines a section in a document                           |
+  | <span>    | Defines a section in a document                           |
+  | <header>  | Defines a header for a document or section                |
+  | <footer>  | Defines a footer for a document or section                |
+  | <main>    | Specifies the main content of a document                  |
+  | <section> | Defines a section in a document                           |
+  | <article> | Defines an article                                        |
+  | <aside>   | Defines content aside from the page content               |
+  | <details> | Defines additional details that the user can view or hide |
+  | <dialog>  | Defines a dialog box or window                            |
+  | <summary> | Defines a visible heading for a <details> element         |
+  | <data>    | Adds a machine-readable translation of a given content    |
+
+- 元信息
+
+  | Tag    | Description                                                  |
+  | :----- | :----------------------------------------------------------- |
+  | <head> | Defines information about the document                       |
+  | <meta> | Defines metadata about an HTML document                      |
+  | <base> | Specifies the base URL/target for all relative URLs in a document |
+
+- 编程
+
+  | Tag        | Description                                                  |
+  | :--------- | :----------------------------------------------------------- |
+  | <script>   | Defines a client-side script                                 |
+  | <noscript> | Defines an alternate content for users that do not support client-side scripts |
+  | <embed>    | Defines a container for an external (non-HTML) application   |
+  | <object>   | Defines an embedded object                                   |
+  | <param>    | Defines a parameter for an object                            |
 
 #### HTML文档
 

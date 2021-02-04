@@ -2,39 +2,116 @@
 
 > 层叠样式表（**C**ascading **S**tyle **S**heet，简称：CSS），它是一门样式表语言，可以用它来选择性地为网页中的 HTML 元素添加样式。它描述的是HTML元素的布局和表现。
 
-### 语法和基本数据类型
+### 语法
 
-![](\css图\css-declaration.png)
+> css样式表由一系列的语句组成。
 
-整个结构称为 **规则集**（通常简称“规则”），各部分释义如下：
+#### 语句
+
+> css中有两种语句：at-rule和ruleset
+
+##### at-rule
+
+一个 **at-rule** 是一个CSS 语句，以at符号开头, '`@`' (`U+0040 COMMERCIAL AT`), 后跟一个标识符，并包括直到下一个分号的所有内容, '`;`' (`U+003B SEMICOLON`), 或下一个CSS块，以先到者为准。
+
+下面是一些 @规则, 由它们的标示符指定, 每种规则都有不同的语法:
+
+- [`@charset`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@charset), 定义样式表使用的字符集.
+- [`@import`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@import), 告诉 CSS 引擎引入一个外部样式表.
+- [`@namespace`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@namespace), 告诉 CSS 引擎必须考虑XML命名空间。
+- 嵌套@规则, 是嵌套语句的子集,不仅可以作为样式表里的一个语句，也可以用在条件规则组里：
+  - [`@media`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media), 如果满足媒介查询的条件则条件规则组里的规则生效。
+  - [`@page`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@page), 描述打印文档时布局的变化.
+  - [`@font-face`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@font-face), 描述将下载的外部的字体。
+  - [`@keyframes`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@keyframes), 描述 CSS 动画的中间步骤 .
+  - [`@supports`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@supports), 如果满足给定条件则条件规则组里的规则生效。
+  - [`@document`](https://developer.mozilla.org/zh-CN/docs/Web/CSS/@document), 如果文档样式表满足给定条件则条件规则组里的规则生效。 *(推延至 CSS Level 4 规范)*
+
+
+
+##### ruleset
+
+<img src=".\css图\css-ruleset-structure.png" style="zoom:50%;" />
+
+整个结构称为 **规则集**（通常简称“规则”），由选择器和声明块构成，各部分释义如下：
 
 - 选择器（**Selector**）
 
   HTML 元素的名称位于规则集开始。它选择了一个或多个需要添加样式的元素（在这个例子中就是 `p` 元素）。要给不同元素添加样式只需要更改选择器就行了。
 
-- 声明（**Declaration**）
+- 声明块（**Declaration block**）
+
+  由一对大括号`{}`及包含在内的0个或多个声明组成。
+
++ 声明（**Declaration**）
 
   一个单独的规则，如 `color: red;` 用来指定添加样式元素的**属性**。
 
-- 属性（**Properties**）
++ 属性（**Properties**）
 
-  改变 HTML 元素样式的途径。（本例中 `color` 就是 [``](https://developer.mozilla.org/zh-CN/docs/Web/HTML/Element/p) 元素的属性。）CSS 中，由编写人员决定修改哪个属性以改变规则。
+  改变 HTML 元素样式的途径。（本例中 `color` 就是 `p`元素的属性。）CSS 中，由编写人员决定修改哪个属性以改变规则。
 
-- 属性的值（Property value）
++ 属性的值（**Property value**）
 
   在属性的右边，冒号后面即**属性的值**，它从指定属性的众多外观中选择一个值（我们除了 `red` 之外还有很多属性值可以用于 `color` ）。
 
 注意其他重要的语法：
 
-- 每个规则集（除了选择器的部分）都应该包含在成对的大括号里（`{}`）。
+- 每个规则集（除了选择器的部分）都应该包含在成对的大括号里（`{}`），大括号及里面的一系列声明构成一个声明块。
 - 在每个声明里要用冒号（`:`）将属性与属性值分隔开。
 - 在每个规则集里要用分号（`;`）将各个声明分隔开。
 
-
-
 ### 选择器
 
-> 在CSS中，模式匹配规则确定哪些样式规则适用于文档树中的元素。 这些模式称为选择器，从简单的元素名称模式到丰富的上下文模式。 如果模式中的所有条件对于某个元素都为真，则选择器匹配该元素。
+> 在CSS中，模式匹配规则确定样式规则适用于文档树中的哪些元素。 这些模式称为选择器，从简单的元素名称模式到丰富的上下文模式。 如果模式中的所有条件对于某个元素都为真，则选择器匹配该元素。
+
+**选择器使用原则**
+
++ 根据 id 选单个元素
++ class 和 class 的组合选成组元素
++ tag 选择器确定页面风格
+
+**选择器类型**
+
++ 简单选择器
+
+  > 元素上的单个条件
+
+  + 类型
+  + 通用
+  + 属性
+  + 类
+  + ID
+  + 伪类
+    + 树结构关系伪类
+    + 链接与行为伪类
+    + 逻辑伪类
+    + 其他伪类
+
++ 复合选择器
+
+  > 复合选择器是一系列没有被组合器分隔的简单的选择器，代表单个元素上的一组同时条件。
+
++ 复杂选择器
+
+  > 复杂选择器是由组合器分隔的一个或多个复合选择器的序列。 它代表由其组合器描述的特定关系的一组元素上的一组同时条件。
+
+  组合器
+
+  + 后代组合器（空格）
+  + 子代组合器（>）
+  + 相邻兄弟组合器（+）
+  + 后继兄弟组合器（~）
+
++ 选择器列表
+
+  > 由逗号分隔的简单、复合、复杂选择器列表，逗号表示“或”的关系。
+
+**选择器优先级**
+
+> 当一个元素被多个规则命中，不同规则指定同一属性为不同值时，就需要考虑优先级的问题。
+
+**常见选择器示例**
 
 | Pattern                  | Meaning                                                      | Described in section                                         | First defined in CSS level |
 | :----------------------- | :----------------------------------------------------------- | :----------------------------------------------------------- | :------------------------: |
@@ -77,48 +154,58 @@
 | E + F                    | an F element immediately preceded by an E element            | [Adjacent sibling combinator](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#adjacent-sibling-combinators) |             2              |
 | E ~ F                    | an F element preceded by an E element                        | [General sibling combinator](https://www.w3.org/TR/2011/REC-css3-selectors-20110929/#general-sibling-combinators) |             3              |
 
+### CSS值
 
+#### 值的类型
 
-### CSS属性值
++ CSS中的关键字
 
-+ 整数和实数（Integers and real numbers）
++ 数值
+  + 整数
+  + 实数
+  + 百分比
+  + 维度（带有单位的数）
++ 字符串
++ URL
 
-+ 长度（Lengths）
++ color
++ image
++ 2D位置
++ 函数
 
-  非零长度格式：<number> + unit identifier；如果是零长度的话，后面的单位是可选的。
+#### 单位
 
-  + 相对长度单位
-    + em（在font-size中表示父元素的字体大小、其他属性中则为自身字体大小）
-    + rem（根元素字体大小）
-    + vw（视窗宽度的1%）
-    + vh（视窗高度的1%）
-    + vmin（视窗较小尺寸的1%）
-    + vmax（视窗较大尺寸的1%）
-  + 绝对长度单位
-    - **in**: inches — 1in is equal to 2.54cm.
-    - **cm**: centimeters
-    - **mm**: millimeters
-    - **pt**: points — the points used by CSS are equal to 1/72nd of 1in.
-    - **pc**: picas — 1pc is equal to 12pt.
-    - **px**: pixel units — 1px is equal to 0.75pt.
++ 长度单位
 
-+ 百分数（percentages）
+  + 相对长度
 
-  <number>  + %
+    + 相对于字体
 
-+ URLS and URIs
+      rem、em、ex、cap、ch、ic、lh、rlh
 
-  url(...)
+    + 相对于视口
 
-+ Counters
+      vw、vh、vi、vb、vmax、vmin
 
-+ 颜色（Colors）
-  + 关键字，如：red、blue
-  + 十六进制数值，如#fd32fa，#fa2
-  + 函数，如rgb(255,255,255)、rgb(100%,100%,100%)、rgba(255,255,255,.4)
-+ 字符串（strings）
+  + 绝对长度
 
-+ 不支持的值（unsupported values）
+    mm、Q、in、pt、pc、px
+
++ 角度单位
+
+  deg、grad、rad、turn
+
++ 时间单位
+
+  s、ms
+
++ 频率单位
+
+  Hz、kHz
+
++ 分辨率单位
+
+  dpi、dpcm、dppx
 
 
 
@@ -148,7 +235,7 @@
 
   + 否则，如果该属性是继承的，并且该元素不是root元素，则使用父元素的computed value。
 
-  + 否则，使用属性的初始值。每个属性的初始值在属性的定义中指定。
+  + 否则，（该属性既没有cascade value，也不是继承来的）使用属性的初始值。每个属性的初始值在属性的定义中指定。
 
 + computed values
 
@@ -184,7 +271,7 @@
     4. author important declarations
     5. user important declarations
   + 3.按选择器的特异性对具有相同重要性和起源的规则进行排序：更具体的选择器将覆盖更通用的选择器。 伪元素和伪类分别计为普通元素和类。
-  + 4.最后，按指定的顺序排序：如果两个声明的权重，来源和特异性相同，则以后者为准。 导入的样式表中的声明被视为在样式表本身中的任何声明之前。
+  + 4.最后，按指定的顺序排序：如果两个声明的重要性，来源和特异性相同，则以后者为准。 导入的样式表中的声明被视为在样式表本身中的任何声明之前。
 
 + !important rules
 
@@ -195,15 +282,15 @@
   A selector's specificity is calculated as follows:
 
   - count 1 if the declaration is from is a 'style' attribute rather than a rule with a selector, 0 otherwise (= a) (In HTML, values of an element's "style" attribute are style sheet rules. These rules have no selectors, so a=1, b=0, c=0, and d=0.)
-  - count the number of ID attributes in the selector (= b)
-  - count the number of other attributes and pseudo-classes in the selector (= c)
-  - count the number of element names and pseudo-elements in the selector (= d)
+  - count the number of **ID** attributes in the selector (= b)
+  - count the number of **other attributes and pseudo-classes** in the selector (= c)
+  - count the number of **element names and pseudo-elements** in the selector (= d)
 
 
 
 ### 媒体类型
 
-
+<img src=".\css图\mediatype.png" style="zoom: 50%;" />
 
 
 
@@ -211,7 +298,7 @@
 
 > 完整的 CSS 盒模型应用于块级盒子，内联盒子只使用盒模型中定义的部分内容。模型定义了盒的每个部分 —— margin, border, padding, and content —— 合在一起就可以创建我们在页面上看到的内容。
 
- ![](\css图\box-model.png)
+ <img src=".\css图\box-model.png" style="zoom:80%;" />
 
 CSS中组成一个块级盒子需要:
 
@@ -241,8 +328,6 @@ CSS中组成一个块级盒子需要:
 + 文档树中元素之间的关系
 + external information（如照片的大小、视口的大小等）
 
-
-
 **containing block**
 
 > 元素box的尺寸或位置有时需要根据某个矩形来计算，这个矩形被称为该元素的‘包含块’。（采用百分比来定义元素box的width、height、padding、margin，绝对定位元素的offset属性等）
@@ -255,11 +340,11 @@ CSS中组成一个块级盒子需要:
 >
 >   + position属性值为relative或static
 >
->   ​       则包含的块由作为块容器或建立格式化上下文的最近祖先框的‘content edge’（盒子模型的内容框）形成。
+>     则包含的块由作为块容器或建立格式化上下文的最近祖先框的‘content edge’（盒子模型的内容框）形成。
 >
 >   + position属性值为fixed
 >
->   ​    在连续媒体里，包含块为视口；在分页媒体里，包含块为页面区域。
+>     在连续媒体里，包含块为视口；在分页媒体里，包含块为页面区域。
 >
 >   + position属性值为absolute
 >
@@ -273,8 +358,6 @@ CSS中组成一个块级盒子需要:
 >
 >       包含块为初始包含块
 
-
-
 #### 盒子的生成
 
 > 盒子具有不同的类型，盒子的类型部分地影响其在视觉格式化模型中的行为。 “ display”属性指定了盒子的类型。
@@ -283,7 +366,7 @@ CSS中组成一个块级盒子需要:
 
   + **块级元素**：被视觉格式化为block的源文档中的元素
 
-  当元素的 `display`为 `block`、`list-item` 或 `table` 时，该元素将成为块级元素。
+    当元素的 `display`为 `block`、`list-item` 或 `table` 时，该元素将成为块级元素。
 
   + **块级盒子**：block-level box，由块级元素生成。一个块级元素至少会生成一个块级盒子，但也有可能生成多个（例如列表项元素）。参与**块格式化上下文**（block formatting context）（规定了块级盒子的渲染方式）的创建。**描述元素与其父元素和兄弟元素之间的行为**。
 
@@ -298,15 +381,13 @@ CSS中组成一个块级盒子需要:
 
   + **行内级元素**：源文档中不构成内容块的那些元素
 
-  如果一个元素的 `display` 属性为 `inline`、`inline-block` 或 `inline-table`，则称该元素为行内级元素。
+    如果一个元素的 `display` 属性为 `inline`、`inline-block` 或 `inline-table`，则称该元素为行内级元素。
 
   + **行内级盒子**：inline-level box，行内级元素会生成行内级盒子，行内级盒子包括行内盒子和原子行内级盒子两种，区别在于该盒子是否参与行内格式化上下文（inline formatting context）的创建。
   + **行内盒子**：inline box，参与行内格式化上下文创建的行内级盒子称为行内盒子。
   + **匿名行内盒子**
 
 + 其他类型盒子
-
-
 
 #### Positioning scheme
 
@@ -339,7 +420,7 @@ In static positioning no position is defined and the default positioning is used
 
 + Inline formatting contexts
 
-行内格式上下文由不包含块级盒子（block-level box）的块容器盒子（block container box）建立。 在行内格式上下文中，盒子从一个包含块的顶部开始一个接一个的水平排列。 这些盒子之间应注意水平内边距，边框和外边距，盒子的width、height属性将不起作用。 
+行内格式化上下文由不包含块级盒子（block-level box）的块容器盒子（block container box）建立。 在行内格式上下文中，盒子从一个包含块的顶部开始一个接一个的水平排列。 这些盒子之间应注意水平内边距，边框和外边距，盒子的width、height属性将不起作用。 
 
 + Relative positioning
 
@@ -347,7 +428,7 @@ In static positioning no position is defined and the default positioning is used
 
 ##### 浮动（float）
 
-由float属性控制，此属性指定盒子是否应该向左，向右浮动或根本不浮动。 可以为任何元素设置它，但仅作用于非绝对定位的元素。
+由float属性控制，此属性指定盒子是否应该向左，向右浮动或根本不浮动。 可以为任何元素设置它，**但仅作用于非绝对定位的元素**。
 
 + clear
 

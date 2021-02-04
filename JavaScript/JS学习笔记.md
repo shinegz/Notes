@@ -15,11 +15,15 @@ EcmaScript、DOM、BOM、第三方库、用户自定义对象
 
 ## 数据类型
 
+> 在JavaScript中，用户无法自定义数据类型。
+>
+> 在计算机语言中，能够表示并操作的值的类型称作数据类型。
+
 数据类型实际指的就是值（字面量）的类型，在JavaScript中，有8种数据类型，分别是
 
 7种基本类型：
 
-String、Number、Boolean、Undefined、Null、BigInt、Symbol
+String、Number、Boolean、Undefined、Null、BigInt、Symbol（用于创建独一无二的属性）
 
 和引用类型Object
 
@@ -48,11 +52,26 @@ String、Number、Boolean、Undefined、Null、BigInt、Symbol
   | [Function](https://developer.mozilla.org/zh-CN/docs/Glossary/Function) 对象 (按照 ECMA-262 规范实现 [[Call]]) | `"function"`                                                 |
   | 其他任何对象                                                 | `"object"`                                                   |
 
-- instanceof ： 用来检测当前实例是否隶属于某个类
+- object **instanceof** constructor ： 用来检测constructor.prototype是否存在于object的**原型链**上
 
 - constructor ： 基于构造函数检测数据类型
 
-- Object.prototype.toString.call() : 检测数据类型最好的方法
+- Object.prototype.toString.call() : 检测数据类型最好的方法**（适用于检测基本数据类型和内置构造函数的实例类型，对于自定义构造函数的实例都为[object Object]）**
+
+  > JavaScript中内置构造函数生成的对象都有私有的[[class]]属性，该属性可以用Object.prototype.toString获取，在JavaScript中，没有任何方法可以更改私有的Class属性
+
+```javascript
+let getType = (value) => {
+    // 值为null的情况
+    if (value === null) return 'Null';
+    // 值为引用类型的情况
+    if (typeof value === 'object')  return value.constructor.name; // 弊端是value.constructor.name可以被更改
+    // 值为基本类型和函数时
+    return (typeof value).slice(0, 1).toUpperCase() + (typeof value).slice(1);
+}
+```
+
+
 
 ### JS中的各类型值运算时的默认转换规则
 
@@ -82,7 +101,7 @@ true + 1 + typeof undefined  // '2undefined'
 
 ### null与undefined
 
-null与undefined是JavaScript的两个基本数据类型，都表示没有。
+null与undefined是JavaScript的两个基本数据类型Null、Undefined的值，都表示没有。
 
 null表示变量没有值，不指向任何地方，不与任何值相关联，它的出现是往往是人为设定给某个变量的。
 
@@ -124,6 +143,58 @@ isNaN(1 + null) // false
 isNaN(1 + undefined) // true
 ```
 
+
+
+## 变量
+
+> 用来保存值的标识符。
+
+在JavaScript中，变量是无类型的（untyped），变量可以被赋予任何类型的值，同样一个变量也可以重新赋予不同类型的值。
+
+变量可能包含两种数据类型的值：基本类型的值和引用类型的值。
+
+基本类型的值直接存储在变量所关联的栈内存中（变量本身也存储在栈内存中）；引用类型的值由于保存在堆内存中，所以变量所关联的栈内存中存储的是值在堆内存中的地址。
+
+### 执行环境（context）
+
+>执行环境：定义了 变量有权访问的其他数据。**每个执行环境都有一个与之相关联的变量对象**，环境中定义的所有变量都保存在这个对象中。
+
+- 全局执行环境
+
+  全局执行环境中的数据能够被在任何地方的变量访问，根据ECMAScript实现所在的宿主环境不同，表示执行环境的对象也不一样，在浏览器中，window对象就是全局执行环境。
+
+- 局部执行环境
+
+  函数内部对外是封闭，只有函数内部的变量才有权访问其中定义的其他数据，一个函数对象就是一个局部执行环境（简单来说，局部执行环境就是非全局执行环境）。
+
+### 作用域
+
+从字面上的意思来看就是起作用的区域；在计算机程序中，变量的作用域是指其**有定义**（可被访问）的区域；作用域的分布结构是从全局作用域向内逐层嵌套。
+
++ 作用域类型
+
+  + 全局作用域
+
+    任何函数作用域和块级作用域之外的区域
+
+  + 函数作用域
+
+    函数代码块的区域
+
+  + 块级作用域
+
+    一个代码块（{}）的区域，由let关键字声明的变量具有块级作用域
+
++ 静态（词法）作用域和动态作用域
+
+> javascript中的作用域是静态作用域。静态作用域是指在标识符定义的时候，其作用域就已经确定了，即表现为静态的；动态作用域是指当调用标识符时，其作用域才随之确定，即表现为动态的。
+
++ 作用域链
+
+> 当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途，是**保证对执行环境有权访问的所有变量和函数的有序访问**。**当前执行的代码所在环境的变量对象**始终是**作用域链**的**始端**，作用域链中的下一个变量对象来自前一个变量对象的父执行环境，依次类推，一直到全局执行环境的变量对象；**全局执行环境的变量对象**始终是**作用域链**中的**最后**一个对象。
+
+
+
 ## 运算符
 
 + 相等运算符
@@ -163,9 +234,6 @@ isNaN(1 + undefined) // true
 
     注：主要防止一个期望值为undefined的表达式产生副作用。
   
-
-
-
 + 运算符优先级
 
   下面的表将所有运算符按照优先级的不同从高（21）到低（0）排列。
@@ -244,7 +312,7 @@ isNaN(1 + undefined) // true
 
 #### let和const命令
 
-> 在JS中，有六种声明变量的方式 var、let、const、function、import、Class、Symbol
+> 在JS中，有六种声明变量的方式 var、let、const、function、import、class
 
 `let`和`const`命令是ES6新增的命令，用来声明变量，它的用法类似于var。
 
@@ -252,7 +320,7 @@ isNaN(1 + undefined) // true
 
 ​	被`let`和`const`命令声明的变量，只在let命令所在的代码块内生效，代码块外无法访问；
 
-​	每次进入一个作用域时，会创建一个变量的 *环境*。当`let`声明出现在循环体里时拥有完全不同的行为。 不仅是在循环里引入了一个新的变量环境，而是针对 *每次迭代*都会创建这样一个新作用域。
+​	每次进入一个作用域时，会创建一个变量的 *环境*。当`let`声明出现在循环体里时拥有完全不同的行为。不仅是在循环里引入了一个新的变量环境，而是针对 *每次迭代*都会创建这样一个新作用域。
 
 2.变量提升
 
@@ -260,7 +328,7 @@ isNaN(1 + undefined) // true
 
 3.暂时性死区
 
-​	被`let`和`const`命令声明的变量，它们不能在被声明之前读或写。 **虽然这些变量始终“存在”于它们的作用域里，但在直到声明它的代码之前的区域都属于 *暂时性死区***。
+​	被`let`、`const`和`class`命令声明的变量，它们不能在被声明之前读或写。 **虽然这些变量始终“存在”于它们的作用域里，但在直到声明它的代码之前的区域都属于 *暂时性死区***。
 
 4.重复声明
 
@@ -320,89 +388,53 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
 
 
-## 变量
+## 对象
 
-> 用来保存值的标识符。
-
-在JavaScript中，变量是松散类型的，即可以用来保存任意类型的值（变量与类型之间不存在固定关系）。
-
-变量可能包含两种数据类型的值：基本类型的值和引用类型的值。
-
-基本类型的值直接存储在变量所关联的栈内存中（变量本身也存储在栈内存中）；引用类型的值由于保存在堆内存中，所以变量所关联的栈内存中存储的是值在堆内存中的地址。
-
-### 执行环境（context）
-
->执行环境：定义了 变量有权访问的其他数据。**每个执行环境都有一个与之相关联的变量对象**，环境中定义的所有变量都保存在这个对象中。
-
-- 全局执行环境
-
-  全局执行环境中的数据能够被在任何地方的变量访问，根据ECMAScript实现所在的宿主环境不同，表示执行环境的对象也不一样，在浏览器中，window对象就是全局执行环境。
-
-- 局部执行环境
-
-  函数内部对外是封闭，只有函数内部的变量才有权访问其中定义的其他数据，一个函数对象就是一个局部执行环境（简单来说，局部执行环境就是非全局执行环境）。
-
-### 作用域
-
-从字面上的意思来看就是起作用的范围、区域；在计算机程序中，是指标识符能够作用到的代码块；作用域的分布结构是从全局作用域向内逐层嵌套。
-
-+ 作用域类型
-
-  + 全局作用域
-
-    任何函数作用域和块级作用域之外的范围
-
-  + 函数作用域
-
-    函数代码块的范围
-
-  + 块级作用域
-
-    一个代码块（{}）的范围，由let关键字声明的变量具有块级作用域
-
-+ 静态作用域和动态作用域
-
-> javascript中的作用域是静态作用域。静态作用域是指在标识符定义的时候，其作用域就已经确定了，即表现为静态的；动态作用域是指当调用标识符时，其作用域才随之确定，即表现为动态的。
-
-+ 作用域链
-
-> 当代码在一个环境中执行时，会创建变量对象的一个作用域链。作用域链的用途，是**保证对执行环境有权访问的所有变量和函数的有序访问**。当**前执行的代码所在环境的变量对象**始终是**作用域链**的**始端**，作用域链中的下一个变量对象来自前一个变量对象的父执行环境，依次类推，一直到全局执行环境的变量对象；**全局执行环境的变量对象**始终是**作用域链**中的**最后**一个对象。
-
-## 关于强类型和弱类型；动态类型检查和静态类型检查；编译型和解释型
-
-> 动态类型检查是指在运行期间才去做数据类型检查的语言，也就是说，动态类型的语言是在第一次赋值给变量时，才确定变量类型；静态类型检查则是在编译阶段确定变量类型。
+> 在计算机科学中，对象是指内存中可以被标识符所引用的一块区域。
 >
-> 弱类型语言是指类型检查不严格，容忍隐式类型转换；强类型则是不容忍隐式类型转换，如果发现类型错误就会中断程序的执行。
->
-> 编译型是指在代码在执行之前先将它编译成机器码，再由机器执行；解释型则是指代码在执行前不需要提前编译，而是在执行时再进行解释执行；编译型和解释型是**实现语言**的特性。
->
-> **区分静态和动态的关键在于：在什么时候进行类型检查（而不是是否有变量类型声明），在运行时则为动态，在编译阶段则为静态**
->
-> **区分强弱类型的关键在于：是否容忍隐式类型转换**
+> JavaScript标准对基于对象的定义：**语言和宿主的基础设施由对象来提供，并且 JavaScript 程序即是一系列互相通讯的对象集合**。（表达了对象对JavaScript的重要性）
 
+​		除了JavaScript原生对象和宿主对象外，用户还可以自定义对象，JavaScript中创建对象有三种方式：
 
+​	一种为字面量方式。
 
-## JS中的对象
+​	一种为`new`关键字加构造函数的方式，这种方式创建对象会经历四个步骤：
 
-> 在计算机科学中，对象是指内存中可以被标识符所引用的一块区域
+​	（1）创建一个新对象
 
-在JavaScript中，万物皆对象，一个对象就是一个无序属性的集合，一个属性包含一个名和一个值。一个属性的值可以是函数，这种情况下属性也被称为*方法*。每个对象由构造函数（通过构造函数定义一类对象的属性和方法）生成，也叫作这个构造函数的实例，每个构造函数都有一个隐藏属性`prototype`指向一个原型对象，由该构造函数生成的对象都继承于这个原型对象（即继承原型对象的所有属性和方法），原型对象中有一个隐藏属性`constructor`指向构造函数（实例对象也继承了这一属性，但不属于它自身的属性），具有相同构造函数的对象（继承同一个原型对象）被称为同一类对象。
+​	（2）将构造函数的作用域赋给新对象（因此this就指向了这个对象）
 
-+ 对象的创建
+​	（3）执行构造函数中的代码（为这个对象添加属性）
 
-  除了JavaScript原生对象和宿主对象外，用户还可以自定义对象，JavaScript中创建对象有三种方式，一种为字面量方式，一种为`new`关键字加构造函数的方式，对象也可以用 `Object.create()`方法创建。该方法非常有用，因为它允许你为创建的对象选择一个原型对象，而不用定义构造函数。
+​	（4）返回新对象
 
-  ​		**对于基本类型的值，它本身不是对应基本类型的实例（对象），之所以可以对其进行对象操作，如读取其默认属性，这是因为JavaScript引擎为了方便操作基本类型的数据，当处于读取模式时，会在后台创建对应基本类型的对象，在读取操作结束后自动销毁对象；但不能添加新属性，因为写模式不会创建对应类型的对象**，引用类型的值为引用类型的一个实例，可以进行对象的各种操作。
+​	对象也可以用 `Object.create()`方法创建。该方法非常有用，因为它允许你为创建的对象选择一个原型对象，而不用定义构造函数。
+
+​		**对于基本类型的值，它本身不是基本类型在对象中所对应的类的实例（对象），之所以可以对其进行对象操作，如读取其默认属性，这是因为JavaScript引擎为了方便操作基本类型的数据，当处于读取模式时，会在后台把基本类型值转换为对应的对象，这个过程称为包装（从对象到基本类型值的转换过程称为拆包），该对象称作包装对象（包装对象模糊了基本类型与对象的关系），在读取操作结束后自动销毁对象；但不能添加新属性，因为写模式不会创建对应类型的对象**，引用类型的值为引用类型的一个实例，可以进行对象的各种操作。
+
+### 对象模型
+
+在JavaScript中，万物皆对象（基本类型的值的情况比较特殊），一个对象就是一个无序属性的集合（散列表），一个属性包含一个名和一个值。属性名可以是字符串或者 Symbol 类型，一个属性的值可以是函数，这种情况下属性也被称为*方法*。
+
++ 对象的基本特征
+
+  + 对象具有唯一标识性：每个对象都是唯一的（通过内存地址来体现）。
+  + 对象具有状态：对象具有状态，同一对象可能处于不同状态之下。
+  + 对象具有行为：即对象的状态，可能因为它的行为而发生变迁。
+
+  在JavaScript中，状态和行为都用属性来抽象。
+
+  **JavaScript 中对象独有的特色是：对象具有高度的动态性，这是因为 JavaScript 赋予了使用者在运行时为对象添改状态和行为的能力（对象的原型在运行时可改变）**。
 
 + 对象的属性
 
-  + 属性名
+  + 属性名（**字符串或Symbol值**）
 
     一个对象的属性名可以是任何有效的 JavaScript 字符串，或者可以被转换为字符串的任何类型，包括空字符串。
 
     **然而，一个属性的名称如果不是一个有效的 JavaScript 标识符（例如，一个由空格或连字符，或者以数字开头的属性名），就只能通过方括号标记访问。**
 
-    注意：方括号中的所有键都将转换为字符串类型。
+    注意：**方括号中的所有键都将转换为字符串类型**。
 
   + ECMAScript定义的对象中有两种属性：数据属性和访问器属性。
 
@@ -410,12 +442,12 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
     **数据属性的特性(Attributes of a data property)**
 
-    | 特性             | 数据类型           | 描述                                                         | 默认值    |
-    | :--------------- | :----------------- | :----------------------------------------------------------- | :-------- |
-    | [[Value]]        | 任何Javascript类型 | 包含这个属性的数据值。                                       | undefined |
-    | [[Writable]]     | Boolean            | 如果该值为 `false，`则该属性的 [[Value]] 特性 不能被改变。   | false     |
-    | [[Enumerable]]   | Boolean            | 如果该值为 `true，`则该属性可以用 [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) 循环来枚举。 | false     |
-    | [[Configurable]] | Boolean            | 如果该值为 `false，`则该属性不能被删除，并且 除了 [[Value]] 和 [[Writable]] 以外的特性都不能被改变。 | false     |
+    | 特性             | 数据类型               | 描述                                                         | 默认值    |
+    | :--------------- | :--------------------- | :----------------------------------------------------------- | :-------- |
+    | [[Value]]        | **任何Javascript类型** | 包含这个属性的数据值。                                       | undefined |
+    | [[Writable]]     | Boolean                | 如果该值为 `false，`则该属性的 [[Value]] 特性 不能被改变。   | false     |
+    | [[Enumerable]]   | Boolean                | 如果该值为 `true，`则该属性可以用 [for...in](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/for...in) 循环来枚举。 | false     |
+    | [[Configurable]] | Boolean                | 如果该值为 `false，`则该属性不能被删除，并且 除了 [[Value]] 和 [[Writable]] 以外的特性都不能被改变。 | false     |
 
     + 访问器属性有一个或两个访问器函数 (get 和 set) 来存取数值。
 
@@ -428,60 +460,57 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
     以上这些特性只有 JavaScript 引擎才用到，因此不能直接访问它们。所以特性被放在两对方括号中，而不是一对。
 
+    > 定义属性及属性描述符的方法：Object.defineProperty([obj], [descriptor])
+  >
+    > 读取属性的特性的方法：Object.prototype.getOwnPropertyDescriptor([obj], [prop])
+
     注：当配置对象属性时，并不一定是该对象的自身属性，有可能是继承来的属性。
-
+  
     ​		set 和 get 函数中的this对象为赋值时的this对象，不一定为定义该属性的对象。
-
+  
   + 删除属性
   
     可以用 [delete](https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Operators/delete) 操作符删除一个**不是继承而来**和Configurable不为false的属性，如果删除成功，返回true，反之为false。
   
     注：通过 `var`, `const` 或 `let` 关键字声明的变量无法用 `delete` 操作符来删除
 
-**使用new关键字和构造函数创建对象的过程**
+### 基于原型的Object Oriented
 
-1、在内存中开辟空间，用于存储新对象
+> 面向对象编程是一种更接近人类思维模式的编程风格，正如它的名字所表达的意思，面向对象编程将代码组织到对象的定义当中，将具有相关行为的数据分组在一起，其中，数据是对象的属性，行为（或者函数）是对象的方法。面向对象的精髓在于消息的传递和处理。
+>
+> 对象可以通过调用另一个对象的方法并向方法中传递数据来进行**信息的传递**，对象的方法在接收到信息过后便可以对**信息进行处理**。
 
-2、把`this`与该存储空间相关联，使其指向该存储空间
++ 基于原型的类型的定义(描述一类对象所具有的属性和方法)
 
-3、在开辟的空间内存储对象的属性和方法的值
+  在JavaScript中，没有类的机制，而是通过**原型**定义对象。每个对象由构造函数生成，也叫作这个构造函数的实例，每个构造函数都有一个隐藏属性`prototype`指向一个原型对象，由该构造函数生成的对象都继承于这个原型对象（即拥有原型对象的所有属性和方法），原型对象中有一个隐藏属性`constructor`指向构造函数（实例对象也继承了这一属性，但不属于它自身的属性），具有相同构造函数的对象（继承同一个原型对象）被称为同一个类的实例。
 
-4、把`this`返回
+  **JavaScript中，创建自定义类型采用的是构造函数+原型的组合模式，构造函数模式用于定义实例属性，而原型模式用于定义方法和共享的属性。**
 
-```javascript
-let obj = new Test()
-//1. let obj = {}
-//2. obj.__proto__ = Test.prototype
-//3. Test.call(obj)
-```
++ 基于原型链的继承机制
 
-### 内置对象
+  在JavaScript中，没有类的机制，它的继承机制是基于原型链实现的，每个对象都有一个隐藏属性`__proto__`指向原型对象（与生成该对象的构造函数中的隐藏属性`prototype`指向的对象是同一个），并继承原型对象的所有属性和方法，原型对象又继承于另一个对象，这就形成了一条原型链，每条原型链的最顶端是Object构造函数的原型对象。
 
-+ parseInt(string, radix)
+### 对象的分类
 
-  解析一个字符串并返回指定基数的十进制整数， `radix` 是2-36之间的整数，表示被解析字符串的基数。
++ 宿主对象（host Objects）: 由JavaScript宿主环境提供的对象。
++ 内置对象（Built-in Objects）：由JavaScript语言提供的对象。
+  + 固有对象（Intrinsic Objects）：由标准规定，随着JavaScript运行时创建而自动创建的对象实例。
+  + 原生对象（Native Objects）：可以由用户通过Array、Date等内置构造器或者特殊语法创建的对象。
+  + 普通对象（Ordinary Objects）：由{}语法、Object构造器或者class关键字定义类创建的对象，它能够被原型继承。
 
-  注：如果 `parseInt `遇到的字符不是指定 `radix `参数中的数字，它将忽略该字符以及所有后续字符，并返回到该点为止已解析的整数值。 `parseInt` 将数字截断为整数值。 允许前导和尾随空格。
+#### 内置对象-固有对象
 
-+ parseFloat(string)
+> 由标准规定，随着JavaScript运行时创建而自动创建的对象实例。
+>
+> 固有对象在任何JavaScript代码执行前就已经被创建出来了，它们通常扮演着类似基础库的角色。
 
-  给定值被解析成浮点数。如果给定值不能被转换成数值，则会返回 `NaN`。
+#### 内置对象-原生对象
 
-+ isNaN()
+> 能够通过语言本身的构造器创建的对象称为原生对象
 
-  如果给定值为 `NaN`（not a number）则返回值为`true`；否则为`false`。
+![](.\TS\内置对象-元生对象.png)
 
-  **`Number.isNaN()`** 方法确定传递的值是否为 `NaN`，并且检查其类型是否为 `Number`。
-
-  注：和全局函数 `isNaN()`相比，`Number.isNaN()` 不会自行将参数转换成数字，只有在参数值为 `NaN` 的数字时，才会返回 `true`。
-
-### 基于原型链实现的Object Oriented
-
-面向对象编程是一种编程方法，正如它的名字所表达的意思，面向对象编程将代码组织到对象的定义当中，或者说类的定义当中，将具有相关行为的数据分组在一起，其中，数据是对象的属性，行为（或者函数）是对象的方法。面向对象的精髓在于消息的传递和处理。
-
-对象可以通过调用另一个对象的方法并向方法中传递数据来进行**信息的传递**,对象的方法在接收到信息过后便可以对**信息进行处理**。一个类可以从另一个类继承它所有的特征，这个被继承的类就称为继承它的类的父类，这种类的继承机制可以有效的减少代码的重复量。
-
-在JavaScript中，没有类的机制，而是通过构造函数定义对象，同时，它的继承机制是基于原型链实现的，每个对象都有一个隐藏属性`__proto__`指向原型对象（与生成该对象的构造函数中的隐藏属性`prototype`指向的对象是同一个），并继承原型对象的所有特征，原型对象也可能继承于另一个对象，这就形成了一条原型链，每条原型链的最顶端是Object构造函数的原型对象。
+## 数组
 
 
 
@@ -489,20 +518,22 @@ let obj = new Test()
 
 #### 浏览器环境下的JavaScript执行机制
 
-主线程从"任务队列"中读取事件，这个过程是循环不断的，所以整个的这种运行机制又称为Event Loop（事件循环）。
+主线程判断"任务队列"中是否非空，是则取出任务执行，否则等待新的任务。这个过程是循环不断的，所以整个的这种运行机制又称为Event Loop（事件循环）（这些任务通常都是某个事件的处理程序，当事件发生时被加入到任务队列，因此叫做事件循环）。
 
 ![](.\TS\event_loop.png)
 
 + **事件循环（Event Loop）**
 
-  事件循环是一个在 JavaScript 引擎等待任务，执行任务和进入休眠状态等待更多任务这几个状态之间转换的无限循环。事件循环模型有效的避免了阻塞的发生。
+  事件循环是一个在 JavaScript 引擎**等待任务**，**执行任务**和**进入休眠状态等待更多任务**这几个**状态**之间**转换**的**无限循环**。事件循环模型有效的避免了阻塞的发生。
 
-   JS引擎在进入事件循环时，首先会将宏任务队列中的第一个宏任务（即整体代码）放到执行栈中执行（全局执行环境进栈），在执行过程中如果遇到同步任务会立即执行，遇到异步任务（分为宏任务和微任务）则会先将其挂起（异步任务派生出对应事件和事件处理程序），继续执行执行栈中的其他任务。当一个异步事件发生时，JS引擎需要执行该事件的处理程序，如果此时引擎繁忙，会根据事件类型将事件放入宏任务事件队列或微任务事件队列。当执行栈中的所有任务都执行完毕， 主线程处于闲置状态时，主线程会依次执行当前微任务事件队列中事件所对应的处理程序，执行完后再去查找宏任务事件队列是否有任务，如果有，那么主线程会从中取出排在第一位的事件，并把这个事件对应的回调（事件处理程序）放入执行栈中，然后执行其中的同步任务...，如此反复，这样就形成了一个无限的循环。这就是这个过程被称为“事件循环（Event Loop）”的原因。
+   JS引擎在进入事件循环时，首先会将宏任务队列中的第一个宏任务（即整体代码）放到执行栈中执行（全局执行环境进栈），在执行过程中如果遇到同步任务会立即执行，遇到异步任务（分为宏任务和微任务）则会先将其挂起（异步任务会有相应的触发规则），继续执行执行栈中的其他任务。当一个异步任务被触发时，JS引擎需要执行该任务，如果此时引擎繁忙（无法立刻执行），会根据任务类型将任务放入**宏任务队列**或**微任务队列**。当执行栈中的所有任务都执行完毕， 主线程处于闲置状态时，主线程会依次执行当前微任务队列中的任务，所有微任务执行完后再去查找宏任务队列是否有任务，如果有，那么主线程会从中取出当前最早的宏任务，并进入执行栈执行，然后执行其中的同步任务...，如此反复，这样就形成了一个无限的循环。这就是这个过程被称为“事件循环（Event Loop）”的原因。
 
   **事件循环简化算法：**
 
+  <img src=".\TS\event-loop.jpg" style="zoom: 25%;" />
+
   1. 从 **宏任务** 队列（例如 “script”）中出队（dequeue）并执行最早的任务。
-  2. 执行所有微任务：
+  2. 执行宏任务中所有微任务：
      - 当微任务队列非空时：
        - 出队（dequeue）并执行最早的微任务。
   3. 执行渲染，如果有。
@@ -517,19 +548,180 @@ let obj = new Test()
 
   + 宏任务
 
-    宏任务包含：script(整体代码)、setTimeout、setInterval、I/O、UI交互事件、postMessage、MessageChannel、setImmediate(Node.js 环境)
+    > 由宿主环境发起的任务
 
   + 微任务
 
-    在宏任务执行期间如果遇到微任务，并不会立刻执行它们，而是依次将它们放到一个队列（称为微任务队列microtask queue）中，在当前宏任务执行完后，再将微任务队列中的微任务依次全部执行完。
+    > 由JavaScript引擎发起的任务
 
-    常见微任务有：Promise.then\catch\finally、MutaionObserver、process.nextTick(Node.js 环境)
++ **异步执行顺序确定步骤**
 
-+ **注意**
+  + 首先我们分析有多少个宏任务；
+  + 在每个宏任务中，分析有多少个微任务；
+  + 根据调用次序，确定宏任务中的微任务执行次序；
+  + 根据宏任务的触发规则和调用次序，确定宏任务的执行次序；
+  + 确定整个顺序。
 
-  + 在不同环境下，JavaScript的执行机制是不同，主要体现在事件队列的分类和各事件队列的执行顺序上。
-  + 引擎执行任务时永远不会进行渲染（render）。如果任务执行需要很长一段时间也没关系。仅在任务完成后才会绘制对 DOM 的更改。
-  + 如果一项任务执行花费的时间过长，浏览器将无法执行其他任务，无法处理用户事件，因此，在一定时间后浏览器会在整个页面抛出一个如“页面未响应”之类的警报，建议你终止这个任务。这种情况常发生在有大量复杂的计算或导致死循环的程序错误时。
+
+
+## 函数
+
+>函数是一段能够实现某个功能的JavaScript代码，只需定义一次，以后需要这个功能时，只需要执行函数即可。
+>
+>这种思想即是"封装"，封装的目的是减小重复代码，提供代码复用率（低耦合高内聚）
+
++ 函数相关概念
+
+  + 高阶函数
+
+    以函数作为参数或返回值的函数称为高阶函数
+
+  + first class functions
+
+    在计算机科学当中，将能够作为函数的参数和返回值，以及赋值给变量的一类值称为First Class；
+
+    可以作为函数的参数，但不能从函数返回，也不能赋给变量的一类值称为Second Class；
+
+    不能作为函数参数和返回值，也不能赋给变量的一类值称为Third Class。
+
+    将满足First Class定义条件的函数称为First Class Functions（即函数可以作为函数的参数和返回值以及赋值给变量），在JavaScript中，所有函数都属于这一类型。
+
++ 编写pure function的准则
+
+  函数的功能是提供input到output的映射，除此之外，不应该再有其他对外部程序状态的影响（如函数在执行过后，改变了函数外的变量的值）；**对于相同的输入，永远输出相同的结果**；函数内部的任何计算都不应该影响到外部作用域的变量；函数计算所需要的外部值只能通过形参获取，并且不能改变向形参传递值的实参的值。
+
+  一个pure function的输出仅仅取决于它的输入。
+
++ 函数种类
+
+  + 普通函数：function关键字定义的函数
++ 箭头函数：用 => 运算符定义的函数
+  + 方法：在class中定义的函数
++ 生成器函数：用function*定义的函数
+  + 类：用class定义
++ 异步函数：被async关键字修饰的函数
+  
++ 创建函数
+
+  + 形参：入口
+
+  + 返回值：出口
+
+    函数体内创建的变量从函数体外无法获取，如果想要获取内部的信息，需要通过return返回值机制，将相关信息返回。
+
+    注意：**return result返回的是result变量存储的值，而不是变量本身（倘若是变量本身，则就可以改变函数体内创建的变量，这与函数作用域的机制相违背），且运行完return语句后，将结束函数的执行**
+
+    没有return语句或者return为空，函数默认返回值为undefined
+
++ 传递参数
+
+  在JavaScript中所有参数的传递是按值传递。
+
+  对于基本类型的变量：传递的变量的值（值的拷贝）
+
+  对于引用类型的变量：传递的也是变量的值，只不过该值是引用类型值在堆内存中的地址
+
++ 执行函数
+
+  + 实参：传入函数的东西
+
+    执行函数时，没有接收到值的形参默认为undefined
+
++ arguments
+
+  函数内置的实参集合，用来存储所有函数执行时传入函数的实参
+
+  不论是否传递形参，arguments都存在
+
+  不论是否传递实参，arguments也都存在
+
+  ```javascript
+  function sum () {
+  	let total = null
+  	for(let i = 0; i < arguments.lenth; i++){
+  		let item = arguments[i]
+  		if(isNaN(item)){
+              continue
+          }
+  		total += item
+      }
+  	return total
+  }
+  ```
+
+
+### this
+
+`this`是 JavaScript 语言的一个关键字，为**执行上下文中的重要组成部分**。
+
+它是函数执行时，自动生成的一个对象，一般在函数体内部使用。
+
+> ```javascript
+> function test() {
+> 　this.x = 1;
+> }
+> ```
+
+上面代码中，函数`test`运行时，会创建一个与之相应的执行上下文，`this`的值也就随之确定。
+
+也就是说在不同的执行上下文中，`this`的取值会有所不同。
+
+那么，`this`的值是什么呢？
+
++ 全局执行上下文
+
+  `this`值为全局对象（在浏览器中为window）
+
++ 函数执行上下文
+
+  + 被一个引用对象调用
+
+    `this`为该引用对象
+
+  + 箭头函数
+
+    `this`为定义箭头函数的那个对象
+
+  + 其他情况
+
+    `this`值为全局对象或undefined（严格模式下）
+
++ 在构造函数中
+
+  `this`为实例对象
+
+### 闭包
+
+> 在JavaScript中，所有函数都是闭包。
+
+JavaScript权威指南解释：**函数的执行依赖于变量作用域，这个作用域是函数定义时决定的，而不是函数调用时决定的。**
+
+因为JavaScript是基于词法作用域的语言，每一段JavaScript代码（全局代码或函数）都有一个与之关联的作用域链，该作用域链（一个对象列表或者链表，定义了“作用域”中的变量）是在静态分析阶段就已经确定，它与函数在哪定义有关，而与在哪执行无关，通过作用域链，函数内部可以访问外部函数作用域中定义的变量。
+
+简单讲，**闭包就是绑定了词法环境（ES3中叫作用域链，ES2018改为词法环境，为执行上下文的一部分）的函数。它将函数变量隐藏在词法环境（作用域链）中，因此看起来函数将变量“包裹”了起来。**
+
+但这也会造成比较大的性能开销，因此，在闭包使用完成后应该将其销毁。对闭包不再引用就会自动将其销毁。
+
+（注：在JavaScript中，如果一个对象不再被引用，那么这个对象就会被垃圾回收机制回收）
+
+如下代码：
+
+```JavaScript
+var a=0;
+function fn(){
+	var a=1;
+	function fm(){
+		console.log(a);
+	}
+	return fm;
+}
+var f1=fn();
+f1();//相当于fm函数运行；此时输出的是1；而不是0；虽然是在window中运行的；但是在fn中定义的；所以a找到的是fm上一级作用域fn的a；而不是window中的a；
+```
+
+**闭包的用处**
+
+闭包可以用在许多地方。它的最大用处有两个，一个是可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。
 
 
 
@@ -646,9 +838,11 @@ let [foo, bar] = await Promise.all([getFoo(), getBar()]);
 
 
 
-## Module
+## 模块
 
-历史上，JavaScript 一直没有模块（module）体系，无法将一个大程序拆分成互相依赖的小文件，再用简单的方法拼装起来。其他语言都有这项功能，比如 Ruby 的`require`、Python 的`import`，甚至就连 CSS 都有`@import`，但是 JavaScript 任何这方面的支持都没有，这对开发大型的、复杂的项目形成了巨大障碍。
+> 模块模式的思想：把逻辑分块，各自封装，相互独立，每个块自行决定对外暴露什么，同时自行决定引入执行哪些外部代码。
+
+历史上，JavaScript 一直没有模块（module）体系，无法将一个大程序拆分成相互独立的小文件，再用简单的方法拼装起来。其他语言都有这项功能，比如 Ruby 的`require`、Python 的`import`，甚至就连 CSS 都有`@import`，但是 JavaScript 任何这方面的支持都没有，这对开发大型的、复杂的项目形成了巨大障碍。
 
 在 ES6 之前，社区制定了一些模块加载方案，最主要的有 CommonJS 和 AMD 两种，前者用于服务器，后者用于浏览器。ES6 在语言标准的层面上，实现了模块功能，而且实现得相当简单，完全可以取代 CommonJS 和 AMD 规范，成为浏览器和服务器通用的模块解决方案。
 
@@ -835,290 +1029,76 @@ import(`./section-modules/${someVariable}.js`)
     因为 CommonJS 加载的是一个对象（即`module.exports`属性），该对象只有在脚本运行完才会生成 。 而 ES6 模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。 
 
   - CommonJS 模块的`require()`是同步加载模块，ES6 模块的`import`命令是异步加载，有一个独立的模块依赖的解析阶段。
-  
-
-## this
-
-`this`是 JavaScript 语言的一个关键字。
-
-它是函数**运行时**，在函数体内部自动生成的一个对象，一般在函数体内部使用。
-
-> ```javascript
-> function test() {
-> 　this.x = 1;
-> }
-> ```
-
-上面代码中，函数`test`运行时，内部会自动有一个`this`对象可以使用。
-
-那么，`this`的值是什么呢？
-
-函数的不同使用场合，`this`有不同的值。总的来说，`this`就是函数运行时所在的环境对象。下面分四种情况，详细讨论`this`的用法。
-
-+ 情况一：纯粹的函数调用
-
-这是函数的最通常用法，属于全局性调用，因此`this`就代表全局对象。请看下面这段代码，它的运行结果是1。
-
-> ```javascript
-> var x = 1;
-> function test() {
->    console.log(this.x);
-> }
-> test();  // 1
-> ```
-
-+ 情况二：作为对象方法的调用
-
-函数还可以作为某个对象的方法调用，这时`this`就指这个上级对象。
-
-> ```javascript
-> function test() {
->   console.log(this.x);
-> }
-> 
-> var obj = {};
-> obj.x = 1;
-> obj.m = test;
-> 
-> obj.m(); // 1
-> ```
-
-+ 情况三 作为构造函数调用
-
-所谓构造函数，就是通过这个函数，可以生成一个新对象。这时，`this`就指这个新对象。
-
-> ```javascript
-> function test() {
-> 　this.x = 1;
-> }
-> 
-> var obj = new test();
-> obj.x // 1
-> ```
-
-运行结果为1。为了表明这时this不是全局对象，我们对代码做一些改变：
-
-> ```javascript
-> var x = 2;
-> function test() {
->   this.x = 1;
-> }
-> 
-> var obj = new test();
-> x  // 2
-> ```
-
-运行结果为2，表明全局变量`x`的值根本没变。
-
-+ 情况四 apply 调用
-
-`apply()`是函数的一个方法，作用是改变函数的调用对象。它的第一个参数就表示改变后的调用这个函数的对象。因此，这时`this`指的就是这第一个参数。
-
-> ```javascript
-> var x = 0;
-> function test() {
-> 　console.log(this.x);
-> }
-> 
-> var obj = {};
-> obj.x = 1;
-> obj.m = test;
-> obj.m.apply() // 0
-> ```
-
-`apply()`的参数为空时，默认调用全局对象。因此，这时的运行结果为`0`，证明`this`指的是全局对象。
-
-如果把最后一行代码修改为
-
-> ```javascript
-> obj.m.apply(obj); //1
-> ```
-
-运行结果就变成了`1`，证明了这时`this`代表的是对象`obj`。
-
-总结一下，`this`是动态变化的，是在运行时才能确定的。
-
-
-
-## 闭包
-
-> 在JavaScript中，函数总是可以访问创建它的上下文环境，这就叫做闭包。
-
-JavaScript权威指南解释：**函数的执行依赖于变量作用域，这个作用域是函数定义时决定的，而不是函数调用时决定的。**
-
-简单讲，**闭包就是有权访问另一个函数作用域中的变量的函数。它定义在函数内部，当外部函数调用结束之后，其变量对象本应该被销毁，但闭包的存在使得我们仍然可以访问外部函数的变量对象。**
-
-但这也会造成比较大的性能开销，因此，在闭包使用完成后应该将其销毁。对闭包不再引用就会自动将其销毁。
-
-（注：在JavaScript中，如果一个对象不再被引用，那么这个对象就会被垃圾回收机制回收）
-
-> 注：函数对象可以通过作用域链相互关联起来，函数体内部使用到的变量都可以保存在外部函数作用域内，这种特性叫闭包； **函数执行时所依赖的作用域链的确定，和在哪运行没有关系，只和在哪儿定义有关系；**
-
-如下代码：
-
-```JavaScript
-var a=0;
-function fn(){
-	var a=1;
-	function fm(){
-		console.log(a);
-	}
-	return fm;
-}
-var f1=fn();
-f1();//相当于fm函数运行；此时输出的是1；而不是0；虽然是在window中运行的；但是在fn中定义的；所以a找到的是fm上一级作用域fn的a；而不是window中的a；
-```
-
-JavaScript高级程序设计解释：当在函数内部定义了其它函数时，就创建了闭包；闭包有权访问其外面函数内部的所有变量。
-
-**通常，函数的作用域及其所有的变量都会在函数执行结束后被销毁。但是，当这个函数内部还有函数时，也就是创建了闭包后，使得它不会被销毁，会一直保存到闭包不存在为止。**
-
-闭包可以理解为函数运行时的一个特性，即函数运行所依赖的变量作用域是在函数定义时就已经确定，而不是在运行时确定。闭包不是一种语法，它的形成和作用域链有关系。
-
-闭包的形成和JavaScript的函数作用域以及静态作用域链有关，当在函数A内部定义函数B时，在函数B中访问变量时，会先在函数B的作用域内查找变量，如果没有，则在函数A的作用域中查找该变量的值，而函数作用域对外是封闭的，并且函数访问变量所依赖的作用域链是在函数定义时就确定的。这样，函数B在运行时所调用的变量的值也就确定了，因为这些变量保存在函数作用域内，对外封闭，所以我们称函数B为闭包。
-
-**闭包的用处**
-
-闭包可以用在许多地方。它的最大用处有两个，一个是可以读取函数内部的变量，另一个就是让这些变量的值始终保持在内存中。
-
-
-
-### 函数
-
->函数就是一个方法或者一个功能体，函数就是把实现某个功能的代码放到一起进行封装，以后需要这个功能时，只需要执行函数即可。
->
->这种思想即是"封装"，封装的目的是减小重复代码，提供代码复用率（低耦合高内聚）
->
->此外：当函数和`new`搭配使用时，可以用来创建对象，用来创建对象的函数又称为构造函数，JS中的对象都是通过构造函数生成的。
-
-+ 编写pure function的准则
-
-  函数的功能是提供input到output的映射，除此之外，不应该再有其他对外部程序状态的影响（如函数在执行过后，改变了函数外的变量的值）；**对于相同的输入，永远输出相同的结果**；函数内部的任何计算都不应该影响到外部作用域的变量；函数计算所需要的外部值只能通过形参获取，并且不能改变向形参传递值的实参的值。
-
-  一个pure function的输出仅仅取决于它的输入。
-
-+ 函数种类
-
-  + 高阶函数
-
-    以函数作为参数或返回值的函数称为高阶函数
-
-  + first class functions
-
-    在计算机科学当中，将能够作为函数的参数和返回值，以及赋值给变量的一类值称为First Class；
-
-    可以作为函数的参数，但不能从函数返回，也不能赋给变量的一类值称为Second Class；
-
-    不能作为函数参数和返回值，也不能赋给变量的一类值称为Third Class。
-
-    将满足First Class定义条件的函数称为First Class Functions（即函数可以作为函数的参数和返回值以及赋值给变量），在JavaScript中，所有函数都属于这一类型。
-
-  + lambda
-
-    作为函数参数和返回值的函数称为lambda，即匿名函数。
-
-+ 创建函数
-
-  + 形参：入口
-
-  + 返回值：出口
-
-    函数体内创建的变量从函数体外无法获取，如果想要获取内部的信息，需要通过return返回值机制，将相关信息返回。
-
-    注意：**return result返回的是result变量存储的值，而不是变量本身（倘若是变量本身，则就可以改变函数体内创建的变量，这与函数作用域的机制相违背），且运行完return语句后，将结束函数的执行**
-
-    没有return语句或者return为空，函数默认返回值为undefined
-
-+ 传递参数
-
-  在JavaScript中所有参数的传递是按值传递。
-
-  对于基本类型的变量：传递的变量的值（值的拷贝）
-
-  对于引用类型的变量：传递的也是变量的值，只不过该值是引用类型值在堆内存中的地址
-
-+ 执行函数
-
-  + 实参：传入函数的东西
-
-    执行函数时，没有接收到值的形参默认为undefined
-
-+ arguments
-
-  函数内置的实参集合，用来存储所有函数执行时传入函数的实参
-
-  不论是否传递形参，arguments都存在
-
-  不论是否传递实参，arguments也都存在
-
-  ```javascript
-  function sum () {
-  	let total = null
-  	for(let i = 0; i < arguments.lenth; i++){
-  		let item = arguments[i]
-  		if(isNaN(item)){
-              continue
-          }
-  		total += item
-      }
-  	return total
-  }
-  ```
-
-+ 函数底层运行机制
-
-  ![](D:\GitProjects\notes\前端\JS笔记图\JS中的函数运行机制（简化版）.png)
 
 
 
 # DOM
 
-> DOM is short for Document Object Model. It is the object presentation of the HTML document and the interface of HTML elements to the outside world like JavaScript.
-> The root of the tree is the "[Document](http://www.w3.org/TR/1998/REC-DOM-Level-1-19981001/level-one-core.html#i-Document)" object.
-
-### JS中获取DOM元素的几种方式
-
-- document.getElementById() 指定在文档中，基于元素的ID或者这个元素对象
-- [context].getElementsByTagName() 在指定上下文中，通过标签名获取一组元素集合
-- [context].getElementsByClassName() 在指定上下文中，通过样式类名获取一组元素集合（不兼容IE6~8）
-- document.getElementsByName() 在整个文档中，通过标签的name属性值获取一组元素集合（在IE中只有表单元素的name才能识别，所以一般只应用于表单处理）
-- document.head/document.body/document.documentElement 获取页面中的HEAD/BODY/HTML三个元素
-- [context].querySelector([selector])在指定上下文中，通过选择器获取到指定的元素对象
-- [context].querySelectorAll([selector]) 在指定上下文中，通过选择器获取到指定的元素集合
-
-> 以上方法可以帮我们获取到页面中的任意的元素，但只能通过在某个范围设置筛选条件的形式，这就限制了我们获取元素的途径，不够灵活，因此，还可以根据各节点之间的层级关系来获取节点对象，DOM中各个节点对象都具有描述节点间层级关系的属性，通过它们可以获取节点对象。
-
-### JS中的节点和描述节点之间的关系属性
-
-> 节点：Node（页面中的所有东西都是节点）
+> DOM（Document Object Model）是W3C标准，一种平台和语言无关的接口标准。它提供了一套规范，程序和脚本可以按照这套规范动态地访问和更新结构化文档的内容，结构和样式。
 >
-> 节点都是单个对象，有些时候需要一种数据结构来容纳多个节点，DOM提供了两种数据结构，用来容纳节点集合。
+> W3C Document Object Model分为三部分：
 >
-> 节点集合（可容纳各种类型的节点）：NodeList（getElementsByName/querySelectorAll获取的都是节点集合）
->
-> 元素节点集合（只能包含元素类型的节点）：
->
-> HTMLCollection（getElementsByTagName/getElementsByClassName等获取的都是元素节点的集合）
+> - Core DOM - standard model for all document types
+> - XML DOM - standard model for XML documents
+> - HTML DOM - standard model for HTML documents
 
-- 元素节点（元素标签）
-  + nodeType：1
-  + nodeName：大写的标签名
-  + nodeValue：null
-- 文本节点
-  + nodeType：3
-  + nodeName：‘#text’
-  + nodeValue：文本内容
-- 注释节点
-  + nodeType：8
-  + nodeName：‘#comment’
-  + nodeValue：注释内容
-- 文档节点（代表整个文档树，是文档树的根节点）
-  + nodeType：9
-  + nodeName：‘#document’
-  + nodeValue：null
-- 文档类型（DocumentType）节点和顶层元素节点HTML为文档（Document）根节点的两个子节点
+HTML DOM
 
-描述这些节点之间的关系的属性
+> HTML DOM是HTML的标准**对象**模型和**编程接口**。它定义了：
+>
+> + HTML元素作为**对象**
+> + 所有HTML元素的**属性**
+> + 访问所有HTML元素的**方法**
+> + 所有HTML元素的**事件**
+>
+> 也就是说HTML DOM是如何获取、改变、增加和删除HTML元素的标准。
+
+DOM 编程接口
+
+> HTML DOM可以用JavaScript实现（也可以用其他编程语言）。在DOM中，所有的HTML元素被定义为**对象**，编程接口就是每个对象的**方法**和**属性**。
+>
+> **属性**即是一个你能够获取和设置的值（如改变一个HTML元素的内容）。
+>
+> **方法**即是一个你可以做的行为（如添加和删除一个HTML元素）。
+
+DOM Document
+
+> HTML DOM document object是网页中所有其他对象的所有者。
+>
+> document object表示网页，它是获取HTML页面中任何元素的入口。
+
+
+
+###  HTML DOM 
+
+> 在web页面的加载完成后，浏览器会根据 DOM 模型，将结构化文档（比如 HTML 和 XML）解析成一系列的节点对象，再由这些节点对象组成一个树状结构（DOM Tree）。所有的**节点**和最终的**树状结构**，都有规范的**对外接口**（节点对象的方法和属性）。
+
+![](.\TS\pic_htmltree.gif)
+
+#### DOM Nodes
+
+> 根据W3C HTML DOM标准，HTML文档中的任何内容都是一个node。
+>
+> 通过HTML DOM，节点树中的所有节点都可以使用JavaScript来获取，新的节点可以被创建、所有节点可以被修改或删除。
+
+- The entire document is a document node
+- Every HTML element is an element node
+- The text inside HTML elements are text nodes
+- Every HTML attribute is an attribute node (deprecated)
+- All comments are comment nodes
+
+#### Node relationship
+
+节点树中的节点之间具有层次关系。
+
+The terms parent, child, and sibling are used to describe the relationships.
+
+- In a node tree, the top node is called the root (or root node)
+- Every node has exactly one parent, except the root (which has no parent)
+- A node can have a number of children
+- Siblings (brothers or sisters) are nodes with the same parent
+
+描述这些节点之间的关系的属性。
 
 - childNodes：获取所有的子节点
 - children：获取所有的元素子节点（子元素标签）
@@ -1132,7 +1112,52 @@ JavaScript高级程序设计解释：当在函数内部定义了其它函数时�
 - previousElementSibling/nextElementSibling
 - ....
 
-### JS中动态增删改元素
+#### 几个重要的Node attribute
+
++ nodeName
+
+  nodeName属性指定一个节点的名字
+
+  - nodeName is read-only
+  - nodeName of an element node is the same as the tag name
+  - nodeName of an attribute node is the attribute name
+  - nodeName of a text node is always #text
+  - nodeName of the document node is always #document
+
++ nodeValue
+
+  nodeValue属性指定一个节点的值
+
+  - nodeValue for element nodes is `null`
+  - nodeValue for text nodes is the text itself
+  - nodeValue for attribute nodes is the attribute value
+
++ nodeType
+
+  只读属性，返回一个节点的类型
+
+  | Node               | Type | Example                                         |
+  | :----------------- | :--- | :---------------------------------------------- |
+  | ELEMENT_NODE       | 1    | <h1 class="heading">W3Schools</h1>              |
+  | ATTRIBUTE_NODE     | 2    | class = "heading" (deprecated)                  |
+  | TEXT_NODE          | 3    | W3Schools                                       |
+  | COMMENT_NODE       | 8    | <!-- This is a comment -->                      |
+  | DOCUMENT_NODE      | 9    | The HTML document itself (the parent of <html>) |
+  | DOCUMENT_TYPE_NODE | 10   | <!Doctype html>                                 |
+
+###  获取DOM元素（nodes）
+
+- document.getElementById() 指定在文档中，基于元素的ID。
+- [context].getElementsByTagName() 在指定上下文中，通过标签名获取一组元素集合。
+- [context].getElementsByClassName() 在指定上下文中，通过样式类名获取一组元素集合（不兼容IE6~8）。
+- document.getElementsByName() 在整个文档中，通过标签的name属性值获取一组元素集合（在IE中只有表单元素的name才能识别，所以一般只应用于表单处理）。
+- document.head/document.body/document.documentElement 获取页面中的HEAD/BODY/HTML三个元素。
+- [context].querySelector([selector])在指定上下文中，通过选择器获取到指定的元素对象
+- [context].querySelectorAll([selector]) 在指定上下文中，通过选择器获取到指定的元素集合
+
+> 以上方法可以帮我们获取到页面中的任意的元素，但只能通过在某个范围设置筛选条件的形式，这就限制了我们获取元素的途径，不够灵活，因此，还可以根据各节点之间的层级关系来获取节点对象，DOM中各个节点对象都具有描述节点间层级关系的属性，通过它们可以获取节点对象。
+
+### 增删改DOM元素（nodes）
 
 常用方法
 
@@ -1142,17 +1167,17 @@ JavaScript高级程序设计解释：当在函数内部定义了其它函数时�
 
 `appendChild`把元素添加到容器的末尾
 
-> 容器.appendChild([节点对象])
+> [container].appendChild([节点对象])
 
 `insertBefore`把元素添加到指定容器中指定元素的前面
 
-> 容器.insertBefore([新增元素],[指定元素])  // 指定元素要是容器的子元素
+> [container].insertBefore([新增元素],[指定元素])  // 指定元素要是容器的子元素
 
 `cloneNode(true/false)` 克隆元素或节点，true表示深克隆，里面的节点也克隆，false表示浅克隆，不包含里面的节点
 
 `removeChild`删除元素
 
-> 容器.removeChild(元素)
+> [container].removeChild(元素)
 
 给元素设置自定义属性的方法（标签属性）
 
@@ -1166,7 +1191,19 @@ JavaScript高级程序设计解释：当在函数内部定义了其它函数时�
 
 [element].xxx = xxx
 
-### 获取元素样式和操作样式
+### 存放DOM节点的数据结构对象
+
+> 节点：Node（页面中的所有东西都是节点）
+>
+> 节点都是单个对象，有些时候需要一种数据结构来容纳多个节点，DOM提供了两种数据结构，用来容纳节点集合。
+>
+> **节点集合**（可容纳各种类型的节点）：NodeList（getElementsByName/querySelectorAll获取的都是节点集合）
+>
+> **元素节点集合**（只能包含元素类型的节点）：
+>
+> HTMLCollection（getElementsByTagName/getElementsByClassName等获取的都是元素节点的集合）
+
+### DOM CSS
 
 ```javascript
 // 修改元素样式
@@ -1263,5 +1300,142 @@ styleObj['属性名']
 styleObj.属性名
 ```
 
+
+
+### DOM Event和Event Listener
+
+> HTML DOM Event允许JavaScript在HTML文档中的元素上注册不同的事件处理程序。
+>
+> 事件可以表示任何从基本的用户交互、到发生在渲染模型自动通知的任何事情
+
++ HTML Event Attribute
+
+  ```html
+  <button onclick="displayDate()">Try it</button>
+  ```
+
++ HTML DOM
+
+  ```html
+  <script>document.getElementById("myBtn").onclick = displayDate;</script>
+  ```
+
++ Event Listener
+
+  ```javascript
+  element.addEventListener(event, function, useCapture);
+  element.removeEventListener(event, function);
+  ```
+
+  通过addEventListener方法可以为一个元素的同一个事件添加多个处理函数，不会发生覆盖。
+
+  第一个参数是事件的类型（如`click`或`mousedown`或其他事件类型[HTML DOM Event](https://www.w3schools.com/jsref/dom_obj_event.asp)）
+
+  第二个参数是事件处理函数（当事件发生时调用）。
+
+  第三个为可选参数，是一个布尔值，默认为false，在冒泡阶段触发元素的事件监听器（the inner most element's event is handled first and then the outer）；若为true，则在捕获阶段触发元素的事件监听器（the outer most element's event is handled first and then the inner）。（事件的传播分为两个阶段：捕获（由外向内，从最外层元素向内直到事件目标元素）和冒泡（由内向外，从事件目标元素向外传播））。
+
+
+
 # BOM
+
+> Browser Object Model允许JavaScript与浏览器‘对话’。
+>
+> 浏览器对象模型（BOM）没有官方标准。
+>
+> 由于现代浏览器已经（几乎）实现了与JavaScript交互性相同的方法和属性，因此通常将其称为BOM的方法和属性。
+
+### Window
+
+> window对象被所有浏览器对象支持，它表示浏览器的窗口。
+>
+> 所有全局的JavaScript对象、函数和变量自动成为window对象的成员，全局变量是window对象的属性，全局函数是window对象的方法，document object也是window对象的属性。
+
+#### window.screen
+
+> window.screen对象包含关于用户屏幕的相关信息。
+
+属性:
+
+- `screen.width`
+- `screen.height`
+- `screen.availWidth`
+- `screen.availHeight`
+- `screen.colorDepth`
+- `screen.pixelDepth`
+
+#### window.location
+
+> window.location对象可用于获取当前页面地址（URL）并将浏览器重定向到新页面。
+
+- `window.location.href` returns the href (URL) of the current page
+- `window.location.hostname` returns the domain name of the web host
+- `window.location.pathname` returns the path and filename of the current page
+- `window.location.protocol` returns the web protocol used (http: or https:)
+- `window.location.assign()` loads a new document
+
+#### window.history
+
+> window.history对象包含浏览器的历史记录。
+
+#### window.navigator
+
+> window.navigator对象包含有关访问者浏览器的信息。
+
+#### popup boxes
+
+> 三种盒子：alert box、confirm box、prompt box
+
++ window.alert
++ window.confirm
++ window.prompt
+
+#### Timing events
+
+- window.setTimeout(*function*, *milliseconds*)
+  Executes a function, after waiting a specified number of milliseconds.
+
+- window.clearTimeout(*timeoutVariable*)
+
+  ```javascript
+  myVar = setTimeout(function, milliseconds);
+  clearTimeout(myVar);
+  ```
+
+- window.setInterval(*function*, *milliseconds*)
+  Same as setTimeout(), but repeats the execution of the function continuously.
+
+- window.clearInterval(*timerVariable*)
+
+  ```javascript
+  myVar = setInterval(function, milliseconds);
+  clearInterval(myVar);
+  ```
+
+#### Cookies
+
+> 用来在网页中存储用户信息。
+
+Cookies是存储在您计算机上的小型文本文件中的数据。
+
+Web服务器将网页发送到浏览器后，连接将关闭，并且服务器会忘记有关用户的所有信息。
+
+Cookies被发明来解决“如何记住有关用户的信息”的问题：
+
++ 当用户访问网页时，他/她的名字可以存储在cookie中。
++ 下次用户访问页面时，Cookie会“记住”他/她的名字。
+
+
+
+**关于强类型和弱类型；动态类型检查和静态类型检查；编译型和解释型**
+
+> 动态类型检查是指在运行期间才去做数据类型检查的语言，也就是说，动态类型的语言是在第一次赋值给变量时，才确定变量类型；静态类型检查则是在编译阶段确定变量类型。
+>
+> 弱类型语言是指类型检查不严格，容忍隐式类型转换；强类型则是不容忍隐式类型转换，如果发现类型错误就会中断程序的执行。
+>
+> 编译型是指在代码在执行之前先将它编译成机器码，再由机器执行；解释型则是指代码在执行前不需要提前编译，而是在执行时再进行解释执行；编译型和解释型是**实现语言**的特性。
+>
+> **区分静态和动态的关键在于：在什么时候进行类型检查（而不是是否有变量类型声明），在运行时则为动态，在编译阶段则为静态**
+>
+> **区分强弱类型的关键在于：是否容忍隐式类型转换**
 
