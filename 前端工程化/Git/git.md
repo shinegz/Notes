@@ -15,7 +15,7 @@ git commit
 
 > c0为初始提交，c1是基于c0进行差异化后的提交，c2是基于c1进行差异化后的提交
 
-<img src="D:\Notes\Git\git\git_commit.png" style="zoom:50%;" />
+<img src=".\git\git_commit.png" style="zoom:50%;" />
 
 ### branch
 
@@ -64,19 +64,19 @@ git commit
 
 > 将当前分支与指定分支进行合并
 
-<img src="D:\Notes\Git\git\git_merge_1.png" style="zoom:50%;" />
+<img src=".\git\git_merge_1.png" style="zoom:50%;" />
 
 ```git
 git merge bugFix
 ```
 
-<img src="D:\Notes\Git\git\git_merge_2.png" style="zoom:50%;" />
+<img src=".\git\git_merge_2.png" style="zoom:50%;" />
 
 ### rebase
 
 > 合并分支，将当前分支移动到指定分支下面
 
-<img src="D:\Notes\Git\git\git_rebase_1.png" style="zoom:50%;" />
+<img src=".\git\git_rebase_1.png" style="zoom:50%;" />
 
 ```git
 git rebase main
@@ -84,7 +84,7 @@ git rebase main
 
 
 
-<img src="D:\Notes\Git\git\git_rebase.png" alt="git_rebase" style="zoom:50%;" />
+<img src=".\git\git_rebase.png" alt="git_rebase" style="zoom:50%;" />
 
 ## 高级
 
@@ -106,7 +106,7 @@ git checkout main
 // HEAD -> mian -> c1
 ```
 
-<img src="D:\Notes\Git\git\分离的HEAD.png" style="zoom:50%;" />
+<img src=".\git\分离的HEAD.png" style="zoom:50%;" />
 
 #### 哈希值
 
@@ -122,14 +122,14 @@ git checkout <hash value>
 git checkout main^
 ```
 
-<img src="D:\Notes\Git\git\^.png" style="zoom:50%;" />
+<img src=".\git\^.png" style="zoom:50%;" />
 
 ```git
 git checkout main^2
 // 默认后退到第一个父节点，^2表示选择后退到另一个父节点
 ```
 
-<img src="D:\Notes\Git\git\选择回退.png" style="zoom:50%;" />
+<img src=".\git\选择回退.png" style="zoom:50%;" />
 
 #### 相对引用（~）
 
@@ -139,7 +139,7 @@ git checkout main^2
 git checkout HEAD~4
 ```
 
-<img src="D:\Notes\Git\git\~.png" style="zoom:50%;" />
+<img src=".\git\~.png" style="zoom:50%;" />
 
 ### 强制修改分支位置
 
@@ -163,7 +163,7 @@ git reset HEAD~1
 // 在reset后， C2 所做的变更还在，但是处于未加入暂存区状态。
 ```
 
-<img src="D:\Notes\Git\git\reset.png" style="zoom:50%;" />
+<img src=".\git\reset.png" style="zoom:50%;" />
 
 #### git revert（添加一个新的提交记录用来消除指定提交记录的影响）
 
@@ -178,7 +178,7 @@ git revert HEAD
 // 新提交记录 `C2'` 引入了**更改** —— 这些更改刚好是用来撤销 `C2` 这个提交的。也就是说 `C2'` 的状态与 `C1`是相同的。
 ```
 
-<img src="D:\Notes\Git\git\revert.png" style="zoom:50%;" />
+<img src=".\git\revert.png" style="zoom:50%;" />
 
 ## 移动提交树
 
@@ -190,13 +190,13 @@ git revert HEAD
 >
 > git cherry-pick <提交号A> <提交号B>... 
 
-<img src="D:\Notes\Git\git\git_cherry-pick_1.png" style="zoom:50%;" />
+<img src=".\git\git_cherry-pick_1.png" style="zoom:50%;" />
 
 ```git
 git cherry-pick c2 c4
 ```
 
-<img src="D:\Notes\Git\git\git_cherry-pick_2.png" style="zoom:50%;" />
+<img src=".\git\git_cherry-pick_2.png" style="zoom:50%;" />
 
 ### git rebase -i（交互式rebase）
 
@@ -210,13 +210,13 @@ git cherry-pick c2 c4
 >
 > git tag <标签名> <提交号>
 
-<img src="D:\Notes\Git\git\git_tag_1.png" style="zoom:50%;" />
+<img src=".\git\git_tag_1.png" style="zoom:50%;" />
 
 ```git
 git tag v1 c1
 ```
 
-<img src="D:\Notes\Git\git\git_tag_2.png" style="zoom:50%;" />
+<img src=".\git\git_tag_2.png" style="zoom:50%;" />
 
 ### git describe
 
@@ -267,7 +267,7 @@ git checkout o/main
 git commit
 ```
 
-<img src="D:\Notes\Git\git\远程分支.png" style="zoom:50%;" />
+<img src=".\git\远程分支.png" style="zoom:50%;" />
 
 ### 通信
 
@@ -279,24 +279,24 @@ git commit
 >
 > git fetch origin <source>:<destination>
 
-<img src="D:\Notes\Git\git\git_fetch_p1.png" style="zoom:50%;" />
+<img src=".\git\git_fetch_p1.png" style="zoom:50%;" />
 
 ```git
 git fetch origin foo^:bar
 // 将远程主机上的foo^提交记录下载到本地，并与bar分支合并
 ```
 
-<img src="D:\Notes\Git\git\git_fetch_p2.png" style="zoom:50%;" />
+<img src=".\git\git_fetch_p2.png" style="zoom:50%;" />
 
 如果 `git fetch` 没有参数，它会下载所有的提交记录到各个远程分支
 
-<img src="D:\Notes\Git\git\git_fetch_1.png" style="zoom:50%;" />
+<img src=".\git\git_fetch_1.png" style="zoom:50%;" />
 
 ```git
 git fetch
 ```
 
-<img src="D:\Notes\Git\git\git_fetch_2.png" style="zoom:50%;" />
+<img src=".\git\git_fetch_2.png" style="zoom:50%;" />
 
 `git fetch` 完成了仅有的但是很重要的两步:
 
@@ -327,7 +327,7 @@ git pull --rebase
 // 相当于git fetch和git rebase的缩写
 ```
 
-<img src="D:\Notes\Git\git\git_pull.png" style="zoom:50%;" />
+<img src=".\git\git_pull.png" style="zoom:50%;" />
 
 #### 向远程仓库提交数据
 
@@ -337,24 +337,24 @@ git pull --rebase
 >
 > git push origin <source>:<destination>
 
-<img src="D:\Notes\Git\git\git_push_p1.png" style="zoom:50%;" />
+<img src=".\git\git_push_p1.png" style="zoom:50%;" />
 
 ```git
 git push origin foo^:main
 // Git 将 foo^ 解析为一个位置，上传所有未被包含到远程仓库里 main 分支中的提交记录。
 ```
 
-<img src="D:\Notes\Git\git\git_push_p2.png" style="zoom:50%;" />
+<img src=".\git\git_push_p2.png" style="zoom:50%;" />
 
 如果 `git push` 没有参数，它会上传当前分支的提交记录到远程主机上追踪分支
 
-<img src="D:\Notes\Git\git\git_push_1.png" style="zoom:50%;" />
+<img src=".\git\git_push_1.png" style="zoom:50%;" />
 
 ```git
 git push
 ```
 
-<img src="D:\Notes\Git\git\git_push_2.png" style="zoom:50%;" />
+<img src=".\git\git_push_2.png" style="zoom:50%;" />
 
 当本地分支与远程仓库中的对应分支提交历史不同时，提交会被拒绝
 
@@ -362,7 +362,7 @@ git push
 git push
 ```
 
-<img src="D:\Notes\Git\git\偏离的提交历史.png" style="zoom:50%;" />
+<img src=".\git\偏离的提交历史.png" style="zoom:50%;" />
 
 这时需要让本地分支与远程仓库中的对应分支同步后再执行提交
 
@@ -372,7 +372,7 @@ git rebase o/main
 git push
 ```
 
-<img src="D:\Notes\Git\git\偏离的提交历史1.png" style="zoom:50%;" />
+<img src=".\git\偏离的提交历史1.png" style="zoom:50%;" />
 
 ### 远程跟踪
 

@@ -385,7 +385,7 @@ https://zhuanlan.zhihu.com/p/53374516
 
 ### 限制范围
 
-如果非同源，共有三种行为受到限制。
+如果非同源，共有三种行为（DOM、Web数据和网络）受到限制。
 
 > （1） Cookie、LocalStorage 和 IndexDB 无法读取。
 >

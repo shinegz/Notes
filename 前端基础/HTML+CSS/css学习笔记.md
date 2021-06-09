@@ -301,12 +301,12 @@
   + 1.查找适用于目标媒体类型的所有相关元素和属性的声明。 如果关联的选择器与所讨论的元素匹配，并且目标媒体与包含声明的所有@media规则以及到达样式表的路径上的所有链接上的媒体列表相匹配，则声明适用。
   + 2.根据**重要性**（normal or important）和**来源**（author、user、user agent）。按升序排列为：
     1. user agent declarations
-    2. user normal declarations
+    2. **user normal declarations**
     3. author normal declarations
     4. author important declarations
-    5. user important declarations
+    5. **user important declarations**
   + 3.按**选择器的特异性对具有相同重要性和起源的规则进行排序**：更具体的选择器将覆盖更通用的选择器。 伪元素和伪类分别计为普通元素和类。
-  + 4.最后，按指定的顺序排序：如果两个声明的**重要性，来源和特异性相同**，则以**后者为准**。 导入的样式表中的声明被视为在样式表本身中的任何声明之前。
+  + 4.最后，按指定的顺序排序：如果两个声明的**重要性，来源和特异性相同**，则以**后者为准**。导入的样式表中的声明被视为在样式表本身中的任何声明之前。
 
 + !important rules
 
@@ -318,7 +318,7 @@
 
   - count 1 if the declaration is from is a 'style' attribute rather than a rule with a selector, 0 otherwise (= a) (In HTML, values of an element's "style" attribute are style sheet rules. These rules have no selectors, so a=1, b=0, c=0, and d=0.)
   - count the number of **ID** attributes in the selector (= b)
-  - count the number of **other attributes and pseudo-classes** in the selector (= c)
+  - count the number of **other attributes and class and pseudo-classes** in the selector (= c)
   - count the number of **element names and pseudo-elements** in the selector (= d)
 
 #### 元素层叠（stacking）
@@ -338,7 +338,7 @@
 ​	文档中的层叠上下文由满足以下任意一个条件的元素形成：
 
 - 根元素 (`<html>`)
-- `z-index` 值不为`auto` 的`position` 值为非`static` 
+- `z-index` 值不为`auto` 的
 - `position` 值为非`static` 
 - 一个`z-index` 值不为`auto` 的 Flex 项目 (Flex item)，即：父元素`display: flex|inline-flex` 
 - `opacity` 属性值小于`1` 的元素
@@ -408,7 +408,7 @@ CSS中组成一个块级盒子需要:
 
 #### 包含块
 
-元素box的尺寸或位置有时需要根据某个矩形来计算，这个矩形被称为该元素的‘包含块’。（采用百分比来定义元素box的width、height、padding、margin，绝对定位元素的offset属性等）
+元素box的尺寸或位置有时需要根据某个矩形来计算，这个矩形被称为该元素的‘包含块’。（采用百分比来定义元素box的width、height、padding、margin，**绝对定位元素的offset属性**等）
 
 **初始包含块**
 
@@ -567,7 +567,7 @@ In static positioning no position is defined and the default positioning is used
 
 > value: left、right、both、none
 
-此属性指示元素框的哪个边可能不与较早的浮动盒子相邻。clear属性不考虑元素自身内部或其他块格式化上下文中的浮动
+此属性指示元素框的上边应该在由源文档中它前面的元素产生的浮动盒子边框底部的下面。clear属性不考虑元素自身内部或其他块格式化上下文中的浮动
 
 **left**
 
@@ -597,7 +597,7 @@ No constraint on the box's position with respect to floats.
 >
 > + position为absolute或fixed
 >
->   其**包含块**的边框与其‘margin edge’之间的距离。
+>   其**包含块**的边框与其**‘margin edge’**之间的距离。
 >
 > + position为relative
 >
@@ -642,6 +642,8 @@ The behavior of the 'auto' value is user agent-dependent, but should cause a scr
 
 
 ### Flex布局
+
+![](.\css图\flexbox.png)
 
 #### Flex布局是什么
 

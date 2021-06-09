@@ -227,7 +227,7 @@ app.component('MyComponentName', {
 
 #### beforeUpdate & updated
 
-#### beforeDestroy & destroy
+#### beforeDestroy & destroyed
 
 #### activated & deactivated
 
@@ -313,7 +313,7 @@ app.component('MyComponentName', {
 
 父组件有一个 `provide` 选项来提供数据，子组件有一个 `inject` 选项来开始使用这些数据。
 
-<img src="D:\Notes\前端框架\vue\provide_inject.png" style="zoom:50%;" />
+<img src=".\vue\provide_inject.png" style="zoom:50%;" />
 
 语法：
 
