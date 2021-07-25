@@ -1,6 +1,16 @@
 ## React 理念
 
+构建**快速响应**的大型 Web 应用程序。
 
+制约快速响应的因素：
+
++ CPU 瓶颈：大计算量的操作或者设备性能不足使页面掉帧，导致卡顿
++ IO 瓶颈：发送网络请求后，由于需要等待数据返回才能进一步操作导致不能快速响应
+
+应对措施：
+
++ CPU 瓶颈：控制 JS 脚本在一个帧中的执行时间，即将一个长更新任务拆分到每一帧中，每个帧中执行一小段任务。将**同步的更新变为可中断的异步更新**，避免更新任务阻塞浏览器渲染UI。
++ IO 瓶颈：在等待的数据返回之前，先显示指定的页面，待收到数据后再更新页面。将页面的**同步更新变为可中断的异步更新**。
 
 
 
@@ -45,7 +55,7 @@ element 对象的特征：
 
 ### JSX
 
-> 一种用于描述组件显示内容的语言，最终会被编译为生成 React Element 的 React.creaetElement()
+> 一种用于描述组件显示内容的标记语言，最终会被编译为生成 React Element 的 React.creaetElement()
 
 
 
@@ -56,6 +66,98 @@ element 对象的特征：
 组件是构建 React 应用的基本单元
 
 ### Class
+
+> React 组件可以通过自定义 class 来实现，自定义的 class 需要继承组件基类 React.Component。
+
+#### 实例属性
+
+##### state
+
+> this.state 包括组件自身所定义的数据，为一个普通 JavaScript 对象，对外不可见
+
++ setState：该方法会将对组件 state 的更改排入队列，然后**批量推迟**更新，React 将使用更新后的 state 重新渲染此组件及其子组件
+
+  ```javascript
+  setState(updater, [callback])
+  ```
+
+  参数一为带有形式参数的 `updater` 函数或对象类型：
+
+  ```JavaScript
+  (state, props) => stateChange || stateChange
+  ```
+
+  updater 函数中接收的 `state` 和 `props` 都保证为最新，stateChange 会与 `state` 进行浅合并。
+
+  参数二为可选的回调函数，它将在 setState 完成合并并重新渲染组件后执行。
+
+##### props
+
+> this.props 包括被该组件调用者定义的 props，当组件的 props 发生变化时，就会触发组件更新
+
+##### forceUpdate
+
+> 当 render() 方法中依赖于 state、props 以外的数据时，需要调用 forceUpdate() 方法强制组件重新渲染。
+
+#### render
+
+> render() 方法是 class 组件中唯一必须实现的方法，返回的值决定了组件在屏幕上的显示内容。
+
+该方法返回值可以是以下几种类型之一：
+
++ React 元素。通常通过 JSX 创建。
++ 数组或 fragments。使得 render 方法可以返回多个 React 元素。
++ Portals。可以渲染子节点到不同的 DOM 子树中。
++ 字符串或数值类型。它们在 DOM 中会被渲染为文本节点。
++ 布尔类型或 null、undefined。什么都不渲染。
+
+
+
+#### 生命周期
+
+<img src=".\react\微信截图_20200826143331.png" style="zoom:50%;" />
+
+> 组件的整个生命周期在横向上可分为三个阶段：挂载，更新，卸载。
+>
+> 每个阶段可被纵向分为“Render”阶段和“Commit”阶段。
+>
+> 在组件生命周期的特殊时间点上会去调用特定的方法，这些方法被称为“生命周期方法”。
+
+##### 挂载
+
+> 组件实例被创建并渲染到 DOM 中
+
+组件挂载时，生命周期方法的调用顺序为：
+
++ **constructor()**
++ static getDerivedStateFromProps()
++ **render()**
++ **componentDidMount()**
+
+##### 更新
+
+> 组件首次渲染到 DOM 中后，当组件的 props 或 state 发生变化时（或调用 forceUpdate() ），就会触发组件更新
+
+组件更新时，生命周期方法的调用顺序为：
+
++ static getDerivedStateFromProps()
++ shouldComponentUpdate()：**当该方法返回true时，才会继续更新，否则中断更新过程**
++ **render()**
++ getSnapshotBeforeUpdate()
++ **componentDidUpdate()**
+
+##### 卸载
+
+当组件从 DOM 中移除时会调用：
+
++ **componentWillUnmount()**
+
+##### 错误处理
+
+在生命周期的任何阶段，当有错误抛出时，会调用如下方法：
+
++ static getDerivedStateFromError()
++ componentDidCatch()
 
 
 
@@ -179,8 +281,8 @@ https://react.iamkasong.com/hooks/create.html
 
 JSX 标签的第一部分指定了 React 元素的类型。JSX 元素可分为两类：
 
-+ component：标签名以大写字母开头
-+ DOM node：标签名以小写字母开头
++ component：标签名以**大写字母**开头
++ DOM node：标签名以**小写字母**开头
 
 标签名中可以使用点语法，但不能是一个表达式。
 
@@ -200,7 +302,7 @@ JSX 标签的第一部分指定了 React 元素的类型。JSX 元素可分为�
 
 + 属性展开
 
-  通过展开预算法`...`可以一次传递整个 pops 对象
+  通过预展开算法`...`可以一次传递整个 pops 对象
 
 #### JSX 中的子元素
 
@@ -212,7 +314,7 @@ JSX 标签的第一部分指定了 React 元素的类型。JSX 元素可分为�
 
   此时 `props.children` 就只是该字符串
 
-+ 子元素
++ JSX 元素
 
   子元素可以由其他 JSX 元素组成
 
@@ -234,6 +336,24 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 ## React 架构
 
+React16 架构可以分为三层：
+
+- Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入**Reconciler**
+- Reconciler（协调器）—— 负责找出变化的组件
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+
+
+
 ### 实现原理
 
+组件是如何渲染为 DOM
+
+生命周期方法是如何被调用的，这些生命周期的时间点又是怎么确定的
+
+setState方法的实现原理
+
+
+
 ### 工作原理
+
+setState方法工作原理
