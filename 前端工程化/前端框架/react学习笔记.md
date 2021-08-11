@@ -12,7 +12,156 @@
 + CPU 瓶颈：控制 JS 脚本在一个帧中的执行时间，即将一个长更新任务拆分到每一帧中，每个帧中执行一小段任务。将**同步的更新变为可中断的异步更新**，避免更新任务阻塞浏览器渲染UI。
 + IO 瓶颈：在等待的数据返回之前，先显示指定的页面，待收到数据后再更新页面。将页面的**同步更新变为可中断的异步更新**。
 
+### React 架构
 
+React16 架构可以分为三层：
+
+- Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入**Reconciler**
+- Reconciler（协调器）—— 负责找出变化的组件
+- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+
+相较于React15，React16中新增了**Scheduler**
+
+### Fiber 架构
+
+#### 产生背景
+
+在`React15`及以前，`Reconciler`采用递归的方式创建虚拟DOM，递归过程是不能中断的。如果组件树的层级很深，递归会占用线程很多时间，造成卡顿。
+
+为了解决这个问题，`React16`将**递归的无法中断的更新**重构为**异步的可中断更新(由Scheduler控制)**，由于曾经用于递归的**虚拟DOM**数据结构已经无法满足需要。于是，全新的`Fiber(React16虚拟DOM)`架构应运而生。
+
+#### 实现原理
+
+##### Fiber的含义
+
+`Fiber`包含三层含义：
+
+1. 作为架构来说，之前`React15`的`Reconciler`采用递归的方式执行，数据保存在递归调用栈中，所以被称为`stack Reconciler`。`React16`的`Reconciler`基于`Fiber节点`实现，被称为`Fiber Reconciler`。
+2. 作为静态的数据结构来说，每个`Fiber节点`对应一个`React element`，保存了该组件的类型（函数组件/类组件/原生组件...）、对应的DOM节点等信息。
+3. 作为动态的工作单元来说，每个`Fiber节点`保存了本次更新中该组件改变的状态、要执行的工作（需要被删除/被插入页面中/被更新...）。
+
+##### Fiber的结构
+
+```javascript
+function FiberNode(
+  tag: WorkTag,
+  pendingProps: mixed,
+  key: null | string,
+  mode: TypeOfMode,
+) {
+  // 作为静态数据结构的属性
+  this.tag = tag; // Fiber对应组件的类型 Function/Class/Host...
+  this.key = key; // key属性
+  this.elementType = null; // 大部分情况同type，某些情况不同，比如FunctionComponent使用React.memo包裹
+  this.type = null; // 对于 FunctionComponent，指函数本身，对于ClassComponent，指class，对于HostComponent，指DOM节点tagName
+  this.stateNode = null; // Fiber对应的真实DOM节点
+
+  // 用于连接其他Fiber节点形成Fiber树
+  this.return = null; // 指向父级Fiber节点
+  this.child = null; // 指向子Fiber节点
+  this.sibling = null; // 指向右边第一个兄弟Fiber节点
+  this.index = 0;
+
+  this.ref = null;
+
+  // 作为动态的工作单元的属性
+  this.pendingProps = pendingProps;
+  this.memoizedProps = null;
+  this.updateQueue = null;
+  this.memoizedState = null;
+  this.dependencies = null;
+
+  this.mode = mode;
+  
+  // 保存本次更新会造成的DOM操作
+  this.effectTag = NoEffect;
+  this.nextEffect = null;
+
+  this.firstEffect = null;
+  this.lastEffect = null;
+
+  // 调度优先级相关
+  this.lanes = NoLanes;
+  this.childLanes = NoLanes;
+
+  // 指向该fiber在另一次更新时对应的fiber
+  this.alternate = null;
+}
+```
+
+#### 工作原理
+
+> `React`使用“双缓存”来完成`Fiber树`的构建与替换——对应着`DOM树`的创建与更新。
+
+在`React`中最多会同时存在两棵`Fiber树`。当前屏幕上显示内容对应的`Fiber树`称为`current Fiber树`，正在内存中构建的`Fiber树`称为`workInProgress Fiber树`。
+
+`current Fiber树`中的`Fiber节点`被称为`current fiber`，`workInProgress Fiber树`中的`Fiber节点`被称为`workInProgress fiber`，他们通过`alternate`属性连接。
+
+```javascript
+currentFiber.alternate === workInProgressFiber;
+workInProgressFiber.alternate === currentFiber;
+```
+
+`React`应用的根节点通过使`current`指针在不同`Fiber树`的`rootFiber`间切换来完成`current Fiber`树指向的切换。
+
+即当`workInProgress Fiber树`构建完成交给`Renderer`渲染在页面上后，应用根节点的`current`指针指向`workInProgress Fiber树`，此时`workInProgress Fiber树`就变为`current Fiber树`。
+
+每次状态更新都会产生新的`workInProgress Fiber树`，通过`current`与`workInProgress`的替换，完成`DOM`更新。
+
+##### mount时
+
+考虑如下例子：
+
+```js
+function App() {
+  const [num, add] = useState(0);
+  return (
+    <p onClick={() => add(num + 1)}>{num}</p>
+  )
+}
+
+ReactDOM.render(<App/>, document.getElementById('root'));
+```
+
+1. 首次执行`ReactDOM.render`会创建`fiberRootNode`（源码中叫`fiberRoot`）和`rootFiber`。其中`fiberRootNode`是整个应用的根节点，`rootFiber`是`<App/>`所在组件树的根节点。
+
+之所以要区分`fiberRootNode`与`rootFiber`，是因为在应用中我们可以多次调用`ReactDOM.render`渲染不同的组件树，他们会拥有不同的`rootFiber`。但是整个应用的根节点只有一个，那就是`fiberRootNode`。
+
+`fiberRootNode`的`current`会指向当前页面上已渲染内容对应`Fiber树`，即`current Fiber树`。
+
+<img src=".\react\rootfiber.png" style="zoom:50%;" />
+
+```js
+fiberRootNode.current = rootFiber;
+```
+
+由于是首屏渲染，页面中还没有挂载任何`DOM`，所以`fiberRootNode.current`指向的`rootFiber`没有任何`子Fiber节点`（即`current Fiber树`为空）。
+
+1. 接下来进入`render阶段`，根据组件返回的`JSX`在内存中依次创建`Fiber节点`并连接在一起构建`Fiber树`，被称为`workInProgress Fiber树`。（下图中右侧为内存中构建的树，左侧为页面显示的树）
+
+在构建`workInProgress Fiber树`时会尝试复用`current Fiber树`中已有的`Fiber节点`内的属性，在`首屏渲染`时只有`rootFiber`存在对应的`current fiber`（即`rootFiber.alternate`）。
+
+<img src=".\react\workInProgressFiber.png" style="zoom:50%;" />
+
+1. 图中右侧已构建完的`workInProgress Fiber树`在`commit阶段`渲染到页面。
+
+此时`DOM`更新为右侧树对应的样子。`fiberRootNode`的`current`指针指向`workInProgress Fiber树`使其变为`current Fiber 树`。
+
+<img src=".\react\wipTreeFinish.png" alt="workInProgressFiberFinish" style="zoom:50%;" />
+
+##### update时
+
+1. 接下来我们点击`p节点`触发状态改变，这会开启一次新的`render阶段`并构建一棵新的`workInProgress Fiber 树`。
+
+<img src=".\react\wipTreeUpdate.png" alt="wipTreeUpdate" style="zoom:50%;" />
+
+和`mount`时一样，`workInProgress fiber`的创建可以复用`current Fiber树`对应的节点数据。
+
+> 这个决定是否复用的过程就是Diff算法
+
+1. `workInProgress Fiber 树`在`render阶段`完成构建后进入`commit阶段`渲染到页面上。渲染完毕后，`workInProgress Fiber 树`变为`current Fiber 树`。
+
+<img src=".\react\currentTreeUpdate.png" alt="currentTreeUpdate" style="zoom:50%;" />
 
 ## 基本概念
 
@@ -267,12 +416,6 @@ Hook 就是 JavaScript 函数，调用它们需要遵循以下两个规则：
 
 
 
-#### Hook 实现原理
-
-https://react.iamkasong.com/hooks/create.html
-
-
-
 ### JSX
 
 > 一种类似于 HTML 的语法，在 React 中被用来描述 React Element，执行时会被编译为 React.createElement(Element Type, props, ...children) 的调用
@@ -334,26 +477,31 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 
 
-## React 架构
+## 原理
 
-React16 架构可以分为三层：
+### 组件树渲染
 
-- Scheduler（调度器）—— 调度任务的优先级，高优任务优先进入**Reconciler**
-- Reconciler（协调器）—— 负责找出变化的组件
-- Renderer（渲染器）—— 负责将变化的组件渲染到页面上
+组件树最终渲染到 DOM 中的过程可以分为两个阶段：render阶段和commit阶段。
 
+#### render阶段
 
-
-### 实现原理
-
-组件是如何渲染为 DOM
-
-生命周期方法是如何被调用的，这些生命周期的时间点又是怎么确定的
-
-setState方法的实现原理
+> 创建各组件所对应的 Fiber 节点并构建 Fiber 树
 
 
 
-### 工作原理
 
-setState方法工作原理
+
+#### commit阶段
+
+> 根据 render 阶段构建的 Fiber 树执行 DOM 操作，更新 DOM 树
+
+
+
+### 状态更新
+
+
+
+### Hooks
+
+
+
