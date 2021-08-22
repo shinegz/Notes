@@ -360,6 +360,8 @@ function ExampleWithManyStates() {
 }
 ```
 
+注意：`useState` 只会在组件首次渲染时初始化状态值，后续组件更新会使用上一次的状态值。
+
 
 
 ##### Effect Hook
@@ -376,7 +378,7 @@ useEffect(func1 () {
 	}     
 }, [state1, state2...])
 // func1会在组件每次渲染完成之后延迟执行，相当于componentDidMount和componentDidUpdate的组合
-// 在effect中返回一个函数是可选的，func2会在组件卸载时执行，相当于componentWillUnmount
+// 在effect中返回一个函数是可选的，func2会在组件卸载时执行（此外，每次渲染之后也会执行清除操作），相当于componentWillUnmount
 ```
 
 执行机制：
@@ -387,13 +389,13 @@ useEffect(func1 () {
 与 Class 对比：
 
 + 无需将作用于**相同的副作用**的逻辑代码拆分到`componentDidMount` 和 `componentWillUnmount`
-+ 无需将不相关的副作用的逻辑代码放到一个生命周期方法中
-+ 不同于**生命周期方法**的**同步执行**，使用 `useEffect` 调度的 effect 是**异步执行**的，不会阻塞浏览器更新屏幕
++ 可以将不同用途的逻辑代码分离到不同的`effect`，无需将不相关的逻辑代码放到一个生命周期方法中
++ 不同于**生命周期方法**的**同步执行**，使用 `useEffect` 调度的 `effect` 是**异步执行**的，不会阻塞浏览器更新屏幕
 
 优点：
 
-+ 可以将具有相关逻辑的代码组织在一起
-+ 实现关注点分离，将不相关的逻辑分离到不同的 effect 中
++ 实现关注点分离，按照代码用途而非生命周期来分离代码，将不相关的逻辑分离到不同的 `effect` 中
++ 异步执行，性能更佳
 
 
 
