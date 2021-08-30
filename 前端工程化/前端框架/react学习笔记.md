@@ -157,7 +157,7 @@ fiberRootNode.current = rootFiber;
 
 和`mount`时一样，`workInProgress fiber`的创建可以复用`current Fiber树`对应的节点数据。
 
-> 这个决定是否复用的过程就是Diff算法
+> 这个决定是否复用的过程就是`Diff`算法
 
 1. `workInProgress Fiber 树`在`render阶段`完成构建后进入`commit阶段`渲染到页面上。渲染完毕后，`workInProgress Fiber 树`变为`current Fiber 树`。
 
