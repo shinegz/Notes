@@ -271,6 +271,10 @@ element 对象的特征：
 > 每个阶段可被纵向分为“Render”阶段和“Commit”阶段。
 >
 > 在组件生命周期的特殊时间点上会去调用特定的方法，这些方法被称为“生命周期方法”。
+>
+> ````
+> React的架构遵循`schedule - render - commit`的运行流程，这个流程是 React 世界最底层的运行规律，而生命周期是为了介入 React 的运行流程而实现的更上层抽象。
+> ````
 
 ##### 挂载
 
@@ -501,9 +505,227 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 ### 状态更新
 
+在`React`中，有如下方法可以触发状态更新（排除`SSR`相关）：
 
+- `ReactDOM.render` —— HostRoot
+- `this.setState` —— ClassComponent
+- `this.forceUpdate` —— ClassComponent
+- `useState` —— FunctionComponent
+- `useReducer` —— FunctionComponent
+
+#### 工作流程
+
+在触发状态更新后，React 便会执行一系列地操作来更新应用。工作流程如下：
+
+```sh
+触发状态更新（根据场景调用不同方法）
+ 	|
+ 	|
+    v
+创建Update对象（接下来三节详解）
+    |
+    |
+    v
+从fiber到root（`markUpdateLaneFromFiberToRoot`）：从触发状态更新的fiber一直向上遍历到rootFiber，过程中还会更新遍历到的fiber的优先级，最终返回render阶段需要的rootFiber。
+    |
+    |
+    v
+调度更新（`ensureRootIsScheduled`）：通知Scheduler根据更新的优先级，决定以同步还是异步的方式调度本次更新。
+    |
+    |
+    v
+render阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+    |
+    |
+    v
+commit阶段（`commitRoot`）
+```
+
+
+
+#### Update
+
+每个触发更新的方法，React 都会为之创建一个相对应的 Update 对象
+
+##### 类型
+
+触发更新的方法所隶属的组件一共有三种（`HostRoot` | `ClassComponent` | `FunctionComponent`）。由于不同类型的组件工作方式不同，所以存在两种不同结构的`Update`，其中：
+
++ `ClassComponent`与`HostRoot`共用一套`Update`结构
++ `FunctionComponent`单独使用一种`Update`结构
+
+##### 结构
+
+`ClassComponent`与`HostRoot`共用的`Update`结构
+
+```typescript
+type Update<State> = {
+  // TODO: Temporary field. Will remove this by storing a map of
+  // transition -> event time on the root.
+  eventTime: number,
+  lane: Lane,
+  suspenseConfig: null | SuspenseConfig,
+
+  tag: 0 | 1 | 2 | 3,
+  payload: any,
+  callback: (() => mixed) | null,
+
+  next: Update<State> | null,
+};
+```
+
+字段意义如下：
+
+- `eventTime`：任务时间，通过`performance.now()`获取的毫秒数。
+- `lane`：优先级相关字段。
+
+- `suspenseConfig`：`Suspense`相关。
+- `tag`：更新的类型，包括`UpdateState` | `ReplaceState` | `ForceUpdate` | `CaptureUpdate`。
+- `payload`：更新挂载的数据，不同类型组件挂载的数据不同。对于`ClassComponent`，`payload`为`this.setState`的第一个传参。对于`HostRoot`，`payload`为`ReactDOM.render`的第一个传参。
+- `callback`：更新的回调函数。
+- `next`：与其他`Update`连接形成链表。
+
+`FunctionComponent`单独使用的`Update`结构
+
+
+
+##### 与Fiber的联系
+
+类似`Fiber节点`组成`Fiber树`，`Fiber节点`上的多个`Update`会组成链表并被包含在`fiber.updateQueue`中。
+
+`Fiber节点`最多同时存在两个`updateQueue`：
+
+- `current fiber`保存的`updateQueue`即`current updateQueue`
+- `workInProgress fiber`保存的`updateQueue`即`workInProgress updateQueue`
+
+在`commit阶段`完成页面渲染后，`workInProgress Fiber树`变为`current Fiber树`，`workInProgress Fiber树`内`Fiber节点`的`updateQueue`就变成`current updateQueue`。
+
+##### updateQueue
+
+`updateQueue`有三种类型，其中一种针对`HostComponent`的类型，剩下两种类型和`Update`的两种类型对应。
+
+`ClassComponent`与`HostRoot`使用的`UpdateQueue`结构如下：
+
+```typescript
+type SharedQueue<State> = {
+  pending: Update<State> | null,
+};
+
+type UpdateQueue<State> = {
+  baseState: State,
+  firstBaseUpdate: Update<State> | null,
+  lastBaseUpdate: Update<State> | null,
+  shared: SharedQueue<State>,
+  effects: Array<Update<State>> | null,
+};
+```
+
+字段意义如下：
+
+- `baseState`：本次更新前该`Fiber节点`的`state`，`Update`基于该`state`计算更新后的`state`。
+
+- `firstBaseUpdate`与`lastBaseUpdate`：本次更新前该`Fiber节点`已保存的`Update`。以链表形式存在，链表头为`firstBaseUpdate`，链表尾为`lastBaseUpdate`。之所以在更新产生前该`Fiber节点`内就存在`Update`，是由于某些`Update`优先级较低所以在上次`render阶段`由`Update`计算`state`时被跳过。
+
+- `shared.pending`：触发更新时，产生的`Update`会保存在`shared.pending`中形成单向环状链表。当由`Update`计算`state`时这个环会被剪开并连接在`lastBaseUpdate`后面。
+
+- `effects`：数组。保存`update.callback !== null`的`Update`。
+
+#### 优先级
+
+`状态更新`由`用户交互`产生，用户心里对`交互`执行顺序有个预期。`React`根据`人机交互研究的结果`中用户对`交互`的预期顺序为`交互`产生的`状态更新`赋予不同优先级。
+
+##### 调度优先级
+
+每当需要调度任务时，`React`会调用`Scheduler`提供的方法`runWithPriority`。
+
+该方法接收一个`优先级`常量与一个`回调函数`作为参数。`回调函数`会以`优先级`高低为顺序排列在一个`定时器`中并在合适的时间触发。
+
+##### 保证状态正确
+
+- `render阶段`可能被中断。如何保证`updateQueue`中保存的`Update`不丢失？
+- 有时候当前`状态`需要依赖前一个`状态`。如何在支持跳过`低优先级状态`的同时保证**状态依赖的连续性**？
+
+###### 保证Update不丢失
+
+在`render阶段`，`shared.pending`的环被剪开并被同时连接在`workInProgress updateQueue.lastBaseUpdate`与`current updateQueue.lastBaseUpdate`后面。
+
+当`render阶段`被中断后重新开始时，会基于`current updateQueue`克隆出`workInProgress updateQueue`。由于`current updateQueue.lastBaseUpdate`已经保存了上一次的`Update`，所以不会丢失。
+
+当`commit阶段`完成渲染，由于`workInProgress updateQueue.lastBaseUpdate`中保存了上一次的`Update`，所以 `workInProgress Fiber树`变成`current Fiber树`后也不会造成`Update`丢失。
+
+###### 保证状态依赖的连续性
+
+当某个`Update`由于优先级低而被跳过时，保存在`baseUpdate`中的不仅是该`Update`，还包括链表中该`Update`之后的所有`Update`。
 
 ### Hooks
 
+在 React 中，`Component` 之于 `UI`，好比原子之于世间万物。原子的类型与属性决定了事物的外观与表现，同样，`Component` 的属性和类型决定了 `UI` 的外观与表现。
+
+`Hooks` 如同围绕着原子运行的电子，影响着 `Component` 的特性。
+
+#### 数据结构
+
+```typescript
+type Update<S, A> = {
+  // TODO: Temporary field. Will remove this by storing a map of
+  // transition -> start time on the root.
+  eventTime: number,
+  lane: Lane,
+  suspenseConfig: null | SuspenseConfig,
+  action: A,
+  eagerReducer: ((S, A) => S) | null,
+  eagerState: S | null,
+  next: Update<S, A>,
+  priority?: ReactPriorityLevel,
+};
+
+type UpdateQueue<S, A> = {
+  pending: Update<S, A> | null,
+  dispatch: (A => mixed) | null,
+  lastRenderedReducer: ((S, A) => S) | null,
+  lastRenderedState: S | null,
+};
+
+export type Hook = {
+  memoizedState: any,
+  baseState: any,
+  baseQueue: Update<any, any> | null,
+  queue: UpdateQueue<any, any> | null,
+  next: Hook | null,
+};
+```
+
+不同类型`hook`的`memoizedState`保存不同类型数据，具体如下：
+
+- `useState`：对于`const [state, updateState] = useState(initialState)`，`memoizedState`保存`state`的值
+- `useReducer`：对于`const [state, dispatch] = useReducer(reducer, {});`，`memoizedState`保存`state`的值
+- `useEffect`：`memoizedState`保存包含`useEffect回调函数`、`依赖项`等的链表数据结构`effect`。`effect`链表同时会保存在`fiber.updateQueue`中
+- `useRef`：对于`useRef(1)`，`memoizedState`保存`{current: 1}`
+- `useMemo`：对于`useMemo(callback, [depA])`，`memoizedState`保存`[callback(), depA]`
+- `useCallback`：对于`useCallback(callback, [depA])`，`memoizedState`保存`[callback, depA]`。与`useMemo`的区别是，`useCallback`保存的是`callback`函数本身，而`useMemo`保存的是`callback`函数的执行结果
+
+有些`hook`是没有`memoizedState`的，比如：
+
+- `useContext`
+
+#### 与Fiber的联系
+
+类似`Fiber节点`组成`Fiber树`，`FunctionComponent Fiber节点`上的多个`Hook`会组成链表并被包含在`fiber.memoizedState`中。
+
+`Fiber节点`最多同时存在两个`memoizedState`：
+
+- `current fiber`保存的`memoizedState`即`current memoizedState`
+- `workInProgress fiber`保存的`memoizedState`即`workInProgress memoizedState`
+
+在`commit阶段`完成页面渲染后，`workInProgress Fiber树`变为`current Fiber树`，`workInProgress Fiber树`内`Fiber节点`的`memoizedState`就变成`current memoizedState`。
+
+注意：
+
+`hook`与`FunctionComponent fiber`都存在`memoizedState`属性。
+
+- `fiber.memoizedState`：`FunctionComponent`对应`fiber`保存的`Hooks`链表。
+- `hook.memoizedState`：`Hooks`链表中保存的单一`hook`对应的数据。
 
 
+
+### Scheduler
