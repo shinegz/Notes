@@ -493,6 +493,28 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 > 创建各组件所对应的 Fiber 节点并构建 Fiber 树
 
+##### 工作流程
+
+```shell
+render 入口（根据本次更新是同步还是异步调用不同方法`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+ 	  |
+ 	  |
+    v
+进入循环，开始递归构建 Fiber 树（根据本次更新是同步还是异步调用不同方法`workLoopSync` 或 `workLoopConcurrent(可中断递归)`）
+    |
+    |
+    v
+“递”阶段（`beginWork`）：从 rootFiber 开始向下深度优先遍历，为遍历到的每个 Fiber 节点调用 beginWork 方法，该方法会根据传入的 Fiber 节点创建子 Fiber 节点，并将这两个 Fiber 节点连接起来，当遍历到叶子节点时就会进入“归”阶段 
+    |
+    |
+    v
+“归”阶段（`completeWork`）：当一个 Fiber 节点执行完 completeWork，如果其存在兄弟 Fiber 节点，会进入父级 Fiber 的“归”阶段
+    |
+    |
+    v
+构建完成：“递”和“归”阶段会交错执行直到“归”到 rootFiber 
+```
+
 
 
 
@@ -519,10 +541,10 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 ```sh
 触发状态更新（根据场景调用不同方法）
- 	|
- 	|
+ 	  |
+ 	  |
     v
-创建Update对象（接下来三节详解）
+创建Update对象
     |
     |
     v
@@ -587,6 +609,21 @@ type Update<State> = {
 
 `FunctionComponent`单独使用的`Update`结构
 
+```typescript
+type Update<S, A> = {
+  // TODO: Temporary field. Will remove this by storing a map of
+  // transition -> start time on the root.
+  eventTime: number,
+  lane: Lane,
+  suspenseConfig: null | SuspenseConfig,
+  action: A,
+  eagerReducer: ((S, A) => S) | null,
+  eagerState: S | null,
+  next: Update<S, A>,
+  priority?: ReactPriorityLevel,
+};
+```
+
 
 
 ##### 与Fiber的联系
@@ -623,12 +660,22 @@ type UpdateQueue<State> = {
 字段意义如下：
 
 - `baseState`：本次更新前该`Fiber节点`的`state`，`Update`基于该`state`计算更新后的`state`。
-
 - `firstBaseUpdate`与`lastBaseUpdate`：本次更新前该`Fiber节点`已保存的`Update`。以链表形式存在，链表头为`firstBaseUpdate`，链表尾为`lastBaseUpdate`。之所以在更新产生前该`Fiber节点`内就存在`Update`，是由于某些`Update`优先级较低所以在上次`render阶段`由`Update`计算`state`时被跳过。
-
 - `shared.pending`：触发更新时，产生的`Update`会保存在`shared.pending`中形成单向环状链表。当由`Update`计算`state`时这个环会被剪开并连接在`lastBaseUpdate`后面。
-
 - `effects`：数组。保存`update.callback !== null`的`Update`。
+
+`FunctionComponent`单独使用的`UpdateQueue`结构
+
+```typescript
+type UpdateQueue<S, A> = {
+  pending: Update<S, A> | null,
+  dispatch: (A => mixed) | null,
+  lastRenderedReducer: ((S, A) => S) | null,
+  lastRenderedState: S | null,
+};
+```
+
+
 
 #### 优先级
 
@@ -657,6 +704,8 @@ type UpdateQueue<State> = {
 
 当某个`Update`由于优先级低而被跳过时，保存在`baseUpdate`中的不仅是该`Update`，还包括链表中该`Update`之后的所有`Update`。
 
+
+
 ### Hooks
 
 在 React 中，`Component` 之于 `UI`，好比原子之于世间万物。原子的类型与属性决定了事物的外观与表现，同样，`Component` 的属性和类型决定了 `UI` 的外观与表现。
@@ -666,26 +715,6 @@ type UpdateQueue<State> = {
 #### 数据结构
 
 ```typescript
-type Update<S, A> = {
-  // TODO: Temporary field. Will remove this by storing a map of
-  // transition -> start time on the root.
-  eventTime: number,
-  lane: Lane,
-  suspenseConfig: null | SuspenseConfig,
-  action: A,
-  eagerReducer: ((S, A) => S) | null,
-  eagerState: S | null,
-  next: Update<S, A>,
-  priority?: ReactPriorityLevel,
-};
-
-type UpdateQueue<S, A> = {
-  pending: Update<S, A> | null,
-  dispatch: (A => mixed) | null,
-  lastRenderedReducer: ((S, A) => S) | null,
-  lastRenderedState: S | null,
-};
-
 export type Hook = {
   memoizedState: any,
   baseState: any,
@@ -728,4 +757,11 @@ export type Hook = {
 
 
 
+#### 工作流程
+
+##### useState与useReducer
+
+
+
 ### Scheduler
+
