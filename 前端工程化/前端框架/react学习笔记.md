@@ -145,13 +145,13 @@ fiberRootNode.current = rootFiber;
 
 1. 图中右侧已构建完的`workInProgress Fiber树`在`commit阶段`渲染到页面。
 
-此时`DOM`更新为右侧树对应的样子。`fiberRootNode`的`current`指针指向`workInProgress Fiber树`使其变为`current Fiber 树`。
+此时`DOM`更新为右侧树对应的样子。`fiberRootNode`的`current`指针指向`workInProgress Fiber树`使其变为`current Fiber树`。
 
 <img src=".\react\wipTreeFinish.png" alt="workInProgressFiberFinish" style="zoom:50%;" />
 
 ##### update时
 
-1. 接下来我们点击`p节点`触发状态改变，这会开启一次新的`render阶段`并构建一棵新的`workInProgress Fiber 树`。
+1. 接下来我们点击`p节点`触发状态改变，这会开启一次新的`render阶段`并构建一棵新的`workInProgress Fiber树`。
 
 <img src=".\react\wipTreeUpdate.png" alt="wipTreeUpdate" style="zoom:50%;" />
 
@@ -159,7 +159,7 @@ fiberRootNode.current = rootFiber;
 
 > 这个决定是否复用的过程就是`Diff`算法
 
-1. `workInProgress Fiber 树`在`render阶段`完成构建后进入`commit阶段`渲染到页面上。渲染完毕后，`workInProgress Fiber 树`变为`current Fiber 树`。
+1. `workInProgress Fiber树`在`render阶段`完成构建后进入`commit阶段`渲染到页面上。渲染完毕后，`workInProgress Fiber树`变为`current Fiber 树`。
 
 <img src=".\react\currentTreeUpdate.png" alt="currentTreeUpdate" style="zoom:50%;" />
 
@@ -175,7 +175,7 @@ React 中组件模型类似于函数：**props** => **element tree**
 
 React 提供了两种定义组件的方式：
 
-+ `function`：无法使用 **state**、**context**、**生命周期**等 React 组件特性。
++ `function`：无法使用(React 16前) **state**、**context**、**生命周期**等 React 组件特性。
 + `class`
 
 ### React Elements
@@ -266,9 +266,9 @@ element 对象的特征：
 
 <img src=".\react\微信截图_20200826143331.png" style="zoom:50%;" />
 
-> 组件的整个生命周期在横向上可分为三个阶段：挂载，更新，卸载。
+> 组件的整个生命周期在横向上可分为三个阶段：挂载（首次渲染），更新，卸载。
 >
-> 每个阶段可被纵向分为“Render”阶段和“Commit”阶段。
+> 组件渲染的过程分为“Render”阶段和“Commit”阶段。
 >
 > 在组件生命周期的特殊时间点上会去调用特定的方法，这些方法被称为“生命周期方法”。
 >
@@ -497,8 +497,8 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 ```shell
 render 入口（根据本次更新是同步还是异步调用不同方法`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
- 	  |
- 	  |
+ 	|
+ 	|
     v
 进入循环，开始递归构建 Fiber 树（根据本次更新是同步还是异步调用不同方法`workLoopSync` 或 `workLoopConcurrent(可中断递归)`）
     |
@@ -508,12 +508,22 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
     |
     |
     v
-“归”阶段（`completeWork`）：当一个 Fiber 节点执行完 completeWork，如果其存在兄弟 Fiber 节点，会进入父级 Fiber 的“归”阶段
+“归”阶段（`completeWork`）：当一个 Fiber 节点执行完 completeWork，如果其存在兄弟 Fiber 节点，会进入父级 Fiber 的“递”阶段
     |
     |
     v
-构建完成：“递”和“归”阶段会交错执行直到“归”到 rootFiber 
+构建完成：“递”和“归”阶段会交错执行直到“归”到 rootFiber
 ```
+
+
+
+##### beginWork
+
+<img src=".\react\beginWork.png" style="zoom: 200%;" />
+
+##### completeWork
+
+![](.\react\completeWork.png)
 
 
 
@@ -521,7 +531,45 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
 
 #### commit阶段
 
-> 根据 render 阶段构建的 Fiber 树执行 DOM 操作，更新 DOM 树
+> 根据 render 阶段构建的 Fiber 树执行 DOM 操作（**同步执行**），更新 DOM 树
+
+在 `rootFiber.firstEffect` 上保存了一条需要执行副作用的 Fiber 节点的单向链表 `effectList`，这些 Fiber 节点的 `updateQueue` 中保存了变化的 `props`。这些副作用对应的DOM操作、一些生命周期钩子（比如`componentDidXXX`）、`hook`（比如`useEffect`）在 commit 阶段执行。
+
+##### 工作流程
+
+commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
+
+```bash
+commit 入口（fiberRootNode 作为传参调用`commitRoot(root)`）
+ 	|
+ 	|
+    v
+before mutation之前（变量赋值、状态重置）
+    |
+    |
+    v
+before mutation阶段（执行DOM操作前）
+    |
+    |
+    v
+mutation阶段（执行DOM操作）
+    |
+    |
+    v
+layout阶段（执行DOM操作后）
+```
+
+##### before mutation阶段
+
+
+
+##### mutation阶段
+
+
+
+##### layout阶段
+
+
 
 
 
@@ -529,11 +577,11 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
 
 在`React`中，有如下方法可以触发状态更新（排除`SSR`相关）：
 
-- `ReactDOM.render` —— HostRoot
-- `this.setState` —— ClassComponent
-- `this.forceUpdate` —— ClassComponent
-- `useState` —— FunctionComponent
-- `useReducer` —— FunctionComponent
+- `ReactDOM.render` —— `HostRoot`
+- `this.setState` —— `ClassComponent`
+- `this.forceUpdate` —— `ClassComponent`
+- `useState` —— `FunctionComponent`
+- `useReducer` —— `FunctionComponent`
 
 #### 工作流程
 
@@ -541,8 +589,8 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
 
 ```sh
 触发状态更新（根据场景调用不同方法）
- 	  |
- 	  |
+ 	|
+ 	|
     v
 创建Update对象
     |
