@@ -504,6 +504,10 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
     |
     |
     v
+执行循环体（`performUnitOfWork`)：performUnitOfWork的工作可以分为两部分：“递”和“归”
+    |
+    |
+    V
 “递”阶段（`beginWork`）：从 rootFiber 开始向下深度优先遍历，为遍历到的每个 Fiber 节点调用 beginWork 方法，该方法会根据传入的 Fiber 节点创建子 Fiber 节点，并将这两个 Fiber 节点连接起来，当遍历到叶子节点时就会进入“归”阶段 
     |
     |
@@ -592,15 +596,17 @@ layout阶段（执行DOM操作后）
  	|
  	|
     v
-创建Update对象
+创建Update对象并加入updateQueue，调度update：方法内部调用createUpdate、enqueueUpdate、scheduleUpdateOnFiber方法完成update的创建、入队和调度
     |
     |
-    v
+    V
 从fiber到root（`markUpdateLaneFromFiberToRoot`）：从触发状态更新的fiber一直向上遍历到rootFiber，过程中还会更新遍历到的fiber的优先级，最终返回render阶段需要的rootFiber。
     |
     |
     v
-调度更新（`ensureRootIsScheduled`）：通知Scheduler根据更新的优先级，决定以同步还是异步的方式调度本次更新。
+调度更新（`ensureRootIsScheduled`）：通知Scheduler根据更新的优先级，决定以同步还是异步的方式调度本次更新任务。
+同步（同步优先级）方式：将更新任务加入任务队列中，并注册一个清空任务队列的微任务，若当前执行上下文为NoContext，则同步清空任务队列；
+异步方式：根据任务优先级得到一个过期时间，然后将更新任务加入一个以过期时间为排序标准的最小优先队列
     |
     |
     v
@@ -689,7 +695,7 @@ type Update<S, A> = {
 
 `updateQueue`有三种类型，其中一种针对`HostComponent`的类型，剩下两种类型和`Update`的两种类型对应。
 
-`ClassComponent`与`HostRoot`使用的`UpdateQueue`结构如下：
+`ClassComponent`与`HostRoot`使用的`UpdateQueue`结构（组件对应Fiber节点数据结构上的`updateQueue`属性）如下：
 
 ```typescript
 type SharedQueue<State> = {
@@ -712,7 +718,7 @@ type UpdateQueue<State> = {
 - `shared.pending`：触发更新时，产生的`Update`会保存在`shared.pending`中形成单向环状链表。当由`Update`计算`state`时这个环会被剪开并连接在`lastBaseUpdate`后面。
 - `effects`：数组。保存`update.callback !== null`的`Update`。
 
-`FunctionComponent`单独使用的`UpdateQueue`结构
+`FunctionComponent`单独使用的`UpdateQueue`结构（注意：该`UpdateQueue` 指的是`useState/useReducer`对应Hook数据结构上的`queue`属性，而非组件对应的Fiber节点数据结构上的`updateQueue`属性）
 
 ```typescript
 type UpdateQueue<S, A> = {
@@ -729,9 +735,13 @@ type UpdateQueue<S, A> = {
 
 `状态更新`由`用户交互`产生，用户心里对`交互`执行顺序有个预期。`React`根据`人机交互研究的结果`中用户对`交互`的预期顺序为`交互`产生的`状态更新`赋予不同优先级。
 
+##### 设置优先级
+
+当`ReactDOM`中的一个用户交互产生时，会通过调用`setCurrentUpdatePriority`方法设置当前更新的优先级，这样，当调度更新时，就可以根据当前更新的优先级进行更新任务的处理。
+
 ##### 调度优先级
 
-每当需要调度任务时，`React`会调用`Scheduler`提供的方法`runWithPriority`。
+每当需要调度任务时，`React`会调用`Scheduler`提供  的方法`runWithPriority`。
 
 该方法接收一个`优先级`常量与一个`回调函数`作为参数。`回调函数`会以`优先级`高低为顺序排列在一个`定时器`中并在合适的时间触发。
 
@@ -751,6 +761,64 @@ type UpdateQueue<S, A> = {
 ###### 保证状态依赖的连续性
 
 当某个`Update`由于优先级低而被跳过时，保存在`baseUpdate`中的不仅是该`Update`，还包括链表中该`Update`之后的所有`Update`。
+
+
+
+#### ReactDOM.render
+
+> `ReactDOM.render()`是React应用的起点，开启React应用首次渲染到页面的流程。
+
+整个流程如下：
+
+```sh
+创建fiberRootNode、rootFiber、updateQueue（`legacyCreateRootFromDOMContainer`）：legacyCreateRootFromDOMContainer方法内部会调用createFiberRoot方法完成fiberRootNode和rootFiber的创建以及关联。并初始化updateQueue
+    |
+    |
+    v
+调用更新方法（`updateContainer`）：updateContainer方法内部会先查询本次更新的优先级以及触发更新的事件发生时间，然后调用createUpdate、enqueueUpdate方法完成update的创建、入队，再根据查询到的更新优先级和事件发生时间调用scheduleUpdateOnFiber进行更新任务的调度
+    |
+    |
+    v
+从fiber到root（`markUpdateLaneFromFiberToRoot`）
+    |
+    |
+    v
+调度更新（`ensureRootIsScheduled`）
+    |
+    |
+    v
+render阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+    |
+    |
+    v
+commit阶段（`commitRoot`）
+```
+
+
+
+#### this.setState
+
+整个流程如下：
+
+```sh
+调用更新方法（`enqueueSetState`）：enqueueSetState 方法内部会先查询本次更新的优先级以及触发更新的事件发生时间，然后调用createUpdate、enqueueUpdate方法完成update的创建、入队，再根据查询到的更新优先级和事件发生时间调用scheduleUpdateOnFiber进行更新任务的调度
+    |
+    |
+    v
+从fiber到root（`markUpdateLaneFromFiberToRoot`）
+    |
+    |
+    v
+调度更新（`ensureRootIsScheduled`）
+    |
+    |
+    v
+render阶段（`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
+    |
+    |
+    v
+commit阶段（`commitRoot`）
+```
 
 
 
@@ -811,5 +879,23 @@ export type Hook = {
 
 
 
-### Scheduler
+### Concurrent Mode
+
+> Concurrent 模式是一组 React 的新功能，可帮助应用保持响应，并根据用户的设备性能和网速进行适当的调整，实现`多优先级`的`异步可中断`更新。
+
+React 为了实现 Concurrent Mode，做了以下几部分的工作：
+
++ 底层架构 —— Fiber 架构
+
+  > Fiber 架构的意义在于，它将单个`组件`作为`工作单元`，使以组件为粒度的“异步可中断的更新”成为可能。
+
++ 架构的驱动力 —— Scheduler
+
+  > Scheduler 的功能是根据宿主环境性能，为每个`工作单元`（组件）分配一个`可运行时间`，实现“异步可中断的更新”。
+
++ 架构的运行策略 —— lane 模型
+
+  > Fiber 架构配合 Scheduler 可以控制`更新`在`Fiber`架构中运行/中断/继续运行（异步可中断更新）。但要实现`多优先级`的异步可中断更新，还需要一个模型用于确定更新的优先级，并控制不同优先级的更新之间的关系和行为。
+
+
 
