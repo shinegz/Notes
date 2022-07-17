@@ -1,3 +1,62 @@
+![git](http://www.ruanyifeng.com/blogimg/asset/2014/bg2014061202.jpg)
+
+> 对于一个 git 仓库，只有一个工作区、一个暂存区、一个仓库
+>
+> 切换分支只是从仓库中取出该分支的文件到工作区，暂存区不会随着分支的切换而变化
+>
+> 仓库中的 HEAD 指向当前分支的最新版本
+
+## 本地仓库上传到GitHub上的一般步骤
+
+准备工作：安装好Git
+
+1、首先要建立本地与GitHub的SSH的安全连接
+
+​      具体步骤可参考 https://blog.csdn.net/Mrrrrr/article/details/102999742 
+
+2、在GitHub上新建好仓库，注意：保持默认选项即可，仓库内不能有东西，否则上传时会出错。
+
+3、在本地新建项目，并在项目根目录下初始化仓库
+
+​     在项目根目录下右键打开**Git Bash Here**打开命令窗口
+
+​      键入命令：
+
+```bash
+git init
+```
+
+​    为仓库指定GitHub用户名和email（这里可以不指定，不过当提交文件到仓库或者提交本地仓库到GitHub上时需要每次都输入用户名和邮箱）
+
+```javascript
+git config --global user.name "你的GitHub账号名"
+git config --global user.email "你的注册账号"
+```
+
+ 注意git config命令的–global参数，用了这个参数，表示你这台机器上所有的Git仓库都  会使用这个配置，当然也可以对某个仓库指定不同的用户名和Email地址。 
+
+4、将项目文件提交到本地仓库
+
+ ```bash
+git add 文件 （提交单个文件）//git add . (提交全部文件)
+
+git commit -m "提交信息"
+ ```
+
+5、与GitHub上的仓库建立连接
+
+```bash
+git remote add origin "仓库地址"    *origin 为远程主机名*
+```
+
+6、将本地的当前分支发送到origin主机上，若origin主机上没有对应分支，则在origin主机上新建分支
+
+```bash
+git push -u origin [branchname]    * -u 表示指定origin为默认远程主机，后面可直接使用 git push了
+```
+
+更多远程操作详解看： http://www.ruanyifeng.com/blog/2014/06/git_remote.html 
+
 ## 常用命令
 
 ### add
