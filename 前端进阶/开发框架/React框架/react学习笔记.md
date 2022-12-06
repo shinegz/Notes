@@ -78,10 +78,10 @@ element 对象的特征：
 React 内部的一种数据结构，在组件 mount 时会根据组件返回的 React ELement 生成相应地 Fiber节点，最终映射到真实的 DOM 上。
 
 ```JavaScript
-	  		React 声明式渲染系统
-	  |-------------------------------|
+	  		      React 声明式渲染系统
+	    |-------------------------------|
 JSX ——|——> React ELememt ————> Fiber——|——> DOM
-	  |-------------------------------|
+	    |-------------------------------|
 ```
 
 
@@ -371,8 +371,8 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 ```sh
 触发状态更新（根据场景调用不同方法）
- 	|
- 	|
+ 	  |
+ 	  |
     v
 产生更新：创建Update对象并加入updateQueue，调度update：方法内部调用createUpdate、enqueueUpdate方法完成update的创建、入队。
     |
@@ -856,9 +856,7 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
 构建完成：“递”和“归”阶段会交错执行直到“归”到 rootFiber
 ```
 
-
-
-##### beginWork
+beginWork
 
 ![](.\react\流程图\beginWork工作流程.png)
 

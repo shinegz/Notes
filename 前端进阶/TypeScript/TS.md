@@ -18,7 +18,7 @@
 
 + 静态类型
 
-  TypeScript在运行前需要先编译为 JavaScript，在编译阶段就会进行类型检查。
+  TypeScript 在运行前需要先编译为 JavaScript，在编译阶段就会进行类型检查。
 
 + 弱类型
 
@@ -234,7 +234,7 @@ console.log(Days["Sat"] === 6); // true
 
 **数组**
 
-TypeScript像JavaScript一样可以操作数组元素。 有两种方式可以定义数组。 第一种，可以在元素类型后面接上 `[]`，表示由此类型元素组成的一个数组：
+TypeScript 像 JavaScript 一样可以操作数组元素。 有两种方式可以定义数组。 第一种，可以在元素类型后面接上 `[]`，表示由此类型元素组成的一个数组：
 
 ```ts
 let list: number[] = [1, 2, 3];
