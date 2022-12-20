@@ -834,8 +834,8 @@ function commitRootImpl(root, renderPriorityLevel) {
 
 ```shell
 render 入口（根据本次更新是同步还是异步调用不同方法`performSyncWorkOnRoot` 或 `performConcurrentWorkOnRoot`）
- 	|
- 	|
+ 	  |
+ 	  |
     v
 进入循环，开始递归构建 Fiber 树（根据本次更新是同步还是异步调用不同方法`workLoopSync` 或 `workLoopConcurrent(可中断递归)`）
     |
@@ -884,8 +884,8 @@ commit 阶段的主要工作（即 Renderer 的工作流程）分为三部分：
 
 ```bash
 commit 入口（fiberRootNode 作为传参调用`commitRoot(root)`）
- 	|
- 	|
+ 	  |
+ 	  |
     v
 before mutation之前（变量赋值、状态重置）
     |
