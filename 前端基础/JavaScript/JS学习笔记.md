@@ -536,7 +536,7 @@ break：强制结束整个循环（break后面的代码也不再执行）
 
     以上这些特性只有 JavaScript 引擎才用到，因此不能直接访问它们。所以特性被放在两对方括号中，而不是一对。
 
-    > 定义属性及属性描述符的方法：Object.defineProperty([obj], [descriptor])
+    > 定义属性及属性描述符的方法：Object.defineProperty([obj], [prop], [descriptor])
   >
     > 读取属性的特性的方法：Object.prototype.getOwnPropertyDescriptor([obj], [prop])
 

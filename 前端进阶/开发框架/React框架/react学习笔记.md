@@ -367,7 +367,7 @@ JSX 中的子元素还可以是以上几种类型的组合。
 
 ## 底层原理与机制
 
-### 更新任务生成流程
+### 更新任务的生成和注册
 
 ```sh
 触发状态更新（根据场景调用不同方法）
@@ -816,9 +816,9 @@ function commitRootImpl(root, renderPriorityLevel) {
 
 
 
-### <u>组件树渲染</u>
+### <u>更新任务的执行</u>
 
-组件树渲染的过程可以分为两个阶段：render阶段和commit阶段。
+更新任务执行的过程可以分为两个阶段：render阶段和commit阶段。
 
 ![](.\react\流程图\组件树渲染核心流程.png)
 
@@ -856,7 +856,7 @@ render 入口（根据本次更新是同步还是异步调用不同方法`perfor
 构建完成：“递”和“归”阶段会交错执行直到“归”到 rootFiber
 ```
 
-beginWork
+##### beginWork
 
 ![](.\react\流程图\beginWork工作流程.png)
 
@@ -1861,7 +1861,7 @@ React 为了实现 Concurrent Mode，做了以下几部分的工作：
 
 
 
-#### Fiber 架构
+#### Fiber 架构（替换最新笔记）
 
 ##### 产生背景
 
