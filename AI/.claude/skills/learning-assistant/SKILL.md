@@ -174,19 +174,48 @@ Organize content by applying the **可借鉴之处** below; section order and de
 - 大段散文优先转化为：**表格**（对比、分类）、**列表**（步骤、枚举）、**折叠 QA**（为什么、怎么权衡）。
 - 章节标题使用 `### 概念名 — "类比短语"` 格式（如 `### 两级队列 — "银行叫号 + 限流窗口"`），扫目录即建立初步认知。
 
-**Mermaid diagram style**（提炼自《基于DDD的Smax前端架构设计与实践》，总结中若画图可统一采用）：
-- **类型**：优先用 `flowchart TB`（自上而下）、`flowchart LR`（左右）或 `flowchart TD`；复杂分组用 `subgraph`。
-- **节点**：节点内换行用 `<br/>`（如 `A["UI 层<br/>页面/组件"]`）；连线可加标签（如 `-->|抽象|`）。
-- **配色**：为每个节点显式写 `style NODE fill:#HEX,stroke:#e2e8f0`，保持统一语义：
-  - 中性/背景/UI：`#f1f5f9`
-  - 应用/流程层：`#bae6fd`
-  - 领域/核心：`#ddd6fe` 或 `#c4b5fd`
-  - 基础设施/外部：`#cbd5e1`
-  - 正向/成功/结论：`#a8e6cf`
-  - 根因/错误/强调：`#fecaca`
-  - 警告/次要强调：`#fef3c7` 或 `#fed7aa`
-  - 子图背景：`subgraph` 内 `style sub fill:#f8fafc,stroke:#e2e8f0`
-- **读图结论**：图下方用 1～3 条「读图结论」点明要点，便于扫读。
+**Mermaid diagram style**（提炼自多篇技术深度分析文章，总结中若画图可统一采用）：
+
+**基础规范：**
+- **类型选择**：优先用 `flowchart TB`（自上而下）或 `flowchart LR`（左右）；复杂分组用 `subgraph`，支持嵌套子图和子图连接。`graph TB/LR` 适合简单场景。`sequenceDiagram` 适合交互时序，`mindmap` 适合层级概念。
+- **节点文本**：节点内换行用 `<br/>`（如 `A["UI 层<br/>页面/组件"]`）；次要说明用 `<i>` 标签（如 `A["主标题<br/><i>补充说明</i>"]`）；emoji 前缀辅助视觉扫描（如 `["🔍 混合检索"]`）。
+- **连线标签**：用 `-->|标签|` 标注语义（如 `-->|写入|`、`-->|按需|`）。
+- **起止节点**：圆角矩形 `(["🟢 开始"])` / `(["🔴 结束"])` 用于流程的首尾。
+- **读图结论**：图下方用 1～3 条要点或表格点明关键信息，便于扫读。
+
+**布局技巧：**
+- **子图内部横排**：在 `subgraph` 内用 `direction LR` 让节点水平展开，减少纵向占用。
+- **嵌套子图分组**：将复杂流程拆为多个 Phase/阶段子图（如 `subgraph init["🚀 Phase 1 · 初始化"]`），子图标题附加 emoji + 阶段号。
+- **实线/虚线区分方向**：`-->`（实线）表示主数据流方向，`-.->`（虚线）表示回注/反馈路径。视觉上一眼区分"往下写"和"往上读"。
+- **减少连线交叉**：对齐上下层节点顺序（如沉淀层 `A B C` 与复用层 `X Y Z` 一一对应），使层间连线尽量平行。用子图连接替代逐节点连接来减少总连线数。
+
+**配色方案（两套可选，按文章调性选一套）：**
+
+*方案 A — 柔和淡雅（适合架构设计/DDD 类文章）：*
+  - 中性/背景/UI：`fill:#f1f5f9,stroke:#e2e8f0`
+  - 应用/流程层：`fill:#bae6fd,stroke:#e2e8f0`
+  - 领域/核心：`fill:#ddd6fe,stroke:#e2e8f0` 或 `fill:#c4b5fd,stroke:#e2e8f0`
+  - 基础设施/外部：`fill:#cbd5e1,stroke:#e2e8f0`
+  - 正向/成功：`fill:#a8e6cf,stroke:#e2e8f0`
+  - 错误/强调：`fill:#fecaca,stroke:#e2e8f0`
+  - 警告/次要：`fill:#fef3c7,stroke:#e2e8f0`
+
+*方案 B — Material Design 鲜明（适合机制剖析/流程类文章）：*
+  - 沉淀/存储/正向：`fill:#E8F5E9,stroke:#2E7D32`（绿色系）/ `fill:#C8E6C9,stroke:#388E3C`
+  - 复用/检索/信息：`fill:#E3F2FD,stroke:#1565C0`（蓝色系）/ `fill:#B3E5FC,stroke:#0277BD`
+  - 运行时/流程/活跃：`fill:#FFF3E0,stroke:#E65100`（橙色系）/ `fill:#FFECB3,stroke:#FF8F00`
+  - 用户/身份/抽象：`fill:#F3E5F5,stroke:#6A1B9A`（紫色系）/ `fill:#D1C4E9,stroke:#512DA8`
+  - 错误/结束/危险：`fill:#FFCDD2,stroke:#C62828`（红色系）
+  - 旧数据/警告：`fill:#FFF9C4,stroke:#F9A825`（黄色系）
+  - 强调节点加粗边框：`stroke-width:3px`；普通节点：`stroke-width:2px`
+
+**批量着色**：使用 `classDef` 定义语义类，用 `class` 批量应用，避免逐节点写 `style`：
+```
+classDef core fill:#E8F5E9,stroke:#2E7D32,stroke-width:2px,color:#1B5E20
+classDef info fill:#E3F2FD,stroke:#1565C0,stroke-width:2px,color:#0D47A1
+class NodeA,NodeB,NodeC core
+class NodeX,NodeY info
+```
 
 ### Phase 6: Quality Verification
 

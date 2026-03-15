@@ -16,7 +16,7 @@ aliases:
 > [!abstract] 本文定位
 > 目标是：读完这篇文章，你能清晰地说出 OpenClaw 是什么、为什么火、它的设计思想是什么、核心机制怎么运转——而不需要看懂任何一行源码。**文章从用户视角出发，逐层深入技术原理**，图文并茂，通俗易懂。
 >
-> 配套笔记：[[OpenClaw学习笔记]] · 关联主题：[[Agent-开发技术]]
+> 配套笔记：[[OpenClaw学习笔记]]（源码解析）· [[OpenClaw自我进化机制深度剖析]]（自我进化机制）· 关联主题：[[Agent-开发技术]]
 
 ---
 
@@ -43,7 +43,7 @@ aliases:
 > 
 > | 管家的能力 | 对应 OpenClaw |
 > |-----------|-------------|
-> | 📱 你打电话、发微信、发短信都能找到他 | **多通道接入**——WhatsApp · Telegram · Slack · Discord · iMessage |
+> | 📱 你打电话、发微信、发短信都能找到他 | **多通道接入**——WhatsApp · Telegram · Slack · Discord · iMessage · Signal · LINE · 飞书 · Teams |
 > | 🔧 他不只陪聊，真的去买菜、寄快递、交水电费 | **真实任务执行**——跑代码 · 读写文件 · 调 API · 发邮件 |
 > | 🏠 他住在你家，不是外包公司派来的 | **本地私有**——数据在你机器上，不经过任何云端 |
 > | 📝 他有本小本本，记着你的习惯和偏好 | **三层记忆**——短期 · 中期 · 长期，不会"失忆" |
@@ -124,6 +124,7 @@ flowchart LR
   DC["🎮 Discord"]
   IM["💬 iMessage"]
   SL["💼 Slack"]
+  SIG3["🔒 Signal"]
 
   subgraph gw["你的机器上"]
     GW["🦞 OpenClaw Gateway"]
@@ -136,6 +137,7 @@ flowchart LR
   DC --> GW
   IM --> GW
   SL --> GW
+  SIG3 --> GW
 
   style gw fill:#f1f5f9,stroke:#94a3b8
   style GW fill:#bae6fd,stroke:#0ea5e9
@@ -209,12 +211,13 @@ flowchart TB
 flowchart TB
   OC["🦞 OpenClaw"]
   
-  OC --> C1["📡 多通道接入（WA · TG · SL · DC · iMsg · Signal）"]
+  OC --> C1["📡 多通道接入（WA · TG · SL · DC · iMsg · Signal · LINE · 飞书 · Teams）"]
   OC --> C2["🔧 真实任务执行（文件·命令·邮件·网页·API）"]
   OC --> C3["🧩 Skills 技能插件（5700+ 社区技能）"]
   OC --> C4["🧠 三层记忆系统（短期·中期·长期）"]
   OC --> C5["⏰ 自主调度（Cron + Heartbeat）"]
   OC --> C6["📱 设备节点（摄像头·录屏·位置）"]
+  OC --> C7["🔌 插件系统（24 个生命周期钩子 · 全功能扩展）"]
 
   style OC fill:#bae6fd,stroke:#0ea5e9
   style C1 fill:#f1f5f9,stroke:#94a3b8
@@ -223,6 +226,7 @@ flowchart TB
   style C4 fill:#fef3c7,stroke:#f59e0b
   style C5 fill:#fed7aa,stroke:#f97316
   style C6 fill:#fecaca,stroke:#ef4444
+  style C7 fill:#E3F2FD,stroke:#1565C0
 ```
 
 ### 能力详解
@@ -232,7 +236,7 @@ flowchart TB
 
 #### 📡 多通道接入 — "不管你用什么方式联系管家，他都接得到"
 
-一个 Gateway 进程同时连接多个聊天平台。你在哪个 App 发消息，就从哪个 App 收到回复。原生支持 WhatsApp、Telegram、Discord、iMessage、Slack、Signal，社区持续扩展中。
+一个 Gateway 进程同时连接多个聊天平台。你在哪个 App 发消息，就从哪个 App 收到回复。原生支持 WhatsApp、Telegram、Discord、iMessage、Slack、Signal、LINE、飞书（Feishu）、Microsoft Teams、Nostr 等 10+ 通道，社区持续扩展中。
 
 > **对 Agent 开发者的启发**：通道（Channel）只负责消息格式转换，Agent 完全不知道消息来自哪个平台——这种"入口与智能解耦"的设计让新增平台接入零代码改动。
 
@@ -263,16 +267,33 @@ Skills 是可扩展的"能力包"。每个 Skill 就是一个 Markdown 文件（
 
 > **对 Agent 开发者的启发**：Skill 本质就是"Prompt 即插件"——不需要写代码，一个 Markdown 文件就是一个能力。这是目前 Agent 扩展最轻量的模式之一。
 
+#### 🔌 插件系统 — "管家的能力都能按需升级"
+
+OpenClaw 的通道、记忆、模型 Provider、工具等几乎所有能力，都通过**统一的插件系统**接入。每个插件就是一个 TS/JS 模块，通过 `register(api)` 函数注册自己的能力：
+
+| 注册类型 | 说明 | 类比 |
+|---------|------|------|
+| 通道（Channel） | 接入新聊天平台 | 管家学会用新的沟通方式 |
+| 工具（Tool） | 给 Agent 新工具 | 管家拿到新工具 |
+| 模型 Provider | 对接新 LLM | 管家换了个更聪明的大脑 |
+| 生命周期钩子 | 在 24 个时机点注入逻辑 | 管家在做事的关键节点执行额外动作 |
+
+插件从四个来源自动发现：**配置指定 > 项目工作区 > 内置 > 全局安装**，优先级从高到低。
+
+> **对 Agent 开发者的启发**：OpenClaw 用 24 个生命周期钩子（如 `before_model_resolve`、`agent_end`、`before_compaction`）把 Agent 运行时的每个关键节点都暴露出来，插件可以在这些节点注入、修改、拦截。这让"可扩展"不是口号——从模型路由、提示注入到消息过滤，全部可插拔。
+
 #### 🧠 三层记忆系统 — "管家的小本本、日记本、和刻在脑子里的常识"
 
 ```mermaid
 flowchart LR
   L1["💬 短期记忆<br>（当前对话上下文）"] -->|"压缩沉淀"| L2["📓 中期记忆<br>（每日归档 memory/日期.md）"]
   L2 -->|"提炼写入"| L3["🧠 长期记忆<br>（MEMORY.md · 每次对话加载）"]
+  L2 -.->|"向量化索引"| VEC["🔍 向量记忆<br>（混合检索 · 语义召回）"]
 
   style L1 fill:#fef3c7,stroke:#f59e0b
   style L2 fill:#fed7aa,stroke:#f97316
   style L3 fill:#fecaca,stroke:#ef4444
+  style VEC fill:#E3F2FD,stroke:#1565C0
 ```
 
 | 层级 | 类比 | 特点 |
@@ -280,8 +301,11 @@ flowchart LR
 | 短期 | 管家正在听你说话 | 受 Context Window 限制，对话结束后消失 |
 | 中期 | 管家的工作日记 | 按天自动归档压缩，保留重要细节 |
 | 长期 | 刻在脑子里的事实 | `MEMORY.md` 文件，每次对话都加载，永不遗忘 |
+| 向量 | 管家的语义索引 | 将记忆向量化，支持"按意思搜索"而非"按关键词搜索" |
 
-> **对 Agent 开发者的启发**：记忆不是简单地"把历史塞进 context"。分层设计让 Agent 在 token 预算内兼顾"当下理解力"和"长期认知"——这是构建有状态 Agent 的关键架构模式。
+除了三层文本记忆，OpenClaw 还内置了**混合检索系统**——结合关键词搜索（BM25）和向量语义搜索，再通过**时间衰减**（近期记忆权重更高）和 **MMR 去重**（避免召回重复内容）对结果重排。Agent 可以通过 `memory_search` 工具主动搜索记忆，也可以通过 auto-recall 机制在每次对话开始时自动注入相关记忆。
+
+> **对 Agent 开发者的启发**：记忆不是简单地"把历史塞进 context"。分层设计让 Agent 在 token 预算内兼顾"当下理解力"和"长期认知"。混合检索避免了纯向量搜索的"语义漂移"和纯关键词搜索的"字面匹配"缺陷——这是构建有状态 Agent 的关键架构模式。
 
 #### ⏰ 自主调度 — "管家会自己定闹钟巡逻"
 
@@ -327,11 +351,12 @@ flowchart LR
   end
   subgraph openclaw["OpenClaw"]
     direction TB
-    OC1["✅ 多通道入口"]
+    OC1["✅ 10+ 通道入口"]
     OC2["✅ 能执行真实任务"]
     OC3["✅ 本地私有，数据自控"]
-    OC4["✅ 可扩展技能"]
+    OC4["✅ 可扩展技能 + 插件系统"]
     OC5["✅ 自主调度，无需手动触发"]
+    OC6["✅ 混合记忆检索"]
   end
 
   style chatgpt fill:#f1f5f9,stroke:#94a3b8
@@ -368,6 +393,9 @@ flowchart LR
 > [!important] 思想四：Agent 需要"时间线"，不能只有"对话线"
 > Heartbeat 机制让 Agent 有了独立于用户消息的时间感知。这是从"对话式 AI"进化到"自主 Agent"的关键一步——Agent 不再只是"被问才答"，而是"自己知道什么时候该做什么"。
 
+> [!important] 思想五：用生命周期钩子让扩展性成为一等公民
+> OpenClaw 定义了 24 个生命周期钩子（从模型选择前到消息发送后），每个钩子都是一个"可插入点"。这意味着**任何定制需求都不需要 fork 核心代码**——写一个插件、注册到对应钩子就行。这是从"能用"到"好扩展"的工程化飞跃。
+
 > [!quote] 一句话总结
 > OpenClaw 是"给开发者的私人 AI 基础设施"——你拥有它，它在你的机器上跑，帮你在所有聊天 App 里随时使用 AI，还能自主执行任务。
 
@@ -397,7 +425,10 @@ flowchart TB
     DC["Discord"]
     SL["Slack"]
     IM["iMessage"]
-    SIG["Signal / 其他..."]
+    SIG["Signal"]
+    LINE["LINE"]
+    FE["飞书"]
+    MSTM["MS Teams"]
   end
 
   subgraph CLI_UI["💻 控制客户端"]
@@ -451,10 +482,17 @@ flowchart TB
     DS["DeepSeek / 本地模型..."]
   end
 
+  subgraph PLUG["🔌 插件系统（Plugin Layer）"]
+    PLGD["插件发现（4 来源 · 自动扫描）"]
+    PLGH["24 生命周期钩子（before_model_resolve · agent_end · ...）"]
+    PLGR["插件注册（通道 · 工具 · Provider · 钩子 · HTTP）"]
+  end
+
   subgraph WS_STORE["🗂️ Workspace（本地文件系统 · ~/.openclaw/workspace）"]
     WF["SOUL · USER · MEMORY · AGENTS.md（每次注入）"]
     SK["skills/（技能插件·SKILL.md）"]
     ML["memory/YYYY-MM-DD.md（中期记忆日志）"]
+    VDB["向量索引（SQLite-vec / LanceDB · 混合检索）"]
   end
 
   %% ── 所有入口接入 Gateway ──
@@ -487,6 +525,10 @@ flowchart TB
   LOOP --> TREE
   LOOP --> PIAI
 
+  %% ── 插件系统连接 ──
+  PLUG -.->|"注册通道 / 工具 / 钩子"| GW
+  PLUG -.->|"注入到执行流水线"| EX
+
   %% ── Pi → 本地存储 ──
   SES -->|"读取注入"| WF
   TOOLS -->|"读写文件 / 执行命令"| WS_STORE
@@ -502,6 +544,7 @@ flowchart TB
   style GW fill:#bae6fd,stroke:#0ea5e9
   style EX fill:#ddd6fe,stroke:#8b5cf6
   style PI fill:#a8e6cf,stroke:#059669
+  style PLUG fill:#E3F2FD,stroke:#1565C0
   style MSG_CH fill:#f1f5f9,stroke:#94a3b8
   style CLI_UI fill:#f1f5f9,stroke:#94a3b8
   style NODE fill:#f1f5f9,stroke:#94a3b8
@@ -514,7 +557,8 @@ flowchart TB
 > ② **请求在 Gateway 内按固定四步处理**（Handshake → Authorization → Dispatch → Broadcast），经队列进入 Execution 层；
 > ③ **Execution 层调度 Pi Agent** 完成实际 AI 推理和工具执行，Pi 通过 `pi-ai` 抽象层对接任意 LLM 后端；
 > ④ **执行结果以流式事件经 Broadcast 原路回传**给发起方（聊天 App 或控制客户端）；
-> ⑤ **Workspace 本地文件系统**是 Pi 的"记忆与技能仓库"，每次会话都注入，数据始终在本地。
+> ⑤ **Workspace 本地文件系统**是 Pi 的"记忆与技能仓库"，包含文本记忆和向量索引，每次会话都注入，数据始终在本地；
+> ⑥ **插件系统**横跨 Gateway 和 Execution 层，通过 24 个生命周期钩子让通道、工具、记忆后端、模型 Provider 全部可插拔。
 
 ---
 
@@ -556,6 +600,8 @@ flowchart LR
     DC["🎮 Discord"]
     SL["💼 Slack"]
     IM["💬 iMessage"]
+    SIG2["🔒 Signal"]
+    MORE["📨 LINE · 飞书 · Teams · Nostr ..."]
   end
 
   subgraph hub["🦞 Gateway（Hub）—— 中心控制面"]
@@ -628,6 +674,7 @@ flowchart TB
 | **Gateway** | 📋 总经理 | 连接管理、鉴权、路由、广播 | 不做任何 AI 推理 |
 | **Execution** | 🗂️ 项目经理 | 排队、串行化、超时重试、模型降级 | 不关心 AI 输出了什么 |
 | **Intelligence** | 🧠 工程师 | 推理、调用工具、生成结果 | 不关心消息从哪来 |
+| **Plugin**（横切） | 🔌 人事部 | 在各层的关键节点注入扩展逻辑 | 不替代任何层的核心职责 |
 
 > [!tip] 设计哲学一句话
 > **Gateway 不"思考"，只"调度"**——把"智能"和"基础设施"分开，是 OpenClaw 整个架构最核心的设计思想。这意味着：换 AI 引擎不影响基础设施，加新通道不影响 AI 逻辑——两侧独立演进。
@@ -766,6 +813,7 @@ flowchart TB
   WS --> USER["USER.md（关于你的基本信息）"]
   WS --> SKILLS["skills/（本地技能插件目录）"]
   WS --> MEMDIR["memory/（中期记忆日志）"]
+  WS --> VEC2["向量索引（混合检索 · 语义召回）"]
   
   style WS fill:#fef3c7,stroke:#f59e0b
   style AGENTS fill:#bae6fd,stroke:#0ea5e9
@@ -880,8 +928,10 @@ flowchart TB
 > [!question]- 为什么要同时有 `write` 和 `edit`？
 > 如果只有 `write`，每次改一行代码都得先 `read` 全文 → 内存中修改 → 完整写回——**消耗大量 token 且容易出错**。`edit` 只处理变化部分，且 `old` 必须精确匹配（含缩进），保证"不会误改别处"。这个设计让 Pi 在修改大文件时既高效又安全。
 
-> [!question]- 为什么只有 4 个工具，不多加几个？
-> 这是**刻意的极简设计**。`read/write/edit` 覆盖所有文件操作，`bash` 覆盖一切其他事（网络、进程、系统、外部服务）。工具越少，LLM 在选择工具时决策空间越小，调用准确率越高。如果需要更多能力（邮件、日历、API），通过 **Skills** 用 Prompt 描述即可，不需要增加底层工具。
+> [!question]- 为什么核心只有 4 个工具，不多加几个？
+> 这是**刻意的极简设计**。`read/write/edit` 覆盖所有文件操作，`bash` 覆盖一切其他事（网络、进程、系统、外部服务）。工具越少，LLM 在选择工具时决策空间越小，调用准确率越高。
+> 
+> 不过，通过**插件系统**，OpenClaw 已扩展出更多专用工具：`memory_search`（语义搜索记忆）、`memory_get`（读取记忆片段）、`web_search`（网页搜索）、`browser`（浏览器操作）、`sessions_send`（跨会话通信）等——这些工具按需注册，只在相应插件启用时才出现，不会增加核心工具集的复杂度。
 
 **四工具协同示例**：你说"帮我分析项目里的 TODO 注释，整理成 report.md"——
 
@@ -1017,13 +1067,15 @@ flowchart LR
   style P5 fill:#a8e6cf,stroke:#059669
 ```
 
-### 三个关键设计思想
+### 五个关键设计思想
 
 | # | 思想 | 一句话 | 对你的启发 |
 |---|------|--------|-----------|
 | 1 | **Agent 当基础设施做** | 通道接入、会话管理、任务队列、鉴权等"循环之外"的工程问题，交给 Gateway 统管 | 别把所有逻辑塞进一个 Agent——分离基础设施和智能层 |
 | 2 | **Hub-and-Spoke 架构** | Gateway 是唯一中心，所有入口只和 Gateway 通信 | 接口层与智能层完全解耦，新增入口不改 AI 逻辑 |
 | 3 | **确定性优先** | 入站链固定四步、队列严格排序、run/attempt 边界清晰 | 可预测 > 灵活——生产环境中可调试性是生命线 |
+| 4 | **Agent 需要时间线** | Heartbeat 让 Agent 有了独立于对话的自主节奏 | 从被动响应到主动行动，需要给 Agent "自己的时间感知" |
+| 5 | **生命周期钩子即扩展** | 24 个钩子覆盖运行时每个关键点，插件可插拔不需 fork | 把扩展性设计成一等公民，定制不动核心代码 |
 
 ### 适合谁用
 
@@ -1039,13 +1091,14 @@ flowchart LR
 
 ### Agent 开发者的一页速查
 
-> [!abstract] 从 OpenClaw 带走的 5 条设计经验
+> [!abstract] 从 OpenClaw 带走的 6 条设计经验
 > 
 > 1. **分离"调度"与"智能"** — Gateway 不思考，Pi 不调度。分层让两边各自可替换、可演进。
-> 2. **极简工具集** — 4 个工具覆盖 90% 场景。工具越少，LLM 决策越准。
-> 3. **记忆要分层** — 短期（对话）· 中期（日归档）· 长期（MEMORY.md）。不是所有信息都值得塞进 context。
+> 2. **极简工具集** — 4 个核心工具覆盖 90% 场景。工具越少，LLM 决策越准。专用工具通过插件按需注入。
+> 3. **记忆要分层 + 混合检索** — 短期（对话）· 中期（日归档）· 长期（MEMORY.md）· 向量（语义召回）。BM25 + 向量 + 时间衰减 + MMR，让记忆检索既准又多样。
 > 4. **给 Agent 一条时间线** — Heartbeat 让 Agent 有了"自主节奏"，从被动响应进化到主动行动。
 > 5. **Skill = Prompt 即插件** — 最轻量的扩展方式：一个 Markdown 文件就是一个能力包。
+> 6. **生命周期钩子即扩展** — 24 个钩子让通道、工具、记忆、Provider 全部可插拔，定制不 fork 核心。
 
 ---
 
@@ -1062,5 +1115,6 @@ flowchart LR
 | 入门教程 | [dev.to OpenClaw The AI Agent That Actually Does Stuff](https://dev.to/shresthapandey/openclaw-the-ai-agent-that-actually-does-stuff-part-1-51n4) | 英文入门实战 |
 | 记忆系统 | [learnopenclaw.com/core-concepts/memory](https://learnopenclaw.com/core-concepts/memory) | 三层记忆详解 |
 | 技能系统 | [docs.openclaw.ai/skills](https://docs.openclaw.ai/skills) | Skills 官方说明 |
-| 配套笔记 | [[OpenClaw学习笔记]] | 本笔记的实践操作与上手记录 |
+| 配套笔记 | [[OpenClaw学习笔记]] | 源码级实现解析：入站链、队列、执行流水线、插件/记忆/钩子系统 |
+| 自我进化 | [[OpenClaw自我进化机制深度剖析]] | 经验沉淀、记忆复用、进化闭环的深度解析 |
 | 关联主题 | [[Agent-开发技术]] | Agent 开发技术全景梳理 |
