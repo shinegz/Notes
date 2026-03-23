@@ -179,7 +179,7 @@ Organize content by applying the **可借鉴之处** below; section order and de
 - 大段散文优先转化为：**表格**（对比、分类）、**列表**（步骤、枚举）、**折叠 QA**（为什么、怎么权衡）。
 - 章节标题使用 `### 概念名 — "类比短语"` 格式（如 `### 两级队列 — "银行叫号 + 限流窗口"`），扫目录即建立初步认知。
 
-**Mermaid diagram style:** 总结中若需绘制 Mermaid 图表，请参阅 `references/mermaid-style.md` 获取完整的样式规范（配色方案、布局技巧、图表类型最佳实践等）。
+**Mermaid diagram style:** 总结中若需绘制 Mermaid 图表，请参阅 `references/mermaid-style.md` 获取完整的样式规范（配色方案、布局技巧、图表类型最佳实践等）。如需渲染为专业外观的 SVG 或 ASCII 输出，参阅 `references/beautiful-mermaid-guide.md`，可使用 `scripts/render-mermaid.js` 工具搭配 15 种内置主题（如 `tokyo-night`、`github-light`、`dracula` 等）进行高质量渲染。
 
 ### Phase 6: Quality Verification
 
