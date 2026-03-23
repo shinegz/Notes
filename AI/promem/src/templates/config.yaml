@@ -1,0 +1,53 @@
+# ProMem 配置文件
+# 详细说明参见: https://github.com/example/promem
+
+# 沉淀配置
+capture:
+  max_per_session: 5          # 单次会话最大沉淀条数
+  similarity_threshold: 0.95  # 去重相似度阈值
+  sensitive_patterns:         # 敏感信息正则
+    - "(?i)api[_-]?key\\s*[:=]\\s*\\S+"
+    - "(?i)password\\s*[:=]\\s*\\S+"
+    - "(?i)secret\\s*[:=]\\s*\\S+"
+    - "(?i)token\\s*[:=]\\s*\\S+"
+  # diff 分析配置
+  analyze_diff: true          # 是否启用 diff 内容分析
+  max_diff_lines: 500         # 最大分析的 diff 行数
+  max_diff_per_file: 200      # 单文件最大 diff 行数
+
+# 压缩配置
+compact:
+  auto_threshold: 50          # 自动压缩阈值（原始记录数）
+  keep_original: true         # 保留原始记录
+
+# 检索配置
+recall:
+  top_k: 3                    # 自动注入的记忆条数
+  weights:
+    bm25: 0.3                 # 关键词匹配权重
+    semantic: 0.5             # 语义相似度权重
+    recency: 0.2              # 时间衰减权重
+
+# 进化配置
+evolve:
+  decision_threshold: 3       # 同类决策次数阈值 → 提炼为规则
+  bug_threshold: 2            # 同类 Bug 次数阈值 → 写入模式库
+  require_approval: true      # 规则变更需审批
+
+# 生命周期配置
+lifecycle:
+  archive_after_months: 6       # 超过 N 个月的记忆可被归档
+  min_importance: 0.3           # 低于此评分的记忆自动归档
+  inactive_months: 3            # 未被引用超过 N 个月视为不活跃
+  compact_keep_recent: 10       # 压缩后保留最近 N 条不归档
+
+# Hook 配置
+hooks:
+  pre_push_blocking: false    # pre-push 失败是否阻塞推送
+  fail_silent: true           # Hook 失败时静默（仅 stderr），不弹窗
+
+# 日志配置
+log:
+  enabled: true               # 是否启用结构化日志
+  max_size_mb: 1              # 单个日志文件最大 MB
+  max_files: 3                # 保留历史日志文件数

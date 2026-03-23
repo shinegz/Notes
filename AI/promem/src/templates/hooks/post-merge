@@ -1,0 +1,14 @@
+#!/bin/bash
+# ProMem post-merge hook
+# 合并后自动更新记忆索引
+# 失败不阻塞 merge，仅 stderr 告警
+
+echo "[ProMem] Updating memory index after merge..." >&2
+
+# 通过 npx 调用 ProMem CLI
+if command -v npx &>/dev/null; then
+    npx --yes promem search --rebuild 2>/dev/null || true
+fi
+
+# 始终返回 0，不阻塞
+exit 0

@@ -1,0 +1,12 @@
+# 本地索引（每个开发者私有）
+.index.db
+.index.db-journal
+.index.db-wal
+
+# 运行日志（不需要 Git 同步）
+promem.log
+promem.log.*
+
+# Python 缓存
+__pycache__/
+*.pyc

@@ -1,0 +1,8 @@
+# 本地索引（每个开发者私有）
+.index.db
+.index.db-journal
+.index.db-wal
+
+# Python 缓存
+__pycache__/
+*.pyc

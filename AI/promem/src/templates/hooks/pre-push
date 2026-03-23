@@ -1,0 +1,45 @@
+#!/bin/bash
+# ProMem pre-push hook
+# 分析待 push 的 commit 影响范围，输出回归建议
+# 默认不阻塞 push
+
+# 获取待 push 的 commit 范围
+while read local_ref local_sha remote_ref remote_sha; do
+    if [ "$local_sha" = "0000000000000000000000000000000000000000" ]; then
+        continue  # 删除分支
+    fi
+    
+    if [ "$remote_sha" = "0000000000000000000000000000000000000000" ]; then
+        RANGE="$local_sha"
+    else
+        RANGE="$remote_sha..$local_sha"
+    fi
+    
+    # 获取变更文件列表
+    CHANGED_FILES=$(git diff --name-only "$RANGE" 2>/dev/null)
+    
+    if [ -z "$CHANGED_FILES" ]; then
+        continue
+    fi
+    
+    # 显示变更文件
+    echo "" >&2
+    echo "[ProMem] 📋 Push 影响分析" >&2
+    echo "[ProMem] ================================" >&2
+    echo "[ProMem] 变更文件:" >&2
+    echo "$CHANGED_FILES" | while read f; do
+        echo "[ProMem]   - $f" >&2
+    done
+    echo "[ProMem] ================================" >&2
+    echo "" >&2
+    
+    # 通过 npx 搜索相关记忆（可选）
+    if command -v npx &>/dev/null; then
+        for f in $CHANGED_FILES; do
+            BASENAME=$(basename "$f" | sed 's/\.[^.]*$//' | tr '_-' ' ')
+            npx --yes promem search "$BASENAME" --top-k 1 2>/dev/null | head -5 >&2
+        done
+    fi
+done
+
+exit 0

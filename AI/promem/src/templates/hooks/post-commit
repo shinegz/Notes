@@ -1,0 +1,12 @@
+#!/bin/bash
+# ProMem post-commit hook
+# 自动从 commit 中提取工程知识并沉淀到 .promem/memory/
+# 失败不阻塞 commit，仅 stderr 告警
+
+# 通过 npx 调用 ProMem CLI
+if command -v npx &>/dev/null; then
+    npx --yes promem capture &
+fi
+
+# 始终返回 0，不阻塞 Git 操作
+exit 0

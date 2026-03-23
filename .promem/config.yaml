@@ -1,0 +1,36 @@
+# ProMem 配置文件
+# 详细说明参见: https://github.com/example/promem
+
+# 沉淀配置
+capture:
+  max_per_session: 5          # 单次会话最大沉淀条数
+  similarity_threshold: 0.95  # 去重相似度阈值
+  sensitive_patterns:         # 敏感信息正则
+    - "(?i)api[_-]?key\\s*[:=]\\s*\\S+"
+    - "(?i)password\\s*[:=]\\s*\\S+"
+    - "(?i)secret\\s*[:=]\\s*\\S+"
+    - "(?i)token\\s*[:=]\\s*\\S+"
+
+# 压缩配置
+compact:
+  auto_threshold: 50          # 自动压缩阈值（原始记录数）
+  keep_original: true         # 保留原始记录
+
+# 检索配置
+recall:
+  top_k: 3                    # 自动注入的记忆条数
+  weights:
+    bm25: 0.3                 # 关键词匹配权重
+    semantic: 0.5             # 语义相似度权重
+    recency: 0.2              # 时间衰减权重
+
+# 进化配置
+evolve:
+  decision_threshold: 3       # 同类决策次数阈值 → 提炼为规则
+  bug_threshold: 2            # 同类 Bug 次数阈值 → 写入模式库
+  require_approval: true      # 规则变更需审批
+
+# Hook 配置
+hooks:
+  pre_push_blocking: false    # pre-push 失败是否阻塞推送
+  fail_silent: true           # Hook 失败时静默（仅 stderr），不弹窗

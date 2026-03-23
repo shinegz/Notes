@@ -1,0 +1,299 @@
+<!-- ProMem Start -->
+# ProMem - 项目知识记忆系统
+
+本项目使用 ProMem 知识记忆系统，所有项目知识存储在 `.promem/` 目录中。
+
+## 记忆目录结构
+
+```
+.promem/memory/
+├── decisions/      # 技术决策记录（自动：post-commit 检测到依赖/接口变更）
+├── bugs/           # Bug 修复记录（自动：post-commit 检测到 fix/bugfix）
+├── rules/          # 隐式规则（手动：对话中发现的约束和规则）
+├── entities/       # 配置实体（自动：post-commit 检测到配置文件变更）
+├── summaries/      # 压缩摘要（npx promem compact 生成）
+├── suggestions/    # 进化建议（npx promem evolve 生成，需人工审核）
+└── archive/        # 归档记忆（不参与检索，可手动恢复）
+```
+
+## 自动检索规则
+
+在回答任何关于本项目的问题之前，请先检索相关记忆：
+
+1. **对话开始时**：运行以下命令获取相关知识上下文
+   ```bash
+   npx promem search "<当前话题关键词>"
+   ```
+
+2. **编辑文件时**：搜索该模块的约束和已知 Bug
+   ```bash
+   npx promem search "<模块名>"
+   ```
+
+3. **技术选型时**：搜索历史决策
+   ```bash
+   npx promem search "<选型关键词>"
+   ```
+
+4. **按场景推荐**：获取场景相关的知识
+   ```bash
+   npx promem score --suggest --context "<上下文描述>"
+   ```
+
+## 沉淀规则
+
+知识沉淀分为自动和手动两种方式：
+
+### 自动沉淀（通过 Git Hooks）
+
+Git Hooks 会在 commit 后自动分析 diff，按规则沉淀：
+
+| 检测模式 | 目标目录 | 触发条件 |
+|---------|---------|---------|
+| 依赖/接口变更 | `decisions/` | 检测到 package.json、API 接口等变更 |
+| Bug 修复 | `bugs/` | commit message 包含 fix/bugfix/修复 |
+| 配置文件变更 | `entities/` | 检测到配置文件变更 |
+
+运行 `npx promem capture` 可手动触发从最近 commit 捕获知识。
+
+### 手动沉淀（通过对话）
+
+在对话中识别到以下模式时，手动创建记忆文件：
+
+### 决策沉淀
+当对话中出现技术决策（如选用某个库、选择某种架构方案），创建记忆文件：
+- 路径: `.promem/memory/decisions/YYYY-MM-DD-<slug>.md`
+- 格式:
+  ```markdown
+  # 决策: <标题>
+  
+  - 日期: YYYY-MM-DD
+  - 状态: active
+  
+  ## 背景
+  <决策背景>
+  
+  ## 方案对比
+  | 方案 | 优点 | 缺点 |
+  |------|------|------|
+  
+  ## 结论
+  <最终决策和原因>
+  
+  ## 标签
+  <相关标签>
+  ```
+
+### Bug 沉淀
+当对话中修复了一个 Bug，创建记忆文件：
+- 路径: `.promem/memory/bugs/YYYY-MM-DD-<slug>.md`
+- 格式:
+  ```markdown
+  # Bug: <标题>
+  
+  - 发现时间: YYYY-MM-DD
+  - 状态: fixed
+  
+  ## 现象
+  <Bug 表现>
+  
+  ## 原因
+  <根因分析>
+  
+  ## 修复方案
+  <修复方法>
+  
+  ## 标签
+  <相关标签>
+  ```
+
+### 规则沉淀
+当对话中发现隐式规则或约束（注意：这是手动沉淀，不会自动触发）：
+- 路径: `.promem/memory/rules/YYYY-MM-DD-<slug>.md`
+- 格式:
+  ```markdown
+  # 规则: <标题>
+  
+  - 日期: YYYY-MM-DD
+  - 状态: active
+  
+  ## 规则内容
+  <具体规则>
+  
+  ## 原因
+  <为什么有这个规则>
+  
+  ## 适用范围
+  <在什么场景下适用>
+  
+  ## 标签
+  <相关标签>
+  ```
+
+### 实体沉淀
+当对话中涉及配置实体（注意：配置文件变更会自动沉淀）：
+- 路径: `.promem/memory/entities/YYYY-MM-DD-<slug>.md`
+- 格式:
+  ```markdown
+  # 实体: <名称>
+  
+  - 类型: <接口/配置/模块/服务>
+  - 日期: YYYY-MM-DD
+  
+  ## 描述
+  <实体的用途和职责>
+  
+  ## 关键属性
+  <重要的配置项/字段/参数>
+  
+  ## 关联
+  <与其他实体的关系>
+  
+  ## 标签
+  <相关标签>
+  ```
+
+## Git Hooks 自动触发
+
+ProMem 通过 Git Hooks 实现自动化：
+
+### post-commit
+自动分析 commit diff，按规则沉淀到 decisions/bugs/entities/：
+- 检测依赖变更 → 生成决策记录
+- 检测 fix/bugfix → 生成 Bug 记录
+- 检测配置变更 → 生成实体记录
+
+### pre-push
+推送前自动检查记忆完整性：
+- 检查是否有未索引的记忆文件
+- 检查是否有冲突的知识
+
+### post-merge
+合并后自动重建索引：
+- 重建搜索索引
+- 检查合并冲突
+
+安装 Git Hooks：
+```bash
+npx promem hooks
+```
+
+## 知识进化工作流
+
+进化系统用于分析记忆中的重复模式，提炼出通用规则：
+
+### 完整流程
+
+1. **检查进化建议**
+   ```bash
+   npx promem evolve --check
+   ```
+   分析记忆中的重复模式，生成建议
+
+2. **建议自动保存**
+   - 保存到 `memory/suggestions/`
+   - 状态为 `pending`
+   - 包含建议内容和依据
+
+3. **人工审核**
+   - 查看建议文件内容
+   - 确认是否采纳
+
+4. **应用建议**
+   ```bash
+   npx promem evolve --apply SUG-001
+   ```
+   - 将建议写入 RULES.md 或 PATTERNS.md
+   - 建议状态变为 `approved`
+
+5. **查看历史**
+   ```bash
+   npx promem evolve --history
+   ```
+
+## 可用命令
+
+| 命令 | 用途 | 示例用法 |
+|------|------|----------|
+| `npx promem search` | 检索记忆 | `search "关键词"` |
+| `npx promem capture` | 从 commit 提取知识 | `capture` |
+| `npx promem compact` | 压缩记忆 | `compact --category decisions` 或 `compact --all`，压缩后自动归档旧文件 |
+| `npx promem evolve` | 知识进化 | `evolve --check`, `evolve --apply SUG-001`, `evolve --history` |
+| `npx promem score` | 知识评分 | `score --score`, `score --suggest --context "..."`, `score --gaps`, `score --archive` |
+| `npx promem hooks` | 安装 Git hooks | `hooks` |
+
+## CLI 命令参考
+
+### 搜索记忆
+```bash
+npx promem search "关键词"
+```
+
+### 从 Commit 捕获
+```bash
+npx promem capture
+```
+
+### 压缩记忆
+```bash
+npx promem compact --category decisions
+npx promem compact --all
+```
+
+### 生命周期管理
+```bash
+npx promem score --archive --dry-run  # 预览将归档的文件
+npx promem score --archive             # 执行自动归档（超 6 月 + 评分 < 0.3 + 3 月未引用）
+```
+
+> **注意**：`archive/` 目录不参与检索，无需查看。归档是移动非删除，可手动恢复。
+
+### 进化分析
+```bash
+npx promem evolve --check          # 检查是否有新的进化建议
+npx promem evolve --apply SUG-001  # 应用指定建议
+npx promem evolve --history        # 查看历史建议
+```
+
+### 重要性评分
+```bash
+npx promem score --score           # 计算所有记忆的重要性
+npx promem score --suggest --context "修复登录Bug"  # 按场景推荐记忆
+npx promem score --gaps            # 检测知识缺口
+```
+
+### 安装 Git Hooks
+```bash
+npx promem hooks
+```
+
+## 文件命名规范
+
+- 决策: `.promem/memory/decisions/YYYY-MM-DD-<slug>.md`
+- Bug: `.promem/memory/bugs/YYYY-MM-DD-<slug>.md`
+- 规则: `.promem/memory/rules/YYYY-MM-DD-<slug>.md`
+- 实体: `.promem/memory/entities/YYYY-MM-DD-<slug>.md`
+- 摘要: `.promem/memory/summaries/<category>_summary.md`
+- 建议: `.promem/memory/suggestions/YYYY-MM-DD-SUG-XXX-<slug>.md`
+- 归档: `.promem/memory/archive/<category>/YYYY-MM-DD-<slug>.md`
+
+### Slug 生成规则
+1. 从描述生成，取前 50 字符
+2. 去除特殊字符（保留中文、英文、数字）
+3. 空格转 `-`
+4. 全小写
+
+## 重要提醒
+
+- 所有知识文件使用 Markdown 格式
+- 文件名格式: `YYYY-MM-DD-<描述性slug>.md`
+- 敏感信息（API Key、密码等）不要写入记忆文件
+- 记忆文件随 Git 提交共享给团队
+- 检索/沉淀前确保 `.promem/memory/` 目录存在
+
+## 相关资源
+
+- 配置文件: `.promem/config.yaml`
+- 团队规则: `.promem/RULES.md`
+- 模式库: `.promem/PATTERNS.md`
+<!-- ProMem End -->

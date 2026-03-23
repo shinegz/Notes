@@ -1,0 +1,22 @@
+{
+  "name": "promem",
+  "version": "1.0.0",
+  "description": "ProMem - 为 AI Agent 设计的项目记忆系统",
+  "bin": {
+    "promem": "./bin/promem.js"
+  },
+  "files": [
+    "bin/",
+    "src/"
+  ],
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "license": "MIT",
+  "keywords": ["promem", "ai", "memory", "agent", "knowledge"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/promem"
+  },
+  "author": ""
+}
