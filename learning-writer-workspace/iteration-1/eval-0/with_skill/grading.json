@@ -1,0 +1,10 @@
+{
+  "run_id": "eval-0-with_skill",
+  "grading": [
+    {"text": "文章包含 React Fiber 核心原理的详细解释", "passed": true, "evidence": "包含链表结构、双缓冲、Work Loop 等核心概念"},
+    {"text": "文章解释了为什么需要设计 Fiber", "passed": true, "evidence": "包含递归困局、浏览器卡顿等问题的解释"},
+    {"text": "文章包含时间切片机制的说明", "passed": true, "evidence": "包含帧预算、shouldYield、5ms 让步等机制"},
+    {"text": "文章包含优先级调度的说明", "passed": true, "evidence": "包含 Lane 模型、useTransition 示例"},
+    {"text": "文章包含可视化图表（Mermaid/ASCII）", "passed": true, "evidence": "包含调用栈对比图、流程图"}
+  ]
+}

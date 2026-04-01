@@ -1,0 +1,32 @@
+{
+  "eval_id": 3,
+  "eval_name": "comparative-database-indexes",
+  "prompt": "帮我对比分析不同的数据库索引类型：B-Tree、Hash、Bitmap、GiST 等。要说明每种索引适合什么场景，优缺点是什么。",
+  "assertions": [
+    {
+      "text": "文章包含 B-Tree 索引的详细分析",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含 Hash 索引的详细分析",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含 Bitmap 索引的详细分析",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含 GiST 索引的详细分析",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含各索引类型的对比",
+      "passed": null,
+      "evidence": "待评测"
+    }
+  ]
+}

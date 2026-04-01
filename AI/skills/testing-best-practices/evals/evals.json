@@ -1,0 +1,165 @@
+{
+  "skill_name": "testing-best-practices",
+  "version": "2.0.0",
+  "description": "测试用例用于验证 testing-best-practices skill 的关键改进点：Phase 2 分层执行、Mock 数据前置、语言偏好、测试文件组织",
+  "evals": [
+    {
+      "id": 1,
+      "name": "phase-2-checkpoint-enforcement",
+      "description": "验证 Phase 2 分层执行关卡：确保输出包含 Phase 2A/2B/2C 三个子阶段的完成确认",
+      "prompt": "为以下功能生成测试：用户登录后，在商品列表页点击商品可进入详情页，详情页显示商品名称、价格、库存。库存不足时显示\"库存不足\"标签。",
+      "expected_output": "输出必须包含：1) Phase 2A 单元测试完成确认；2) Phase 2B 集成测试完成确认（或跳过理由）；3) Phase 2C E2E 测试完成确认。三个确认缺一不可。",
+      "assertions": [
+        {
+          "name": "phase-2a-confirmation",
+          "description": "Phase 2A 完成确认存在",
+          "type": "contains",
+          "value": "Phase 2A 完成"
+        },
+        {
+          "name": "unit-test-report-exists",
+          "description": "单元测试报告路径存在",
+          "type": "regex",
+          "value": "(tests/unit/reports|单元测试报告)"
+        },
+        {
+          "name": "phase-2b-confirmation",
+          "description": "Phase 2B 完成确认或跳过理由存在",
+          "type": "regex",
+          "value": "(Phase 2B 完成|Phase 2B 跳过)"
+        },
+        {
+          "name": "integration-test-report-exists",
+          "description": "集成测试报告路径存在或跳过",
+          "type": "regex",
+          "value": "(tests/integration/reports|集成测试报告|Phase 2B 跳过)"
+        },
+        {
+          "name": "phase-2c-confirmation",
+          "description": "Phase 2C 完成确认存在",
+          "type": "contains",
+          "value": "Phase 2C 完成"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "mock-data-prerequisite",
+      "description": "验证 E2E 前置 Mock 数据清单：在执行 E2E 前必须输出 Mock 数据需求文档",
+      "prompt": "为 Smax AM Campaign 创建功能生成测试。场景包括：新客创建 AM Campaign、老客看到升级弹窗、管理页展示 Campaign 列表。需要 E2E 测试验证完整流程。",
+      "expected_output": "在 Phase 2C 阶段，必须在执行 E2E 前输出 'Mock 数据清单' 或 'Mock 数据需求文档'，明确列出每个场景所需的 API 返回值、localStorage 状态、权限开关。",
+      "assertions": [
+        {
+          "name": "mock-data-checklist-exists",
+          "description": "Mock 数据清单存在于 Phase 2C 前",
+          "type": "contains",
+          "value": "Mock 数据清单"
+        },
+        {
+          "name": "mock-api-specified",
+          "description": "指定了 API 返回值",
+          "type": "regex",
+          "value": "(API Mock|GET /api|POST /api)"
+        },
+        {
+          "name": "no-account-blame",
+          "description": "未将阻塞归咎于账号问题",
+          "type": "not_contains",
+          "value": "账号问题"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "chinese-language-output",
+      "description": "验证语言偏好：所有输出必须是中文",
+      "prompt": "为 Campaign 管理页面生成测试计划，包括 Campaign 列表展示、状态筛选、详情页跳转功能。",
+      "expected_output": "测试计划、describe/it 名称、报告等所有输出内容必须是中文。代码标识符（函数名、变量名）保持英文。",
+      "assertions": [
+        {
+          "name": "plan-in-chinese",
+          "description": "测试计划使用中文",
+          "type": "contains",
+          "value": "测试计划"
+        },
+        {
+          "name": "describe-chinese",
+          "description": "describe 名称包含中文",
+          "type": "regex",
+          "value": "describe\\([\"'][^\"']*[\u4e00-\u9fa5]"
+        },
+        {
+          "name": "no-english-report",
+          "description": "报告不是纯英文",
+          "type": "not_contains",
+          "value": "Test Report"
+        },
+        {
+          "name": "unit-report-chinese",
+          "description": "单元测试报告使用中文",
+          "type": "regex",
+          "value": "(单元测试报告|单元测试汇总)"
+        },
+        {
+          "name": "integration-report-chinese",
+          "description": "集成测试报告使用中文",
+          "type": "regex",
+          "value": "(集成测试报告|集成测试汇总)"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "test-file-organization",
+      "description": "验证测试文件组织：一个文件 = 一个功能模块",
+      "prompt": "为以下三个功能生成单元测试：1) Campaign 列表的缩略图展示规则（≤4 全展示，>4 展示前4张+N遮罩）；2) 管理页 Tab 展示规则（有老 AM 三 Tab，无老 AM 两 Tab）；3) 商品选品上限判断（最多100个）。这三个功能分别属于 campaignList/renderCell、amManage/tabConfig、productSelection/limit 三个模块。",
+      "expected_output": "必须生成至少三个独立的测试文件，每个文件对应一个功能模块。禁止将所有测试放在同一个文件中。",
+      "assertions": [
+        {
+          "name": "multiple-test-files",
+          "description": "生成多个测试文件",
+          "type": "regex",
+          "value": "(renderCell\\.test\\.ts|tabConfig\\.test\\.ts|limit\\.test\\.ts)"
+        },
+        {
+          "name": "file-per-module",
+          "description": "每个文件对应一个模块",
+          "type": "custom",
+          "value": "检查生成的测试文件数量是否 >= 3，且每个文件只包含一个模块的测试"
+        },
+        {
+          "name": "no-single-file-all",
+          "description": "未将所有测试放在一个文件",
+          "type": "not_contains",
+          "value": "smaxAmCampaign.test.ts"
+        }
+      ],
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "integration-test-not-skipped",
+      "description": "验证集成测试不被跳过：确保 Phase 2B 有实际输出或明确理由",
+      "prompt": "为订单创建流程生成测试：用户在购物车页面选择商品，点击结算，填写收货地址，选择支付方式，提交订单。该流程涉及购物车、地址、支付三个模块协作。",
+      "expected_output": "Phase 2B 必须识别出模块协作的集成测试机会，并实现至少一个集成测试用例。如果跳过，必须有明确的技术理由。",
+      "assertions": [
+        {
+          "name": "integration-test-exists",
+          "description": "集成测试存在或有跳过理由",
+          "type": "regex",
+          "value": "(Phase 2B 完成|集成测试|integration)"
+        },
+        {
+          "name": "module-collaboration-tested",
+          "description": "模块协作被测试",
+          "type": "contains",
+          "value": "协作"
+        }
+      ],
+      "files": []
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 title: OpenClaw 源码解析
-date: 2026-03-01
+date: 2026-03-30
 tags:
   - AI
   - AI/openclaw
@@ -14,13 +14,74 @@ aliases:
 # OpenClaw 源码解析
 
 > [!abstract] 本文定位
-> 面向希望深入了解 OpenClaw **具体实现**的开发者，以**源码路径 + 示意代码 + 机制逐层解析**的方式，拆解入站链、两级队列、Agent 执行流水线、Pi SDK 嵌入、通道归一化、插件系统、记忆检索、内部钩子等核心模块。
+> 面向希望深入了解 OpenClaw **具体实现**的开发者，以**源码路径 + 示意代码 + 机制逐层解析**的方式，拆解入站链、命令队列与会话串行、Agent 执行流水线、Pi SDK 嵌入、通道归一化、插件系统、记忆检索、内部钩子等核心模块。
 >
 > 配套阅读：[[OpenClaw从零认知]]（概念与架构入门）· [[OpenClaw自我进化机制深度剖析]]（自我进化机制）
 > 官方仓库：[github.com/openclaw/openclaw](https://github.com/openclaw/openclaw)
+>
+> 文中路径已与 **OpenClaw 当前 main 思路**对齐（核对时可用本地克隆对照）；包版本示例：`package.json` 中 `version` 字段。
 
 > [!warning] 关于代码片段
 > 本文代码片段为**示意代码**（Illustrative Code），基于仓库公开架构、文档及目录结构推导，用于说明实现模式，并非逐行引用源码。**请以文中标注的源码路径在仓库中查阅原始实现为准。**
+
+---
+
+## 端到端功能流程总览
+
+读具体模块前，先建立**两条主线**和**一层队列嵌套**，后面各节都是它们的展开。
+
+### 两条执行主线
+
+| 主线 | 从哪进 | 核心调用链（按顺序） | 产出 |
+|------|--------|---------------------|------|
+| **A. Gateway 控制面** | `openclaw` CLI 或 `openclaw.mjs` 入口 | `buildProgram()` → `registerProgramCommands`（`cli/program/command-registry.ts`）→ 子命令（如启动网关）→ `startGatewayServer`（`gateway/server.impl.ts`，由 `gateway/server.ts` 再导出）→ 挂载 WS / HTTP / Control UI → 每帧进入 `server/ws-connection/message-handler.ts` → 校验帧 → `handleGatewayRequest`（`server-methods.ts`，合并 `coreGatewayHandlers`）→ 具体 RPC（`server-methods/agent.ts`、`chat.ts`、`config.ts` …） | JSON `res`、或 `event` 推送 |
+| **B. 自动回复与嵌入式 Agent** | 通道插件 / WebChat 等入站 | `getReplyFromConfig`（`auto-reply/reply/get-reply*.ts`）→ `runReplyAgent`（`auto-reply/reply/agent-runner.ts`）→ `runAgentTurnWithFallback` 等执行层 → `runEmbeddedPiAgent`（`agents/pi-embedded-runner/run.ts`）→ 同进程 Pi SDK → 出站 `routeReply` / 通道发送 | 对用户可见的回复文本与媒体 |
+
+主线 A 负责「谁连上网关、能调哪些 RPC」；主线 B 负责「一条用户消息如何变成模型回复」。二者在 **`agent` RPC** 与 **嵌入式 run** 里汇合：网关侧的 `agent` 处理也会走到与自动回复共享的会话存储、投递和嵌入式执行栈。
+
+### 命令队列：会话串行 × 全局并发
+
+执行嵌入式 Agent 时，`runEmbeddedPiAgent` 使用**嵌套两次** `enqueueCommandInLane`（见 `agents/pi-embedded-runner/run.ts`）：
+
+1. **外层**：lane 名为 `resolveSessionLane(sessionKey)` → 形如 `session:<会话键>`，同一会话内 **FIFO 串行**（默认等价于该 lane `maxConcurrent = 1`），避免同一会话多轮请求交错。
+2. **内层**：lane 为 `resolveGlobalLane(params.lane)` → 通常是 `main`；若当前已在 **Cron** lane 上执行，则退化为 `nested`，避免与 Cron 占用的槽位死锁。
+
+网关启动时 `applyGatewayLaneConcurrency`（`gateway/server-lanes.ts`）只负责把配置里的 **`agents.defaults.maxConcurrent`**、**`cron.maxConcurrentRuns`**、**`subagents.maxConcurrent`** 写到 **具名 lane**（`main` / `cron` / `subagent`），与上面每条会话自己的 `session:…` lane **正交**：前者限制「全进程同时跑多少 Agent / Cron / 子 Agent」，后者限制「同一会话同时只有一个 run」。
+
+```mermaid
+flowchart TB
+  subgraph inbound["入站"]
+    CH["通道 / WebChat / Cron"]
+  end
+  subgraph reply["自动回复栈"]
+    GR["getReplyFromConfig / get-reply-run"]
+    RRA["runReplyAgent"]
+  end
+  subgraph emb["嵌入式执行"]
+    RE["runEmbeddedPiAgent"]
+    SL["enqueue session:… lane"]
+    GL["enqueue main / nested lane"]
+    PI["Pi SDK 同进程"]
+  end
+  subgraph gw["Gateway"]
+    WS["WebSocket message-handler"]
+    RPC["handleGatewayRequest"]
+  end
+  CH --> GR --> RRA --> RE
+  RE --> SL --> GL --> PI
+  WS --> RPC
+```
+
+### 与下文章节的对应关系
+
+| 你想搞懂的「流程」 | 优先阅读章节 |
+|-------------------|-------------|
+| 进程与 CLI 怎么起来 | **一** |
+| WS 上一帧怎么被鉴权、路由到 RPC | **二** |
+| 会话与全局限流队列怎么配合 | **三** |
+| `run` → `attempt` → 流式订阅与 fallback | **四** |
+| 为什么 Pi 跑在同一进程 | **五** |
+| 多通道如何归一 | **六** |
 
 ---
 
@@ -31,20 +92,22 @@ aliases:
 ```
 openclaw/
 ├── src/
-│   ├── index.ts                        # 进程入口
+│   ├── index.ts                        # 进程入口：buildProgram + parseAsync
 │   ├── cli/
-│   │   ├── program.ts                  # CLI 入口（薄封装）
+│   │   ├── program.ts                  # 导出 buildProgram
 │   │   └── program/
-│   │       ├── build-program.ts        # CLI 命令树构建（start / agent / config ...）
+│   │       ├── build-program.ts        # 组装 Commander：context + registerProgramCommands
+│   │       ├── command-registry.ts     # 各子命令注册（gateway / cron / nodes …）
 │   │       ├── gateway-cli/            # Gateway 相关子命令
 │   │       ├── cron-cli/              # Cron 相关子命令
 │   │       └── nodes-cli/             # Node 设备相关子命令
 │   ├── gateway/
+│   │   ├── server.ts                  # 再导出 startGatewayServer（实现于 server.impl）
 │   │   ├── server.impl.ts              # Gateway 核心：WS 服务 + HTTP + Control UI
 │   │   ├── server-broadcast.ts         # 事件广播（scope 守卫 + 慢消费保护）
 │   │   ├── server-methods.ts           # RPC 方法注册（handler 拆到子目录）
 │   │   ├── server-methods/             # RPC handler 模块（agent / chat / sessions / config ...）
-│   │   ├── server-lanes.ts             # 两级队列：session lane + global lane
+│   │   ├── server-lanes.ts             # 将 maxConcurrent 写入 main/cron/subagent lane
 │   │   ├── server-channels.ts          # 通道管理
 │   │   ├── server-cron.ts              # Cron 任务管理
 │   │   └── server/ws-connection/
@@ -149,66 +212,40 @@ openclaw/
 
 ### 1.1 进程入口
 
-OpenClaw 以单一进程启动，入口在 `src/index.ts`，负责解析命令行参数并启动 Gateway：
+OpenClaw 以单一进程启动，入口在 `src/index.ts`：先做运行时与环境初始化（`loadDotEnv`、`assertSupportedRuntime`、`enableConsoleCapture` 等），再 `buildProgram()` 得到 Commander 实例，主模块路径下 `parseAsync(process.argv)`：
 
 ```typescript
-// src/index.ts（示意）
-import { createProgram } from './cli/program'
+// src/index.ts（结构与真实代码一致，省略无关 import）
+import { buildProgram } from "./cli/program.js";
 
-const program = createProgram()
-program.parseAsync(process.argv)
+const program = buildProgram();
+
+if (isMain) {
+  void program.parseAsync(process.argv).catch(/* ... */);
+}
 ```
 
-`src/cli/program.ts` 为薄封装，实际命令树构建在 `src/cli/program/build-program.ts` 中，各子命令分散到 `gateway-cli/`、`cron-cli/`、`nodes-cli/` 等模块。`start` 命令触发 Gateway 初始化：
-
-```typescript
-// src/cli/program/build-program.ts（示意）
-program
-  .command('start')
-  .description('Start the OpenClaw gateway')
-  .option('--port <port>', 'Gateway port', '18789')
-  .action(async (opts) => {
-    const config = await loadConfig()   // 加载 openclaw.json（JSON5 + Zod 校验）
-    await startGateway({ ...config, port: Number(opts.port) })
-  })
-```
+`src/cli/program.ts` 仅再导出 `buildProgram`。命令树在 `src/cli/program/build-program.ts` 中组装：`createProgramContext()` → `registerProgramCommands(program, ctx, argv)`（见 `command-registry.ts`），各业务子命令分散在 `gateway-cli/`、`cron-cli/`、`nodes-cli/` 等模块。具体子命令名以 `command-registry` 与 `--help` 为准（不要硬编码本文草稿里的示意命令名）。
 
 ### 1.2 Gateway 初始化
 
-`src/gateway/server.impl.ts` 是核心控制面，单端口同时提供：
+`src/gateway/server.impl.ts` 导出 `startGatewayServer`，承担插件加载、运行时状态、通道管理、Cron、TLS、WS 运行时绑定等；对外再经 `src/gateway/server.ts` 聚合导出。单进程通常同时提供：
 
 | 服务 | 说明 |
 |------|------|
-| **WebSocket RPC** | 所有客户端（CLI、通道插件、Node App、Control UI）的双向通信 |
-| **HTTP API** | 健康检查、配置查询等 REST 接口 |
-| **Control UI 静态资源** | 内嵌 Vite 构建产物，浏览器直接访问 |
+| **WebSocket** | JSON `req` / `res` / `event` 帧；业务入口最终落到 `handleGatewayRequest` |
+| **HTTP** | 健康探测、部分 REST、以及 Control UI 所需路由 |
+| **Control UI** | 构建产物由基础设施层解析路径并挂载 |
 
-```typescript
-// src/gateway/server.impl.ts（示意）
-export async function startGateway(config: GatewayConfig) {
-  const server = createServer()             // HTTP server
-  const wss = new WebSocketServer({ server })
-
-  wss.on('connection', (ws) => {
-    const ctx = createConnectionContext()   // 每个连接独立上下文
-    ws.on('message', (data) => {
-      const frame = JSON.parse(data.toString())
-      handleFrame(ws, frame, ctx)           // 路由到 message-handler
-    })
-  })
-
-  server.listen(config.port)
-  console.log(`Gateway listening on :${config.port}`)
-}
-```
+启动阶段会执行 `applyGatewayLaneConcurrency`（见第三节）、`loadGatewayPlugins`、`attachGatewayWsHandlers` 等，细节以 `server.impl.ts` 内 `startGatewayServer` 的顺序为准。
 
 **源码路径速查：**
 
 | 职责 | 文件 |
 |------|------|
 | 进程入口 | [`src/index.ts`](https://github.com/openclaw/openclaw/blob/main/src/index.ts) |
-| CLI 命令树 | [`src/cli/program/build-program.ts`](https://github.com/openclaw/openclaw/blob/main/src/cli/program/build-program.ts) |
-| Gateway 服务端 | [`src/gateway/server.impl.ts`](https://github.com/openclaw/openclaw/blob/main/src/gateway/server.impl.ts) |
+| CLI 命令树 | [`src/cli/program/build-program.ts`](https://github.com/openclaw/openclaw/blob/main/src/cli/program/build-program.ts) · [`command-registry.ts`](https://github.com/openclaw/openclaw/blob/main/src/cli/program/command-registry.ts) |
+| Gateway 服务端 | [`src/gateway/server.impl.ts`](https://github.com/openclaw/openclaw/blob/main/src/gateway/server.impl.ts) · [`server.ts`](https://github.com/openclaw/openclaw/blob/main/src/gateway/server.ts) |
 
 ---
 
@@ -241,33 +278,15 @@ type Frame =
 
 ### 2.2 message-handler.ts 解析
 
-`message-handler.ts` 是入站链的核心，结构大致如下：
+`message-handler.ts` 体量很大：除 **connect 握手** 外，还包含设备配对、Canvas 能力 token、限流与日志等。握手完成后，对 `req` 帧会先 **`validateRequestFrame`**，再异步调用 **`handleGatewayRequest`**（传入 `req`、`respond`、`client`、插件扩展的 `extraHandlers` 等），错误统一经 `respond(false, …)` 返回。
+
+结构可简化为：
 
 ```typescript
-// src/gateway/server/ws-connection/message-handler.ts（示意）
-export async function handleFrame(
-  ws: WebSocket,
-  frame: Frame,
-  ctx: ConnectionContext
-) {
-  // ① Handshake：未握手时只允许 connect 帧
-  if (!ctx.handshaked) {
-    if (frame.type !== 'req' || frame.method !== 'connect') {
-      return sendError(ws, frame.id, 'handshake_required')
-    }
-    return handleConnect(ws, frame, ctx)
-  }
-
-  // ② Authorization：验证 role + scopes
-  if (!isAuthorized(ctx.role, frame)) {
-    return sendError(ws, frame.id, 'forbidden')
-  }
-
-  // ③ Dispatch：req 帧路由到对应 handler
-  if (frame.type === 'req') {
-    return dispatch(ws, frame, ctx)
-  }
-}
+// src/gateway/server/ws-connection/message-handler.ts（极度简化）
+// ① 未 connect：仅允许 connect；成功则标记已连接并推送 hello / presence 等
+// ② 已连接：非 req 帧按协议拒绝或忽略
+// ③ req：validateRequestFrame → handleGatewayRequest({ req, respond, client, ... })
 ```
 
 ### 2.3 Handshake：challenge-response 机制
@@ -313,26 +332,7 @@ function isAuthorized(role: Role, frame: ReqFrame): boolean {
 
 ### 2.5 Dispatch：方法路由
 
-`server-methods.ts` 注册所有 RPC 方法，`dispatch` 按 `method` 字段路由。具体 handler 已拆分到 `server-methods/` 子目录（`agent.ts`、`chat.ts`、`sessions.ts`、`config.ts` 等），`server-methods.ts` 负责汇总注册：
-
-```typescript
-// src/gateway/server-methods.ts（示意）
-const methodRegistry = new Map<string, MethodHandler>()
-
-// 注册内置方法（handler 在 server-methods/ 子模块中实现）
-methodRegistry.set('agent', handleAgentRun)       // → server-methods/agent.ts
-methodRegistry.set('agent.abort', handleAgentAbort)
-methodRegistry.set('config.get', handleConfigGet)  // → server-methods/config.ts
-methodRegistry.set('sessions.list', handleSessionsList) // → server-methods/sessions.ts
-// ... 其他方法
-
-// 插件方法注册（plugin 可通过 api.registerGatewayMethod 注册新方法）
-function registerPlugin(plugin: GatewayPlugin) {
-  for (const [method, handler] of Object.entries(plugin.methods ?? {})) {
-    methodRegistry.set(method, handler)
-  }
-}
-```
+`server-methods.ts` 将各域 handler **展开合并**为 `coreGatewayHandlers`，由 `handleGatewayRequest` 按 `req.method` 查找并执行；`authorizeGatewayMethod` 在执行前校验 **role / operator scopes / 控制面写预算** 等。域拆分示例：`connectHandlers`、`agentHandlers`、`chatHandlers`、`configHandlers`、`sessionsHandlers` 等，见文件顶部 import 列表。插件可在运行时注入额外方法与 `extraHandlers`。
 
 ### 2.6 Broadcast：scope 守卫
 
@@ -359,9 +359,9 @@ export function broadcast(event: GatewayEvent, scope: EventScope) {
 
 ---
 
-## 三、会话串行化：两级队列实现
+## 三、会话串行化：命名 Lane + 嵌套入队
 
-并发问题是多通道 Agent 网关的核心难点。OpenClaw 用**两级队列**解决"同一用户不串话、全局不过载"的问题。
+并发是多通道 Agent 网关的核心难点。当前实现用 **同一套 `command-queue` 机制** 表达两类需求：**同一会话不交错**、**全进程 Agent / Cron / 子 Agent 并发上限可配**。
 
 ```mermaid
 flowchart TB
@@ -370,137 +370,84 @@ flowchart TB
     M2["msg（用户 B）"]
     M3["msg（用户 A）"]
   end
-  subgraph session["① Session Lane（按 sessionKey FIFO）"]
-    LA["Lane A（串行）"]
-    LB["Lane B（串行）"]
+  subgraph session["① Lane `session:<sessionKey>`（默认串行）"]
+    LA["同 key 排队"]
+    LB["另一 key 排队"]
   end
-  subgraph global["② Global Lane（maxConcurrent 限制）"]
-    G["最多 N 个并发任务"]
+  subgraph global["② Lane `main`（或 `nested`）"]
+    G["maxConcurrent = agents.defaults.maxConcurrent 等"]
   end
   M1 --> LA
   M3 --> LA
   M2 --> LB
   LA --> G
   LB --> G
-  G --> exec["attempt 执行"]
+  G --> exec["runEmbeddedPiAgent 内逻辑"]
   style LA fill:#fef3c7,stroke:#f59e0b
   style LB fill:#fef3c7,stroke:#f59e0b
   style G fill:#bae6fd,stroke:#0ea5e9
 ```
 
-### 3.1 sessionKey 计算
+### 3.1 sessionKey 与命令 lane 名字
 
-`session-key.ts` 根据「通道 + 会话标识」计算出唯一 `sessionKey`，作为 Session Lane 的分组依据。SessionKey 逻辑在仓库中有多处使用：`src/config/sessions/session-key.ts`（配置层）、`src/routing/session-key.ts`（路由层）以及 `src/cron/isolated-agent/session-key.ts`（Cron 隔离执行）：
+`sessionKey` 仍由配置与路由层解析（`src/config/sessions/`、`src/routing/session-key.ts` 等）。嵌入式执行侧用 `resolveSessionLane(key)`（`agents/pi-embedded-runner/lanes.ts`）把 key 规范成 **lane 字符串** `session:<…>`；若已是 `session:` 前缀则不再重复添加。
 
-```typescript
-// src/routing/session-key.ts（示意）
-export function computeSessionKey(params: {
-  channelId: string
-  agentId: string
-  conversationId: string
-}): string {
-  return `${params.channelId}::${params.agentId}::${params.conversationId}`
-}
-```
+同一对话映射到同一 `sessionKey` → 同一 `session:…` lane → **FIFO + 默认单任务执行**，从而「同用户不串话」。
 
-同一用户在同一通道的对话始终映射到同一 `sessionKey`，从而保证 Session Lane 串行。
+### 3.2 `process/command-queue.ts`：按 lane 名共享队列
 
-### 3.2 Session Lane：单会话严格串行
+队列状态挂在 **`globalThis` 单例**（避免打包分块多份状态），每个 lane 名对应：
 
-```typescript
-// src/gateway/server-lanes.ts（示意）
-class SessionLaneManager {
-  private lanes = new Map<string, PQueue>()
+- 等待队列 `queue[]`
+- `activeTaskIds` + `maxConcurrent`（至少为 1）
+- `generation`（与 `resetAllLanes`、重启协同，防止陈旧任务误唤醒）
 
-  getOrCreate(sessionKey: string): PQueue {
-    if (!this.lanes.has(sessionKey)) {
-      // concurrency: 1 → 严格串行，同一会话同一时刻只处理一个任务
-      this.lanes.set(sessionKey, new PQueue({ concurrency: 1 }))
-    }
-    return this.lanes.get(sessionKey)!
-  }
+`enqueueCommandInLane(lane, task)` 入队并在 `drainLane` 中泵送；排队超过 `warnAfterMs`（默认 2s）会打诊断日志。网关重启前可 `markGatewayDraining()` 拒绝新入队。
 
-  async enqueue(sessionKey: string, task: () => Promise<void>) {
-    const lane = this.getOrCreate(sessionKey)
+### 3.3 `gateway/server-lanes.ts`：只调「主/Cron/子 Agent」三类并发
 
-    // 排队超 2 秒打 verbose 日志
-    const timer = setTimeout(() => log.verbose(`Lane ${sessionKey} waiting >2s`), 2000)
-    return lane.add(async () => {
-      clearTimeout(timer)
-      return task()
-    })
-  }
+`applyGatewayLaneConcurrency(config)` 调用 `setCommandLaneConcurrency`：
 
-  // 清除某 session 排队中（未开始）的任务
-  clear(sessionKey: string) {
-    this.lanes.get(sessionKey)?.clear()
-  }
+| Lane 名 | 典型配置来源 |
+|---------|----------------|
+| `main` | `resolveAgentMaxConcurrent` → `agents.defaults.maxConcurrent`（默认 4） |
+| `cron` | `cron.maxConcurrentRuns`（默认 1） |
+| `subagent` | `resolveSubagentMaxConcurrent` → `agents.defaults.subagents.maxConcurrent`（默认 8） |
 
-  // 重置：清活跃 + 排空（用于 abort / reset 场景）
-  reset(sessionKey: string) {
-    this.clear(sessionKey)
-    // 同时通知 active run 中止
-  }
-}
-```
+这与 **每条会话的 `session:…` lane 正交**：前者限制「多少条嵌入式 run 能同时在 **main** 等资源上跑」，后者限制「同一 session 同时只有一个 run」。
 
-### 3.3 Global Lane：全局并发上限
+### 3.4 `runEmbeddedPiAgent`：外层会话、内层全局
+
+`run.ts` 中（逻辑要点）：
 
 ```typescript
-// src/gateway/server-lanes.ts（示意）
-class GlobalLane {
-  private semaphore: Semaphore
-
-  constructor(maxConcurrent: number) {
-    // 默认 maxConcurrent = 4，可在 agents.defaults.maxConcurrent 配置
-    this.semaphore = new Semaphore(maxConcurrent)
-  }
-
-  async run<T>(task: () => Promise<T>): Promise<T> {
-    await this.semaphore.acquire()
-    try {
-      return await task()
-    } finally {
-      this.semaphore.release()
-    }
-  }
-}
+const sessionLane = resolveSessionLane(params.sessionKey?.trim() || params.sessionId);
+const globalLane = resolveGlobalLane(params.lane);
+// 默认：先占住 session lane，再占住 global lane（main 或 nested）
+return enqueueSession(() =>
+  enqueueGlobal(async () => {
+    // … 模型解析、hook、runEmbeddedAttempt、failover …
+  }),
+);
 ```
 
-### 3.4 命令队列：入站排队
+`resolveGlobalLane`：若当前在 **Cron** lane 上执行内部逻辑，则返回 **`nested`**，避免与 Cron 占用槽位死锁（见 `lanes.ts` 注释）。
 
-`command-queue.ts` 处理入站消息的排队入列，使消息在进入 Session Lane 前先经过一层缓冲：
+### 3.5 与旧版叙述的差异
 
-```typescript
-// src/process/command-queue.ts（示意）
-export class CommandQueue {
-  private queue: Array<Command> = []
-
-  enqueue(cmd: Command) {
-    this.queue.push(cmd)
-    this.process()
-  }
-
-  private async process() {
-    while (this.queue.length > 0) {
-      const cmd = this.queue.shift()!
-      await sessionLanes.enqueue(cmd.sessionKey, () =>
-        globalLane.run(() => executeCommand(cmd))
-      )
-    }
-  }
-}
-```
+早期笔记里「`server-lanes.ts` 内自建 PQueue + Semaphore」的写法已过时；**会话与全局限流都统一为 `command-queue` 的 lane 名**，`server-lanes.ts` 仅负责把配置数字同步到少数几个固定 lane。
 
 **源码路径速查：**
 
 | 职责 | 文件 |
 |------|------|
-| Session Lane + Global Lane | [`src/gateway/server-lanes.ts`](https://github.com/openclaw/openclaw/blob/main/src/gateway/server-lanes.ts) |
-| sessionKey 计算（配置层） | [`src/config/sessions/session-key.ts`](https://github.com/openclaw/openclaw/blob/main/src/config/sessions/session-key.ts) |
-| sessionKey 计算（路由层） | [`src/routing/session-key.ts`](https://github.com/openclaw/openclaw/blob/main/src/routing/session-key.ts) |
-| 命令队列 | [`src/process/command-queue.ts`](https://github.com/openclaw/openclaw/blob/main/src/process/command-queue.ts) |
-| 执行侧队列 | [`src/agents/pi-embedded-runner/lanes.ts`](https://github.com/openclaw/openclaw/blob/main/src/agents/pi-embedded-runner/lanes.ts) |
+| Lane 名 + 嵌套解析 | [`src/agents/pi-embedded-runner/lanes.ts`](https://github.com/openclaw/openclaw/blob/main/src/agents/pi-embedded-runner/lanes.ts) |
+| 队列实现 | [`src/process/command-queue.ts`](https://github.com/openclaw/openclaw/blob/main/src/process/command-queue.ts) |
+| Lane 枚举 | [`src/process/lanes.ts`](https://github.com/openclaw/openclaw/blob/main/src/process/lanes.ts) |
+| 网关侧并发配置 | [`src/gateway/server-lanes.ts`](https://github.com/openclaw/openclaw/blob/main/src/gateway/server-lanes.ts) · [`src/config/agent-limits.ts`](https://github.com/openclaw/openclaw/blob/main/src/config/agent-limits.ts) |
+| sessionKey（配置） | [`src/config/sessions/session-key.ts`](https://github.com/openclaw/openclaw/blob/main/src/config/sessions/session-key.ts) · [`sessions.ts`](https://github.com/openclaw/openclaw/blob/main/src/config/sessions.ts) |
+| sessionKey（路由） | [`src/routing/session-key.ts`](https://github.com/openclaw/openclaw/blob/main/src/routing/session-key.ts) |
+| 自动回复侧入队 | [`src/auto-reply/reply/get-reply-run.ts`](https://github.com/openclaw/openclaw/blob/main/src/auto-reply/reply/get-reply-run.ts) |
 
 ---
 
@@ -510,9 +457,10 @@ export class CommandQueue {
 
 ```mermaid
 flowchart TB
-  subgraph run["run（编排）"]
-    R1["排队 session + global lane"]
-    R2["选择模型 / fallback 顺序"]
+  subgraph run["runEmbeddedPiAgent（编排）"]
+    R1["enqueueSession(session:…) → enqueueGlobal(main/nested)"]
+    R2["before_model_resolve / before_agent_start 等 hook"]
+    R3["resolveModel + failover 循环"]
   end
   subgraph attempt["attempt（单次执行）"]
     A1["subscribe 先于 prompt"]
@@ -529,7 +477,8 @@ flowchart TB
     F2["abort 时不触发"]
   end
   R1 --> attempt
-  R2 -.->|失败时| fb
+  R2 --> attempt
+  R3 -.->|失败时| fb
   fb -.-> attempt
   attempt --> sub
   style run fill:#bae6fd,stroke:#0ea5e9
@@ -540,25 +489,23 @@ flowchart TB
 
 ### 4.1 run.ts：编排层
 
-`run.ts` 是入口，负责把一个 `agent` RPC 请求串联整个执行链：
+`run.ts` 中的 `runEmbeddedPiAgent` 是嵌入式执行的入口：先 **上下文窗口守卫**（`evaluateContextWindowGuard` 等），再 **`enqueueSession` → `enqueueGlobal`** 嵌套入队（见第三节），队列内依次执行 `ensureOpenClawModelsJson`、`before_model_resolve` / `before_agent_start` 插件 hook、`resolveModel`、以及带 failover 的 `runEmbeddedAttempt` 循环。
 
 ```typescript
-// src/agents/pi-embedded-runner/run.ts（示意）
-export async function run(ctx: RunContext): Promise<RunResult> {
-  // 上下文窗口守卫：history 太大则提前拒绝
-  if (ctx.session.history.tokenCount > ctx.model.contextWindow * 0.9) {
-    return { status: 'context_overflow' }
-  }
+// src/agents/pi-embedded-runner/run.ts（结构示意，非完整源码）
+export async function runEmbeddedPiAgent(params: RunEmbeddedPiAgentParams) {
+  const sessionLane = resolveSessionLane(params.sessionKey?.trim() || params.sessionId);
+  const globalLane = resolveGlobalLane(params.lane);
+  const enqueueGlobal =
+    params.enqueue ?? ((task, opts) => enqueueCommandInLane(globalLane, task, opts));
+  const enqueueSession =
+    params.enqueue ?? ((task, opts) => enqueueCommandInLane(sessionLane, task, opts));
 
-  // 两级排队
-  return sessionLane.enqueue(ctx.sessionKey, () =>
-    globalLane.run(async () => {
-      // fallback 顺序：依次尝试模型列表中的每个模型
-      return withFallback(ctx.models, (model) =>
-        attempt(ctx, model)
-      )
-    })
-  )
+  return enqueueSession(() =>
+    enqueueGlobal(async () => {
+      // … context guard、hook、resolveModel、runEmbeddedAttempt、failover …
+    }),
+  );
 }
 ```
 
@@ -694,8 +641,8 @@ export async function withFallback<T>(
 stateDiagram-v2
   [*] --> idle
   idle --> queued_session : 入站消息
-  queued_session --> queued_global : session lane 通过
-  queued_global --> attempting : global lane 通过
+  queued_session --> queued_global : session:… lane 通过
+  queued_global --> attempting : main/nested lane 通过
   attempting --> streaming : 开始推理
   streaming --> compacting : 触发 compaction
   compacting --> completed : compaction 完成
@@ -1396,15 +1343,15 @@ flowchart LR
 
 | 关键行为 | 你应该看的文件 |
 |---------|----------------|
-| Gateway 如何启动 | `src/index.ts` → `src/cli/program/build-program.ts` → `src/gateway/server.impl.ts` |
-| 连接握手如何工作 | `src/gateway/server/ws-connection/message-handler.ts` |
-| 方法如何注册和路由 | `src/gateway/server-methods.ts` + `server-methods/` 子目录 |
+| Gateway 如何启动 | `src/index.ts` → `src/cli/program/build-program.ts` + `command-registry.ts` → `src/gateway/server.impl.ts`（`server.ts` 再导出） |
+| 连接握手与 req 帧 | `src/gateway/server/ws-connection/message-handler.ts` → `handleGatewayRequest` |
+| 方法如何注册和路由 | `src/gateway/server-methods.ts`（`coreGatewayHandlers`）+ `server-methods/*.ts` |
 | 事件如何广播 | `src/gateway/server-broadcast.ts` |
-| sessionKey 如何计算 | `src/routing/session-key.ts`（路由层）/ `src/config/sessions/session-key.ts`（配置层） |
-| 两级队列如何实现 | `src/gateway/server-lanes.ts` + `src/process/command-queue.ts` |
-| Agent 请求如何编排 | `src/agents/pi-embedded-runner/run.ts` |
+| sessionKey 如何计算 | `src/routing/session-key.ts` · `src/config/sessions/session-key.ts` · `src/config/sessions.ts` |
+| 会话与全局限流 | `src/process/command-queue.ts` + `src/agents/pi-embedded-runner/lanes.ts`；`src/gateway/server-lanes.ts` 仅同步 main/cron/subagent 的 `maxConcurrent` |
+| Agent 嵌入式执行如何编排 | `src/agents/pi-embedded-runner/run.ts` |
 | 单次执行如何保证原子性 | `src/agents/pi-embedded-runner/run/attempt.ts` |
-| 流式事件如何回传 | `src/agents/pi-embedded-subscribe.ts`（+ `.handlers.ts` / `.tools.ts`） |
+| 流式事件如何回传 | `src/agents/pi-embedded-subscribe.ts`（+ `handlers` / `tools` 等子模块） |
 | 模型降级如何工作 | `src/agents/model-fallback.ts` |
 | Pi SDK 如何嵌入 | `src/agents/pi-embedded-runner/`（对照 `@mariozechner/pi-coding-agent`） |
 | 系统提示如何构建 | `src/agents/pi-embedded-runner/system-prompt.ts` + `src/agents/system-prompt-params.ts` |
@@ -1412,12 +1359,13 @@ flowchart LR
 | Workspace 文件如何注入 | `src/agents/pi-embedded-runner/system-prompt.ts` |
 | Skills 如何被加载 | `src/agents/skills/` + Workspace `skills/` + 全局 `~/.openclaw/skills/` |
 | 插件如何发现和加载 | `src/plugins/discovery.ts` → `src/plugins/loader.ts` |
-| 插件钩子如何分发 | `src/plugins/hooks.ts`（`createHookRunner`） |
+| 插件钩子如何分发 | `src/plugins/hooks.ts`（`createHookRunner`）· `hooks.ts` 中 `PLUGIN_HOOK_NAMES` 与类型一致 |
 | 记忆如何检索 | `src/memory/search-manager.ts` → `src/memory/manager.ts` / `src/memory/qmd-manager.ts` |
 | 混合检索算法 | `src/memory/hybrid.ts` + `mmr.ts` + `temporal-decay.ts` |
 | 内部钩子如何注册和触发 | `src/hooks/internal-hooks.ts` + `src/hooks/loader.ts` |
 | ACP 路由策略 | `src/acp/policy.ts` + `src/acp/control-plane/` |
 | Agent 工具集 | `src/agents/tools/`（memory / browser / sessions / web / nodes ...） |
+| 自动回复一条消息 | `src/auto-reply/reply/get-reply*.ts` → `agent-runner.ts` → `runEmbeddedPiAgent` |
 
 ---
 

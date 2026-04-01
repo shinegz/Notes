@@ -1,0 +1,81 @@
+{
+  "metadata": {
+    "skill_name": "learning-writer",
+    "skill_path": "/Users/jiangchuan/Desktop/projects/Notes/.agents/skills/learning-writer",
+    "executor_model": "claude-sonnet-4-20250514",
+    "timestamp": "2026-04-01T14:30:00Z",
+    "evals_run": ["eval-0", "eval-5"],
+    "runs_per_configuration": 1,
+    "iteration": 2,
+    "improvements_applied": [
+      "新增「核心要求：像人写的」章节",
+      "强化去 AI 味写作指导",
+      "人性化写作技巧示例",
+      "去 AI 味速查清单",
+      "humanity 权重提升至 30%",
+      "新增专门测试用例 #6"
+    ]
+  },
+  "runs": [
+    {
+      "run_id": "eval-0-iteration-2-with_skill",
+      "eval_id": 0,
+      "eval_name": "technical-algorithm-react-fiber",
+      "config": "with_skill_v2",
+      "output_file": "eval-0/with_skill/outputs/React-Fiber深度解析.md",
+      "tokens": 9200,
+      "duration_seconds": 26,
+      "pass_rate": 0.98,
+      "grading": {
+        "accuracy": 4,
+        "clarity": 4,
+        "structure": 4,
+        "visual": 4,
+        "humanity": 4
+      }
+    },
+    {
+      "run_id": "eval-5-iteration-2-with_skill",
+      "eval_id": 5,
+      "eval_name": "humanity-writing-style",
+      "config": "with_skill_v2",
+      "output_file": "eval-5/with_skill/outputs/JS闭包深度解析.md",
+      "tokens": 7800,
+      "duration_seconds": 24,
+      "pass_rate": 1.0,
+      "grading": {
+        "accuracy": 4,
+        "clarity": 4,
+        "structure": 4,
+        "visual": 3,
+        "humanity": 4
+      }
+    }
+  ],
+  "run_summary": {
+    "iteration_2_with_skill": {
+      "mean_pass_rate": 0.99,
+      "mean_tokens": 8500,
+      "mean_duration_seconds": 25,
+      "mean_humanity": 4.0
+    },
+    "iteration_1_with_skill": {
+      "mean_pass_rate": 0.94,
+      "mean_tokens": 7560,
+      "mean_duration_seconds": 27.4,
+      "mean_humanity": 3.2
+    },
+    "delta": {
+      "pass_rate": "+0.05",
+      "time_seconds": "-2.4",
+      "tokens": "+940",
+      "humanity": "+0.8"
+    }
+  },
+  "notes": [
+    "优化后 humanity 维度从 3.2 提升到 4.0",
+    "新增的「核心要求：像人写的」章节效果显著",
+    "去 AI 味速查清单帮助避免常见 AI 写作模式",
+    "专门测试用例 #6 (闭包) 获得满分"
+  ]
+}

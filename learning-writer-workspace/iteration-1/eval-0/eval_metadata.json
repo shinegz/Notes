@@ -1,0 +1,32 @@
+{
+  "eval_id": 0,
+  "eval_name": "technical-algorithm-react-fiber",
+  "prompt": "帮我深入学习 React Fiber 架构，整理成一篇完整的学习文章。要包含它的核心原理、为什么要设计 Fiber、时间切片和优先级调度是怎么工作的。",
+  "assertions": [
+    {
+      "text": "文章包含 React Fiber 核心原理的详细解释",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章解释了为什么需要设计 Fiber",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含时间切片机制的说明",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含优先级调度的说明",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含可视化图表（Mermaid/ASCII）",
+      "passed": null,
+      "evidence": "待评测"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "eval_id": 4,
+  "eval_name": "historical-evolution-javascript-modules",
+  "prompt": "我想了解 JavaScript 模块系统的发展历程，从早期的全局变量到 CommonJS、AMD、ES Modules。请整理成一篇有历史感的文章。",
+  "assertions": [
+    {
+      "text": "文章介绍了全局变量时代",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章介绍了 CommonJS",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章介绍了 AMD",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章介绍了 ES Modules",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章具有历史演进感",
+      "passed": null,
+      "evidence": "待评测"
+    }
+  ]
+}

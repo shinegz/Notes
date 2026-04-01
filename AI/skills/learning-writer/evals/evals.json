@@ -1,0 +1,118 @@
+{
+  "skill_name": "learning-writer",
+  "eval_dimensions": {
+    "accuracy": {
+      "name": "准确性 (Accuracy)",
+      "weight": 0.20,
+      "description": "技术概念描述准确，事实无误，示例可运行",
+      "scoring": {
+        "excellent": "所有技术细节准确，示例完整可运行",
+        "good": "主要概念准确，minor 错误不影响理解",
+        "fair": "存在明显事实错误，需要修正",
+        "poor": "核心技术概念有误，无法作为学习材料"
+      }
+    },
+    "clarity": {
+      "name": "清晰度 (Clarity)",
+      "weight": 0.20,
+      "description": "表达简洁精准，逻辑清晰，层次分明",
+      "scoring": {
+        "excellent": "30秒能抓住核心，层层递进无冗余",
+        "good": "结构清晰，轻微冗余",
+        "fair": "逻辑混乱或过度冗长",
+        "poor": "难以理解，结构混乱"
+      }
+    },
+    "structure": {
+      "name": "结构性 (Structure)",
+      "weight": 0.15,
+      "description": "模板选择合适，章节安排合理",
+      "scoring": {
+        "excellent": "完美匹配主题类型的最佳结构",
+        "good": "结构合理，有轻微改进空间",
+        "fair": "结构不匹配主题类型",
+        "poor": "完全错误的结构选择"
+      }
+    },
+    "visual": {
+      "name": "可视化 (Visual)",
+      "weight": 0.15,
+      "description": "图表适当，样式一致，辅助理解",
+      "scoring": {
+        "excellent": "图表精准辅助理解，一图一意，样式统一",
+        "good": "有适当图表，样式基本一致",
+        "fair": "图表过多/过少或样式混乱",
+        "poor": "无图表或图表错误百出"
+      }
+    },
+    "humanity": {
+      "name": "人性化 (Humanity)",
+      "weight": 0.30,
+      "description": "无 AI 味，自然流畅，有观点（权重提升）",
+      "scoring": {
+        "excellent": "像资深专家写的，有洞见，无 AI 痕迹，句子节奏丰富",
+        "good": "基本自然，轻微 AI 味，有1-2处改进空间",
+        "fair": "有明显 AI 写作特征，如'此外'、'值得注意的是'等",
+        "poor": "充满 AI 味，无法阅读，公式化严重"
+      }
+    }
+  },
+  "scoring_guide": {
+    "excellent": 4,
+    "good": 3,
+    "fair": 2,
+    "poor": 1
+  },
+  "passing_score": 3.0,
+  "evals": [
+    {
+      "id": 1,
+      "eval_name": "technical-algorithm-react-fiber",
+      "prompt": "帮我深入学习 React Fiber 架构，整理成一篇完整的学习文章。要包含它的核心原理、为什么要设计 Fiber、时间切片和优先级调度是怎么工作的。",
+      "expected_output": "A comprehensive Markdown article about React Fiber with: clear explanation of the problem (old reconciler limitations), core concepts (Fiber nodes, work loop, priorities), visual diagrams showing the reconciliation process, and practical implications. Should have natural, human-like writing style with NO AI phrases like '此外' or '值得注意的是'.",
+      "files": [],
+      "humanity_focus": true
+    },
+    {
+      "id": 2,
+      "eval_name": "conceptual-blockchain-consensus",
+      "prompt": "我想了解区块链的共识机制，请研究后写一篇学习笔记。要解释什么是共识机制、为什么需要它、PoW 和 PoS 的区别，以及还有其他什么共识算法。",
+      "expected_output": "A well-structured Markdown article explaining blockchain consensus: 30-second mental model with analogy, clear distinction between different mechanisms, comparison table, and visual diagrams showing how consensus works. Must read like written by a knowledgeable human, NOT an AI.",
+      "files": [],
+      "humanity_focus": true
+    },
+    {
+      "id": 3,
+      "eval_name": "process-how-to-tcp-handshake",
+      "prompt": "研究一下 TCP 三次握手的过程，然后整理成一篇入门指南。要适合初学者理解，用简单的语言和图示来解释。",
+      "expected_output": "A beginner-friendly guide to TCP three-way handshake with: step-by-step breakdown, clear diagrams showing packet flow, analogy to help understanding, common questions answered. Should be approachable, conversational, and well-visualized. NO AI writing patterns.",
+      "files": [],
+      "humanity_focus": true
+    },
+    {
+      "id": 4,
+      "eval_name": "comparative-database-indexes",
+      "prompt": "帮我对比分析不同的数据库索引类型：B-Tree、Hash、Bitmap、GiST 等。要说明每种索引适合什么场景，优缺点是什么。",
+      "expected_output": "A comparative analysis article with: overview table of index types, deep dive into each type, clear comparison of use cases, visual diagrams showing index structures, practical recommendations. Must have: varied sentence lengths, active voice, human insights, NO filler phrases like '此外' or '值得注意的是'.",
+      "files": [],
+      "humanity_focus": true
+    },
+    {
+      "id": 5,
+      "eval_name": "historical-evolution-javascript-modules",
+      "prompt": "我想了解 JavaScript 模块系统的发展历程，从早期的全局变量到 CommonJS、AMD、ES Modules。请整理成一篇有历史感的文章。",
+      "expected_output": "An evolutionary history article with: timeline of module system development, key figures and turning points, code examples from each era, explanation of why each system emerged, modern impact and best practices. Should read like a compelling story told by an expert, not a textbook summary.",
+      "files": [],
+      "humanity_focus": true
+    },
+    {
+      "id": 6,
+      "eval_name": "humanity-writing-style",
+      "prompt": "写一篇关于闭包（Closure）的技术文章。要求：1) 语言自然，像人在说话不是机器 2) 避免所有 AI 写作特征（此外、值得注意的是、不仅...而且...） 3) 有个人洞见和观点 4) 句子长短交替，有节奏感",
+      "expected_output": "A technical article about JavaScript closures that: 1) reads naturally like written by a senior developer, 2) contains NO AI patterns ('此外', '值得注意的是', '不仅...而且...'), 3) has personal insights and opinions, 4) varies sentence length and rhythm. This tests humanity dimension specifically.",
+      "files": [],
+      "humanity_focus": true,
+      "notes": "专门测试人性化写作能力的用例"
+    }
+  ]
+}

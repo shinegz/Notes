@@ -1,0 +1,27 @@
+{
+  "eval_id": 2,
+  "eval_name": "process-how-to-tcp-handshake",
+  "prompt": "研究一下 TCP 三次握手的过程，然后整理成一篇入门指南。要适合初学者理解，用简单的语言和图示来解释。",
+  "assertions": [
+    {
+      "text": "文章适合初学者理解",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章解释了 TCP 三次握手的过程",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章包含图示或可视化",
+      "passed": null,
+      "evidence": "待评测"
+    },
+    {
+      "text": "文章使用简单语言",
+      "passed": null,
+      "evidence": "待评测"
+    }
+  ]
+}
