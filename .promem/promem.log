@@ -1,3 +1,9 @@
 [2026-03-22 13:26:30] SEARCH index | query="Harness Engineering agent harn" | query=Harness Engineering agent harness coding agents top_k=3 results=0 bm25_hits=0 time_ms=6
 [2026-03-22 14:26:55] SEARCH index | query="learning assistant skill" | query=learning assistant skill top_k=3 results=1 bm25_hits=1 time_ms=7
 [2026-03-22 14:35:01] SEARCH index | query="Harness Engineering 学习文章 学习笔记" | query=Harness Engineering 学习文章 学习笔记 top_k=3 results=1 bm25_hits=1 time_ms=8
+[2026-04-13 20:44:45] SEARCH index | query="llm-wiki" | query=llm-wiki top_k=3 results=0 bm25_hits=0 time_ms=2
+[2026-04-14 10:01:41] SEARCH index | query="harness engineering" | query=harness engineering top_k=3 results=0 bm25_hits=0 time_ms=5
+[2026-04-14 10:18:20] SEARCH index | query="llm-wiki harness-engineering" | query=llm-wiki harness-engineering top_k=3 results=0 bm25_hits=0 time_ms=4
+[2026-04-14 10:23:49] SEARCH index | query="harness engineering agent" | query=harness engineering agent top_k=3 results=0 bm25_hits=0 time_ms=4
+[2026-04-14 12:23:18] SEARCH index | query="llm-wiki wiki writing" | query=llm-wiki wiki writing top_k=3 results=0 bm25_hits=0 time_ms=5
+[2026-04-14 13:23:13] SEARCH index | query="harness engineering" | query=harness engineering top_k=3 results=0 bm25_hits=0 time_ms=3

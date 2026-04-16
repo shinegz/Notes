@@ -1,5 +1,23 @@
 # My existing Agents
 
+## LLM Wiki（Karpathy 知识库）
+
+- 约定见 **`.agents/skills/llm-wiki/SKILL.md`** 与 **`llm-wiki/CLAUDE.md`**
+- **Collect**：**`llm-wiki/skills/collect/SKILL.md`** + **`llm-wiki/tools/source_registry.tsv`**（按 **`adapter_name`** 打开 **`llm-wiki/skills/<adapter_name>/`**）
+- 写成稿（concepts / syntheses / overview）：**`llm-wiki/skills/wiki-writing/SKILL.md`** + **`llm-wiki/skills/humanizer-zh/SKILL.md`**
+- **知识库根目录**：**`llm-wiki/`**（按门类分架的 `raw/<shelf>/`、`wiki/<shelf>/`；Collect 先清单后落盘；工具见 `llm-wiki/tools/`）
+- 上游理念：[llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent)、[llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill)、[graphify](https://github.com/safishamsi/graphify)
+
+在 `Notes` 根目录：
+
+```bash
+export WIKI_ROOT="$PWD/llm-wiki"
+pip install -r llm-wiki/requirements.txt
+bash llm-wiki/tools/check_all.sh "$WIKI_ROOT"
+python3 llm-wiki/tools/build_graph.py --wiki-root "$WIKI_ROOT"
+```
+
+---
 
 <!-- ProMem Start -->
 # ProMem - 项目记忆系统

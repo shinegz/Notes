@@ -1,0 +1,2 @@
+# llm-wiki tools — graph build (Louvain) + optional layout
+networkx>=3.0

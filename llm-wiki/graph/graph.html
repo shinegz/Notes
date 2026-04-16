@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>LLM Wiki — Graph</title>
+<script src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
+<style>
+  body { margin: 0; background: #1a1a2e; font-family: sans-serif; color: #eee; }
+  #graph { width: 100vw; height: 100vh; }
+  #controls {
+    position: fixed; top: 10px; left: 10px; background: rgba(0,0,0,0.7);
+    padding: 12px; border-radius: 8px; z-index: 10; max-width: 280px;
+  }
+  #controls h3 { margin: 0 0 8px; font-size: 14px; }
+  #search { width: 100%; padding: 4px; margin-bottom: 8px; background: #333; color: #eee; border: 1px solid #555; border-radius: 4px; }
+  #info {
+    position: fixed; bottom: 10px; left: 10px; background: rgba(0,0,0,0.8);
+    padding: 12px; border-radius: 8px; z-index: 10; max-width: 360px; display: none;
+  }
+  #stats { position: fixed; top: 10px; right: 10px; background: rgba(0,0,0,0.7); padding: 10px; border-radius: 8px; font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="controls">
+  <h3>LLM Wiki</h3>
+  <input id="search" type="text" placeholder="筛选节点..." oninput="searchNodes(this.value)">
+  <div><span style="background:#4CAF50;padding:3px 8px;margin:2px;border-radius:3px;font-size:12px">source</span><span style="background:#2196F3;padding:3px 8px;margin:2px;border-radius:3px;font-size:12px">entity</span><span style="background:#FF9800;padding:3px 8px;margin:2px;border-radius:3px;font-size:12px">concept</span><span style="background:#9C27B0;padding:3px 8px;margin:2px;border-radius:3px;font-size:12px">synthesis</span></div>
+  <div style="margin-top:8px;font-size:11px;color:#aaa">边仅来自显式 [[wikilink]]</div>
+</div>
+<div id="graph"></div>
+<div id="info">
+  <b id="info-title"></b><br>
+  <span id="info-type" style="font-size:12px;color:#aaa"></span><br>
+  <span id="info-path" style="font-size:11px;color:#666"></span>
+</div>
+<div id="stats"></div>
+<script>
+const nodes = new vis.DataSet([
+  {
+    "id": "overview",
+    "label": "Overview",
+    "type": "synthesis",
+    "color": "#9C27B0",
+    "path": "wiki/overview.md",
+    "group": -1
+  },
+  {
+    "id": "index",
+    "label": "index",
+    "type": "unknown",
+    "color": "#9E9E9E",
+    "path": "wiki/index.md",
+    "group": -1
+  },
+  {
+    "id": "agent/index",
+    "label": "index",
+    "type": "unknown",
+    "color": "#9E9E9E",
+    "path": "wiki/agent/index.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/index",
+    "label": "index",
+    "type": "unknown",
+    "color": "#9E9E9E",
+    "path": "wiki/agent/harness-engineering/index.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/concepts/HarnessEngineering",
+    "label": "Harness Engineering",
+    "type": "concept",
+    "color": "#FF9800",
+    "path": "wiki/agent/harness-engineering/concepts/HarnessEngineering.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "label": "Skill Issue: Harness Engineering for Coding Agents",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "label": "The importance of Agent Harness in 2026",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/philschmid-agent-harness-2026.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "label": "The Emerging Harness Engineering Playbook",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/ignorance-emerging-harness-engineering.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "label": "Building a C compiler with a team of parallel Claudes",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/anthropic-building-c-compiler.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "label": "Harness engineering for coding agent users",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/martin-fowler-harness-engineering.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "label": "\u5de5\u7a0b\u6280\u672f\uff1a\u5728\u667a\u80fd\u4f53\u4f18\u5148\u7684\u4e16\u754c\u4e2d\u5229\u7528 Codex",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/openai-harness-engineering-zh.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "label": "What is an agent harness?",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/parallel-what-is-an-agent-harness.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "label": "\u6df1\u5ea6\u89e3\u6790\uff1aHarness Engineering",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "label": "Effective harnesses for long-running agents",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "label": "My AI Adoption Journey \u2014 Step 5: Engineer the Harness",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "label": "The Anatomy of an Agent Harness",
+    "type": "source",
+    "color": "#4CAF50",
+    "path": "wiki/agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness.md",
+    "group": -1
+  },
+  {
+    "id": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "label": "Harness Engineering \u6df1\u5ea6\u89e3\u6790",
+    "type": "synthesis",
+    "color": "#9C27B0",
+    "path": "wiki/agent/harness-engineering/syntheses/harness-engineering-deep-dive.md",
+    "group": -1
+  }
+]);
+const edges = new vis.DataSet([
+  {
+    "from": "overview",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "overview",
+    "to": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "overview",
+    "to": "agent/harness-engineering/index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "overview",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "index",
+    "to": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/index",
+    "to": "agent/harness-engineering/index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/index",
+    "to": "index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/index",
+    "to": "overview",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "agent/index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/index",
+    "to": "overview",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "agent/harness-engineering/index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "overview",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/concepts/HarnessEngineering",
+    "to": "index",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "to": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "to": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "to": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "to": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "to": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "to": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "to": "agent/harness-engineering/concepts/HarnessEngineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "to": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "to": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/\u6df1\u5ea6\u89e3\u6790-Harness-Engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/martin-fowler-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/openai-harness-engineering-zh",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/humanlayer-skill-issue-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/ignorance-emerging-harness-engineering",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/anthropic-building-c-compiler",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/parallel-what-is-an-agent-harness",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  },
+  {
+    "from": "agent/harness-engineering/syntheses/harness-engineering-deep-dive",
+    "to": "agent/harness-engineering/sources/philschmid-agent-harness-2026",
+    "type": "EXTRACTED",
+    "color": "#555555",
+    "confidence": 1.0
+  }
+]);
+const container = document.getElementById("graph");
+const network = new vis.Network(container, { nodes, edges }, {
+  nodes: { shape: "dot", size: 12, font: { color: "#eee", size: 13 }, borderWidth: 2 },
+  edges: { width: 1.2, smooth: { type: "continuous" }, arrows: { to: { enabled: true, scaleFactor: 0.5 } } },
+  physics: { stabilization: { iterations: 150 }, barnesHut: { gravitationalConstant: -8000, springLength: 120 } },
+  interaction: { hover: true, tooltipDelay: 200 },
+});
+network.on("click", params => {
+  if (params.nodes.length > 0) {
+    const node = nodes.get(params.nodes[0]);
+    document.getElementById("info").style.display = "block";
+    document.getElementById("info-title").textContent = node.label;
+    document.getElementById("info-type").textContent = node.type;
+    document.getElementById("info-path").textContent = node.path;
+  } else {
+    document.getElementById("info").style.display = "none";
+  }
+});
+document.getElementById("stats").textContent = `${nodes.length} nodes · ${edges.length} edges`;
+function searchNodes(q) {
+  const lower = q.toLowerCase();
+  nodes.forEach(n => {
+    nodes.update({ id: n.id, opacity: (!q || n.label.toLowerCase().includes(lower)) ? 1 : 0.15 });
+  });
+}
+</script>
+</body>
+</html>

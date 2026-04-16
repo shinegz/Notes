@@ -1,0 +1,10 @@
+field_name	requiredness	filled_by	value_rule
+source_id	required	router	须与 source_registry.tsv 中某行 source_id 一致
+source_label	required	router	须与登记表对应列一致
+source_category	required	router	core | optional | manual
+input_mode	required	router	url | file | text
+raw_dir	required	router	须为 raw/<子路径>，与登记表一致
+original_ref	required	caller	原始 URL、本地路径或用户粘贴说明
+ingest_text	required	adapter_or_user	进入 ingest 主线的正文非空
+adapter_name	required_may_be_empty	router	core/manual 填 -；optional 填 skills目录名
+fallback_hint	required	router	须为用户可执行的手动回退说明

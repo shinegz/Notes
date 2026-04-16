@@ -1,0 +1,28 @@
+# Deterministic checks for llm-wiki/ (no API keys).
+name: llm-wiki check
+
+on:
+  push:
+    paths:
+      - "llm-wiki/**"
+      - ".github/workflows/llm-wiki-check.yml"
+  pull_request:
+    paths:
+      - "llm-wiki/**"
+      - ".github/workflows/llm-wiki-check.yml"
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: llm-wiki
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install graph deps (import check for build_graph)
+        run: pip install -r requirements.txt
+      - name: layout + validate registry + lint wiki
+        run: bash tools/check_all.sh .

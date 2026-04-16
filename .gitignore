@@ -1,2 +1,8 @@
 node_modules
 .DS_Store
+
+# Upstream clones used only for design reference
+.tmp-wiki-upstream/
+
+# llm-wiki skill: web viewer build output (regenerate via npm start / npm run build)
+.agents/skills/llm-wiki/web/dist/

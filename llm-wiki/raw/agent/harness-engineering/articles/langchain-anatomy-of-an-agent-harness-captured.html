@@ -1,0 +1,429 @@
+<!doctype html>
+<html lang="en" class="js" data-header-style="classic" data-dom-content-loaded="true" style="--kutak--scrollbar-width: 0px;"><head>
+    <title>The Anatomy of an Agent Harness</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://js-na2.hs-banner.com/v2/242623570/banner.js" type="text/javascript" id="cookieBanner-242623570" data-cookieconsent="ignore" data-hs-ignore="true" data-loader="hs-scriptloader" data-hsjs-portal="242623570" data-hsjs-env="prod" data-hsjs-hublet="na2"></script><script src="https://js-na2.hs-analytics.net/analytics/1776144000000/242623570.js" type="text/javascript" id="hs-analytics"></script><script type="text/javascript" async="" data-global-segment-analytics-key="analytics" src="https://cdn.segment.com/analytics.js/v1/wuTLRH4tHYcSiXAyTIF3LO5DkVnCAHKj/analytics.min.js"></script><script type="text/javascript" async="" src="https://snap.licdn.com/li.lms-analytics/insight.min.js"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-47WX3HKKY2&amp;cx=c&amp;gtm=4e64a1h1"></script><script type="text/javascript" async="" src="https://www.googletagmanager.com/gtag/js?id=G-Z8XE5ZJE6X&amp;cx=c&amp;gtm=4e64a1h1"></script><script type="text/javascript" async="" src="https://cdn-cookieyes.com/client_data/d2e859934c4309be824ea8bb/script.js"></script><script async="" src="https://www.googletagmanager.com/gtm.js?id=GTM-PKJ3R6D8"></script><script>document.documentElement.classList.replace('no-js','js');</script>
+    <script>
+        if (window.localStorage.getItem('kutak-prefers-color-scheme') && !document.documentElement.hasAttribute('data-prefers-color-scheme')) {
+            document.documentElement.setAttribute('data-prefers-color-scheme', window.localStorage.getItem('kutak-prefers-color-scheme'));
+        }
+    </script>
+
+    <link rel="preload" as="font" type="font/woff2" href="https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-regular.woff2?v=1d0777b846" crossorigin="">
+<link rel="preload" as="font" type="font/woff2" href="https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-600.woff2?v=1d0777b846" crossorigin="">
+<link rel="preload" as="font" type="font/woff2" href="https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-700.woff2?v=1d0777b846" crossorigin="">
+
+<style>
+    @font-face {
+        font-family: 'Source Sans Pro';
+        font-style: normal;
+        font-weight: 400;
+        font-display: swap;
+        src: url('https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-regular.woff2?v=1d0777b846') format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Source Sans Pro';
+        font-style: italic;
+        font-weight: 400;
+        font-display: swap;
+        src: url('https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-italic.woff2?v=1d0777b846') format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Source Sans Pro';
+        font-style: normal;
+        font-weight: 600;
+        font-display: swap;
+        src: url('https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-600.woff2?v=1d0777b846') format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Source Sans Pro';
+        font-style: italic;
+        font-weight: 600;
+        font-display: swap;
+        src: url('https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-600italic.woff2?v=1d0777b846') format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Source Sans Pro';
+        font-style: normal;
+        font-weight: 700;
+        font-display: swap;
+        src: url('https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-700.woff2?v=1d0777b846') format('woff2');
+    }
+
+    @font-face {
+        font-family: 'Source Sans Pro';
+        font-style: italic;
+        font-weight: 700;
+        font-display: swap;
+        src: url('https://blog.langchain.com/assets/fonts/source-sans-pro-v21-latin-ext_latin-700italic.woff2?v=1d0777b846') format('woff2');
+    }
+
+    :root {
+        --kutak--font-family--base: 'Source Sans Pro', Helvetica, sans-serif;
+        --kutak--font-family--headings: 'Source Sans Pro', Helvetica, sans-serif;
+        --kutak--font-family--elements: 'Source Sans Pro', Helvetica, sans-serif;
+        --kutak--font-weight--base: 400;
+        --kutak--font-weight--base-bold: 700;
+        --kutak--font-weight--headings: 700;
+        --kutak--font-weight--headings-small: 600;
+        --kutak--font-weight--elements: 600;
+    }
+</style>
+
+    <link rel="stylesheet" href="https://blog.langchain.com/assets/dist/style.css?v=1d0777b846">
+
+                <link rel="preload" as="image" imagesrcset="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w360/format/webp/2026/03/LangSmith-for-Startups--4-.png 360w,https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w480/format/webp/2026/03/LangSmith-for-Startups--4-.png 480w,https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w760/format/webp/2026/03/LangSmith-for-Startups--4-.png 760w,https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w990/format/webp/2026/03/LangSmith-for-Startups--4-.png 990w,https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w1248/format/webp/2026/03/LangSmith-for-Startups--4-.png 1248w,https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w1520/format/webp/2026/03/LangSmith-for-Startups--4-.png 1520w" imagesizes="(min-width: 1280px) 580px, (min-width: 1000px) calc(50vw - 60px), 100vw">
+
+
+    <link rel="icon" href="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w256h256/2026/03/App.png" type="image/png">
+    <link rel="canonical" href="https://blog.langchain.com/the-anatomy-of-an-agent-harness/">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    
+    <meta property="og:site_name" content="LangChain Blog">
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="The Anatomy of an Agent Harness">
+    <meta property="og:description" content="By Vivek Trivedy
+
+TLDR: Agent = Model + Harness. Harness engineering is how we build systems around models to turn them into work engines. The model contains the intelligence and the harness makes that intelligence useful. We define what a harness is and derive the core components today's and tomorrow's agents need.">
+    <meta property="og:url" content="https://blog.langchain.com/the-anatomy-of-an-agent-harness/">
+    <meta property="og:image" content="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/LangSmith-for-Startups--4-.png">
+    <meta property="article:published_time" content="2026-03-11T02:41:22.000Z">
+    <meta property="article:modified_time" content="2026-03-16T01:22:43.000Z">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="The Anatomy of an Agent Harness">
+    <meta name="twitter:description" content="By Vivek Trivedy
+
+TLDR: Agent = Model + Harness. Harness engineering is how we build systems around models to turn them into work engines. The model contains the intelligence and the harness makes that intelligence useful. We define what a harness is and derive the core components today's and tomorrow's agents need.">
+    <meta name="twitter:url" content="https://blog.langchain.com/the-anatomy-of-an-agent-harness/">
+    <meta name="twitter:image" content="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/LangSmith-for-Startups--4-.png">
+    <meta name="twitter:label1" content="Written by">
+    <meta name="twitter:data1" content="LangChain Accounts">
+    <meta name="twitter:site" content="@LangChain">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name": "LangChain Blog",
+        "url": "https://blog.langchain.com/",
+        "logo": {
+            "@type": "ImageObject",
+            "url": "https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/LangChain-Support-light.png"
+        }
+    },
+    "author": {
+        "@type": "Person",
+        "name": "LangChain Accounts",
+        "url": "https://blog.langchain.com/author/langchain-accounts/",
+        "sameAs": []
+    },
+    "headline": "The Anatomy of an Agent Harness",
+    "url": "https://blog.langchain.com/the-anatomy-of-an-agent-harness/",
+    "datePublished": "2026-03-11T02:41:22.000Z",
+    "dateModified": "2026-03-16T01:22:43.000Z",
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/LangSmith-for-Startups--4-.png",
+        "width": 1200,
+        "height": 630
+    },
+    "description": "By Vivek Trivedy\n\nTLDR: Agent &#x3D; Model + Harness. Harness engineering is how we build systems around models to turn them into work engines. The model contains the intelligence and the harness makes that intelligence useful. We define what a harness is and derive the core components today&#x27;s and tomorrow&#x27;s agents need.\n\n\nCan Someone Please Define a &quot;Harness&quot;?\n\nAgent &#x3D; Model + Harness\n\nIf you&#x27;re not the model, you&#x27;re the harness.\n\nA harness is every piece of code, configuration, and execution logic ",
+    "mainEntityOfPage": "https://blog.langchain.com/the-anatomy-of-an-agent-harness/"
+}
+    </script>
+
+    <meta name="generator" content="Ghost 6.28">
+    <link rel="alternate" type="application/rss+xml" title="LangChain Blog" href="https://blog.langchain.com/rss/">
+    <script defer="" src="https://cdn.jsdelivr.net/ghost/portal@~2.68/umd/portal.min.js" data-i18n="true" data-ghost="https://blog.langchain.com/" data-key="e411fdfa6f54398669f416d1f0" data-api="https://langchain-blog.ghost.io/ghost/api/content/" data-locale="en" crossorigin="anonymous"></script><style id="gh-members-styles">.gh-post-upgrade-cta-content,
+.gh-post-upgrade-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    text-align: center;
+    width: 100%;
+    color: #ffffff;
+    font-size: 16px;
+}
+
+.gh-post-upgrade-cta-content {
+    border-radius: 8px;
+    padding: 40px 4vw;
+}
+
+.gh-post-upgrade-cta h2 {
+    color: #ffffff;
+    font-size: 28px;
+    letter-spacing: -0.2px;
+    margin: 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta p {
+    margin: 20px 0 0;
+    padding: 0;
+}
+
+.gh-post-upgrade-cta small {
+    font-size: 16px;
+    letter-spacing: -0.2px;
+}
+
+.gh-post-upgrade-cta a {
+    color: #ffffff;
+    cursor: pointer;
+    font-weight: 500;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a:hover {
+    color: #ffffff;
+    opacity: 0.8;
+    box-shadow: none;
+    text-decoration: underline;
+}
+
+.gh-post-upgrade-cta a.gh-btn {
+    display: block;
+    background: #ffffff;
+    text-decoration: none;
+    margin: 28px 0 0;
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.gh-post-upgrade-cta a.gh-btn:hover {
+    opacity: 0.92;
+}</style>
+    <script defer="" src="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/sodo-search.min.js" data-key="e411fdfa6f54398669f416d1f0" data-styles="https://cdn.jsdelivr.net/ghost/sodo-search@~1.8/umd/main.css" data-sodo-search="https://langchain-blog.ghost.io/" data-locale="en" crossorigin="anonymous"></script>
+    
+    <link href="https://blog.langchain.com/webmentions/receive/" rel="webmention">
+    <script defer="" src="/public/cards.min.js?v=1d0777b846"></script>
+    <link rel="stylesheet" type="text/css" href="/public/cards.min.css?v=1d0777b846">
+    <script defer="" src="/public/member-attribution.min.js?v=1d0777b846"></script>
+    <script defer="" src="/public/ghost-stats.min.js?v=1d0777b846" data-stringify-payload="false" data-datasource="analytics_events" data-storage="localStorage" data-host="https://blog.langchain.com/.ghost/analytics/api/v1/page_hit" tb_site_uuid="97889716-a759-46f4-b63f-4f5c46a13333" tb_post_uuid="28504098-7e39-459f-9a67-0a5cf986b7d9" tb_post_type="post" tb_member_uuid="undefined" tb_member_status="undefined"></script><style>:root {--ghost-accent-color: #030710;}</style>
+    <!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-PKJ3R6D8');</script>
+<!-- End Google Tag Manager -->
+
+<script defer="" data-domain="blog.langchain.dev" src="https://plausible.io/js/script.js"></script>
+
+<style>
+  .nav-signin { /* Replace .nav-signin with the actual class or id */
+    display: none !important;
+  }
+</style>
+
+
+<style>
+@media (min-width: 62.5em) {
+    .article-header__figure {
+        aspect-ratio: 16/9;
+    }
+
+</style>
+
+<meta name="google-site-verification" content="wr4UCEYzUuA1lg3MF2RFoRdF7AxRujOawehorKfkZ5M">
+    <link rel="preconnect" href="https://fonts.bunny.net"><link rel="stylesheet" href="https://fonts.bunny.net/css?family=inter:400,500,600"><style>:root {--gh-font-heading: Inter;--gh-font-body: Inter;}</style>
+<script src="https://cdn-cookieyes.com/client_data/d2e859934c4309be824ea8bb/banner.js" async="" id="cookieyes-banner"></script><script src="https://static.reo.dev/334496741e114fd/reo.js" defer=""></script><style>.App{text-align:center}.App-logo{height:40vmin;pointer-events:none}@media (prefers-reduced-motion: no-preference){.App-logo{animation:App-logo-spin infinite 20s linear}}.App-header{background-color:#282c34;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:calc(10px + 2vmin);color:#fff}.App-link{color:#61dafb}@keyframes App-logo-spin{0%{transform:rotate(0)}to{transform:rotate(360deg)}}
+/*$vite$:1*/</style></head>
+
+<body class="post-template gh-font-heading-inter gh-font-body-inter">
+
+    <a class="skip-link visually-hidden-focusable" href="https://blog.langchain.com/the-anatomy-of-an-agent-harness/#main">Skip to content</a>
+
+    <div class="site">
+
+        <header id="site-header" class="site-header" data-is-sticky="false">
+    <span class="site-header__bg"></span>
+
+    <div class="site-header__container container">
+        <button class="site-header__hamburger" data-site-action-trigger="navigation" aria-label="Open Menu" aria-expanded="false" aria-controls="site-actions-navigation">
+            <span></span>
+        </button>
+
+        <a href="https://blog.langchain.com/" rel="home" class="site-header__logo">
+                <img class="site-header__logo-image" data-logo-color-scheme="default" src="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/LangChain-Support-light.png" alt="LangChain Blog">
+        </a>
+
+        <div id="site-actions-navigation" class="site-navigation">
+            <div class="site-navigation__inner">
+                        <nav class="nav-classic">
+            <ul class="nav-classic__menu">
+                 
+                    <li class="nav-classic__menu-item">
+                        <a class="nav-classic__menu-link" href="https://www.langchain.com/">
+                            <span class="nav-classic__menu-title">Website</span>
+                        </a>
+                    </li>
+                 
+                 
+                    <li class="nav-classic__menu-item">
+                        <a class="nav-classic__menu-link" href="https://docs.langchain.com/">
+                            <span class="nav-classic__menu-title">Docs</span>
+                        </a>
+                    </li>
+                 
+                 
+                    <li class="nav-classic__menu-item">
+                        <a class="nav-classic__menu-link" href="https://blog.langchain.com/tag/case-studies/">
+                            <span class="nav-classic__menu-title">Case Studies</span>
+                        </a>
+                    </li>
+                 
+                 
+                    <li class="nav-classic__menu-item">
+                        <a class="nav-classic__menu-link" href="https://blog.langchain.com/tag/in-the-loop/">
+                            <span class="nav-classic__menu-title">Harrison's In the Loop Series</span>
+                        </a>
+                    </li>
+                 
+                 
+                    <li class="nav-classic__menu-item">
+                        <a class="nav-classic__menu-link" href="https://smith.langchain.com/">
+                            <span class="nav-classic__menu-title">Try LangSmith</span>
+                        </a>
+                    </li>
+                 
+            </ul>
+        </nav>
+
+                    <div class="site-account">
+                <a class="site-account__link gh-portal-close" href="https://blog.langchain.com/the-anatomy-of-an-agent-harness/#/portal/signin" data-portal="signin">Sign in</a>
+                <a class="site-account__button button gh-portal-close" data-btn-size="small" href="https://blog.langchain.com/the-anatomy-of-an-agent-harness/#/portal/signup" data-portal="signup">Subscribe</a>
+    </div>
+                            </div>
+        </div>
+
+        <button class="site-header__search-trigger" aria-label="Open Search" data-ghost-search="">
+            <span></span>
+        </button>
+    </div>
+
+    <div class="site-actions">
+        <span class="site-actions__backdrop" data-close-site-actions=""></span>
+        <span class="site-actions__bg"></span>
+
+
+    </div>
+
+</header>
+
+        <main id="main" class="site-main">
+            
+
+<article class="article post featured">
+
+    <header class="article-header section" data-layout-grid="custom" data-theme="highlight" data-section="first" data-has-featured-image="true">
+        <figure class="article-header__figure">
+            <img class="article-header__image" width="16" height="9" src="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w760/format/webp/2026/03/LangSmith-for-Startups--4-.png" srcset="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w360/format/webp/2026/03/LangSmith-for-Startups--4-.png 360w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w480/format/webp/2026/03/LangSmith-for-Startups--4-.png 480w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w760/format/webp/2026/03/LangSmith-for-Startups--4-.png 760w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w990/format/webp/2026/03/LangSmith-for-Startups--4-.png 990w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w1248/format/webp/2026/03/LangSmith-for-Startups--4-.png 1248w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w1520/format/webp/2026/03/LangSmith-for-Startups--4-.png 1520w" sizes="(min-width: 1280px) 580px, (min-width: 1000px) calc(50vw - 60px), 100vw" loading="eager" alt="The Anatomy of an Agent Harness" onload="this.setAttribute('data-loaded', true)" data-loaded="true">
+        </figure>
+        <div class="article-header__content">
+            <h1 class="article-header__title">The Anatomy of an Agent Harness</h1>
+            <div class="article-header__footer">
+                <span class="article-header__meta article-header__meta--read-time">9 min read</span>
+                <time class="article-header__meta article-header__meta--date" datetime="2026-03-10">Mar 10, 2026</time>
+            </div>
+        </div>
+    </header>
+
+    <div class="article-main section" data-canvas-grid="content">
+        <div class="article-content" data-canvas-grid="content" data-canvas-grid-self="full">
+            <p><em>By Vivek Trivedy</em></p><p><strong>TLDR:</strong> Agent = Model + Harness.  Harness engineering is how we build systems around models to turn them into work engines.  The model contains the intelligence and the harness makes that intelligence useful.<strong>  </strong>We define what a harness is and derive the core components today's and tomorrow's agents need.</p><h2 id="can-someone-please-define-a-harness">Can Someone Please Define a "Harness"?</h2><p>Agent = Model + Harness</p><p><strong>If you're not the model, you're the harness.</strong></p><p>A harness is every piece of code, configuration, and execution logic that isn't the model itself.  A raw model is not an agent. But it becomes one when a harness gives it things like state, tool execution, feedback loops, and enforceable constraints.</p><p>Concretely, a harness includes things like:</p><ul><li>System Prompts</li><li>Tools, Skills, MCPs + and their descriptions</li><li>Bundled Infrastructure (filesystem, sandbox, browser)</li><li>Orchestration Logic (subagent spawning, handoffs, model routing)</li><li>Hooks/Middleware for deterministic execution (compaction, continuation, lint checks)</li></ul><p>There are many messy ways to split the boundaries of an agent system between the model and the harness. But in my opinion, this is the cleanest definition because it forces us to think about <strong>designing systems around model intelligence.</strong></p><p>The rest of this post walks through core harness components and derives <em>why</em> each piece exists working backwards from the core primitive of a model.</p><figure class="kg-card kg-image-card"><img src="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/image.png" class="kg-image" alt="" loading="lazy" width="680" height="542" srcset="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w600/2026/03/image.png 600w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/image.png 680w"></figure><p><a href="https://x.com/Vtrivedy10/article/2031408954517971368/media/2031389391680061440?ref=blog.langchain.com"></a></p><h2 id="why-do-we-need-harnesses%E2%80%A6from-a-models-perspective">Why Do We Need Harnesses…From a Model's Perspective</h2><p><strong>There are things we want an agent to do that a model cannot do out of the box. This is where a harness comes in.</strong>Models (mostly) take in data like text, images, audio, video and they output text. That's it. Out of the box they cannot:</p><ul><li>Maintain durable state across interactions</li><li>Execute code</li><li>Access realtime knowledge</li><li>Setup environments and install packages to complete work</li></ul><p>These are all <strong>harness level features</strong>. The structure of LLMs requires some sort of machinery that wraps them to do useful work.For example, to get a product UX like "chatting", we wrap the model in a while loop to track previous messages and append new user messages. Everyone reading this has already used this kind of harness.  The main idea is that we want to convert a desired agent behavior into an actual feature in the harness.</p><h2 id="working-backwards-from-desired-agent-behavior-to-harness-engineering">Working Backwards from Desired Agent Behavior to Harness Engineering</h2><p>Harness Engineering helps humans inject useful priors to guide agent behavior. And as models have gotten more capable, harnesses have been used to surgically extend and correct models to complete previously impossible tasks.</p><p>We won’t go over an exhaustive list of every harness feature.  The goal is to derive a set of features from the starting point of helping models do useful work.  We’ll follow a pattern like this:</p><p><strong>Behavior we want (or want to fix) → Harness Design to help the model achieve this.</strong></p><figure class="kg-card kg-image-card"><img src="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/image-1.png" class="kg-image" alt="" loading="lazy" width="680" height="464" srcset="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w600/2026/03/image-1.png 600w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/image-1.png 680w"></figure><p><a href="https://x.com/Vtrivedy10/article/2031408954517971368/media/2031389459720163328?ref=blog.langchain.com"></a></p><h2 id="filesystems-for-durable-storage-and-context-management">Filesystems for Durable Storage and Context Management</h2><p><strong>We want agents to have durable storage to interface with real data, offload information that doesn't fit in context, and persist work across sessions.</strong></p><p>Models can only directly operate on knowledge within their context window. Before filesystems, users had to copy/paste content directly to the model, that’s clunky UX and doesn't work for autonomous agents. The world was already using filesystems to do work so models were naturally trained on billions of tokens of how to use them. The natural solution became:</p><p><strong>Harnesses ship with filesystem abstractions and tools for fs-ops.</strong></p><p>The filesystem is arguably the most foundational harness primitive because of what it unlocks:</p><ul><li>Agents get a workspace to read data, code, and documentation.</li><li>Work can be incrementally added and offloaded instead of holding everything in context. Agents can store intermediate outputs and maintain state that outlasts a single session.</li><li><strong>The filesystem is a natural collaboration surface.</strong> Multiple agents and humans can coordinate through shared files.  Architectures like Agent Teams rely on this.</li></ul><p>Git adds versioning to the filesystem so agents can track work, rollback errors, and branch experiments.  We revisit the filesystem more below, because it turns out to be a key harness primitive for other features we need.</p><h2 id="bash-code-as-a-general-purpose-tool">Bash + Code as a General Purpose Tool</h2><p><strong>We want agents to autonomously solve problems without humans needing to pre-design every tool.</strong></p><p>The main agent execution pattern today is a <a href="https://docs.langchain.com/oss/python/langchain/agents?ref=blog.langchain.com" rel="noopener noreferrer nofollow">ReAct loop</a>, where a model reasons, takes an action via a tool call, observes the result, and repeats in a while loop. But harnesses can only execute the tools they have logic for.  Instead of forcing users to build tools for every possible action, a better solution is to give agents a general purpose tool like bash.</p><p><strong>Harnesses ship with a bash tool so models can solve problems autonomously by writing &amp; executing code.</strong></p><p>Bash + code exec is a big step towards <strong>giving models a computer</strong> and letting them figure out the rest autonomously. The model can design its own tools on the fly via code instead of being constrained to a fixed set of pre-configured tools.</p><p>Harnesses still ship with other tools, but code execution has become the default general-purpose strategy for autonomous problem solving.</p><h2 id="sandboxes-and-tools-to-execute-verify-work">Sandboxes and Tools to Execute &amp; Verify Work</h2><p><strong>Agents need an environment with the right defaults so they can safely act, observe results, and make progress.</strong></p><p>We've given models storage and the ability to execute code, but all of that needs to happen somewhere.  Running agent-generated code locally is risky and a single local environment doesn’t scale to large agent workloads.</p><p><strong>Sandboxes give agents safe operating environments.</strong> Instead of executing locally, the harness can connect to a sandbox to run code, inspect files, install dependencies, and complete tasks. This creates secure, isolated execution of code.  For more security, harnesses can allow-list commands and enforce network isolation.  Sandboxes also unlock scale because environments can be created on demand, fanned out across many tasks, and torn down when the work is done.</p><p><strong>Good environments come with good default tooling.</strong> Harnesses are responsible for configuring tooling so agents can do useful work. This includes pre-installing language runtimes and packages, CLIs for git and testing, <a href="https://github.com/vercel-labs/agent-browser?ref=blog.langchain.com" rel="noopener noreferrer nofollow">browsers</a> for web interaction and verification.</p><p>Tools like browsers, logs, screenshots, and test runners give agents a way to observe and analyze their work. This helps them create <strong>self-verification loops where</strong> they can <strong>write application code,</strong> run tests, inspect logs, and fix errors.</p><p>The model doesn’t configure its own execution environment out of the box. Deciding where the agent runs, what tools are available, what it can access, and how it verifies its work are all harness-level design decisions.</p><h2 id="memory-search-for-continual-learning">Memory &amp; Search for Continual Learning</h2><p><strong>Agents should remember what they've seen and access information that didn't exist when they were trained.</strong></p><p>Models have no additional knowledge beyond their weights and what's in their current context. Without access to edit model weights, the only way to "add knowledge" is via <strong>context injection.</strong></p><p>For memory, the filesystem is again a core primitive. Harnesses support memory file standards like <a href="http://agents.md/?ref=blog.langchain.com" rel="noopener noreferrer nofollow">AGENTS.md</a> which get injected into context on agent start.  As agents add and edit this file, harnesses load the updated file into context.  This is a form of <a href="https://www.ibm.com/think/topics/continual-learning?ref=blog.langchain.com" rel="noopener noreferrer nofollow">continual learning</a> where agents durably store knowledge from one session and inject that knowledge into future sessions.</p><p>Knowledge cutoffs mean that models can't directly access new data like updated library versions without the user providing them directly. For up-to-date knowledge, Web Search and MCP tools like <a href="https://context7.com/?ref=blog.langchain.com" rel="noopener noreferrer nofollow">Context7</a> help agents access information beyond the knowledge cutoff like new library versions or current data that didn't exist when training stopped.</p><p>Web Search and tools for querying up-to-date context are useful primitives to bake into a harness.</p><h2 id="battling-context-rot">Battling Context Rot</h2><p><strong>Agent performance shouldn’t degrade over the course of work.</strong></p><p><a href="https://research.trychroma.com/context-rot?ref=blog.langchain.com" rel="noopener noreferrer nofollow">Context Rot</a> ****describes how models become worse at reasoning and completing tasks as their context window fills up.  Context is a precious and scarce resource, so harnesses need strategies to manage it.</p><p><strong>Harnesses today are largely delivery mechanisms for good context engineering.</strong></p><p><strong>Compaction</strong> addresses what to do when the context window is close to filling up.  Without compaction, what happens when a conversation exceeds the context window?  One option is that the API errors, that’s not good. The harness has to use some strategy for this case.  So compaction intelligently offloads and summarizes the existing context window so the agent can continue working.</p><p><strong>Tool call offloading</strong> helps reduce the impact of large tool outputs that can noisily clutter the context window without providing useful information. The harness keeps the head and tail tokens of tool outputs above a threshold number of tokens and offloads the full output to the filesystem so the model can access it if needed.</p><p><strong>Skills</strong> address the issue of too many tools or MCP servers loaded into context on agent start which degrades performance before the agent can start working. Skills are a harness level primitive that solve this via <strong>progressive disclosure.</strong>  The model didn't choose to have Skill front-matter loaded into context on start but the harness can support this to protect the model against context rot.</p><h2 id="long-horizon-autonomous-execution">Long Horizon Autonomous Execution</h2><p><strong>We want agents to complete complex work, autonomously, correctly, over long time horizons.</strong></p><p>Autonomous software creation is the holy grail for coding agents. But today's models suffer from early stopping, issues decomposing complex problems, and incoherence as work stretches across multiple context windows.  A good harness has to design around all of this.</p><p>This is where the earlier harness primitives start to compound. Long-horizon work requires durable state, planning, observation, and verification to keep working across multiple context windows.</p><p><strong>Filesystems and git for tracking work across sessions.</strong> Agents produce millions of tokens over a long task so the filesystem durably captures work to track progress over time.  Adding git allows new agents to quickly get up to speed on the latest work and history of the project.  For multiple agents working together, the filesystem also acts as a shared ledger of work where agents can collaborate.</p><p><strong>Ralph Loops for continuing work.</strong> <a href="https://ghuntley.com/loop/?ref=blog.langchain.com" rel="noopener noreferrer nofollow">The Ralph Loop</a> is a harness pattern that intercepts the model's exit attempt via a hook and reinjects the original prompt in a clean context window, forcing the agent to continue its work against a completion goal. The filesystem makes this possible because each iteration starts with fresh context but reads state from the previous iteration.</p><p><strong>Planning and self-verification to stay on track.</strong>  Planning is when a model decomposes a goal into a series of steps.  Harnesses support this via good prompting and injecting reminders how to use a plan file in the filesystem.  After completing each step, agents benefit from the checking correctness of their work via <strong>self-verification.</strong>  Hooks in harnesses can run a pre-defined test suite and loop back to the model on failure with the error message or models can be prompted to self-evaluate their code independently.  Verification grounds solution in tests and creates a feedback signal for self-improvement.</p><h1 id="the-future-of-harnesses">The Future of Harnesses</h1><h2 id="the-coupling-of-model-training-and-harness-design">The Coupling of Model Training and Harness Design</h2><p>Today's agent products like Claude Code and Codex are post-trained with models and harnesses in the loop. This helps models improve at actions that the harness designers think they should be natively good at like filesystem operations, bash execution, planning, or parallelizing work with subagents.</p><p>This creates a feedback loop.  Useful primitives are discovered, added to the harness, and then used when training the next generation of models. As this cycle repeats, models become more capable within the harness they were trained in.</p><p>But this co-evolution has interesting side effects for generalization. It shows up in ways like how changing tool logic leads to worse model performance. A good example is described <a href="https://developers.openai.com/cookbook/examples/gpt-5/codex_prompting_guide/?ref=blog.langchain.com#apply_patch" rel="noopener noreferrer nofollow">here in the Codex-5.3 prompting guide</a> with the apply_patch tool logic for editing files.  A truly intelligent model should have little trouble switching between patch methods, but training with a harness in the loop creates this overfitting.</p><p><strong>But this doesn't mean that the best harness for your task is the one a model was post-trained with.</strong> <a href="https://www.tbench.ai/leaderboard/terminal-bench/2.0?ref=blog.langchain.com" rel="noopener noreferrer nofollow">The Terminal Bench 2.0 Leaderboard</a> is a good example. Opus 4.6 in Claude Code scores far below Opus 4.6 in other harnesses.  <a href="https://x.com/Vtrivedy10/status/2023805578561060992?s=20&amp;ref=blog.langchain.com" rel="noopener noreferrer nofollow">In a previous blog</a>, we showed how we improved our coding agent Top 30 to Top 5 on Terminal Bench 2.0 by only changing the harness.  There's a lot of juice to be squeezed out of optimizing the harness for your task.</p><p><a href="https://x.com/Vtrivedy10/article/2031408954517971368/media/2031389533892218880?ref=blog.langchain.com"></a></p><figure class="kg-card kg-image-card"><img src="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/image-2.png" class="kg-image" alt="" loading="lazy" width="680" height="437" srcset="https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/size/w600/2026/03/image-2.png 600w, https://storage.ghost.io/c/97/88/97889716-a759-46f4-b63f-4f5c46a13333/content/images/2026/03/image-2.png 680w"></figure><h2 id="where-harness-engineering-is-going">Where Harness Engineering is Going</h2><p>As models get more capable, some of what lives in the harness today will get absorbed into the model. Models will get better at planning, self-verification, and long horizon coherence natively, thus requiring less context injection for example.</p><p>That suggests harnesses should matter less over time.  But just as prompt engineering continues to be valuable today, it’s likely that harness engineering will continue to be useful for building good agents.</p><p>It’s true that harnesses today patch over model deficiencies, but they also engineer systems around model intelligence to make them more effective.  A well-configured environment, the right tools, durable state, and verification loops make any model more efficient regardless of its base intelligence.</p><p>Harness engineering is a very active area of research that we use to improve our harness building library <a href="https://docs.langchain.com/oss/python/deepagents/overview?ref=blog.langchain.com" rel="noopener noreferrer nofollow">deepagents</a> at LangChain. Here are a few open and interesting problems we’re exploring today:</p><ul><li>orchestrating hundreds of agents working in parallel on a shared codebase</li><li>agents that analyze their own traces to identify and fix harness-level failure modes</li><li>harnesses that dynamically assemble the right tools and context just-in-time for a given task instead of being pre-configured</li></ul><p>This blog was an exercise in defining what a harness is and how it’s shaped by the work we want models to do.</p><p><strong>The model contains the intelligence and the harness is the system that makes that intelligence useful.</strong></p><p>To more harness building, better systems, and better agents.</p>
+        </div>
+
+
+
+
+        <div class="article-newsletter newsletter-box" data-theme="highlight">
+            <h3 class="newsletter-box__title meta-title">Join our newsletter</h3>
+            <p class="newsletter-box__info">Updates from the LangChain team and community</p>
+            <form class="newsletter-box__form" data-members-form="signup" data-theme="reset">
+                <div class="newsletter-box__form-field">
+                    <label for="newsletter-box-email-input" class="visually-hidden">Enter your email</label>
+                    <input id="newsletter-box-email-input" class="newsletter-box__form-input" type="email" name="email" placeholder="Enter your email" required="" data-members-email="">
+                    <button class="newsletter-box__form-submit" type="submit">Subscribe</button>
+                </div>
+                <p class="newsletter-box__message" data-message="loading">Processing your application...</p>
+                <p class="newsletter-box__message" data-message="success">Success! Please check your inbox and click the link to confirm your subscription.</p>
+                <p class="newsletter-box__message" data-message="error">Sorry, something went wrong. Please try again.</p>
+            </form>
+        </div>
+    </div>
+
+    <footer class="article-footer">
+        
+
+    </footer>
+
+</article>
+
+
+        </main>
+
+        <footer id="site-footer" class="site-footer" data-theme="highlight">
+
+    <div class="site-footer__socials" data-canvas-grid="container">
+        <div class="socials">
+        <a href="https://x.com/LangChain" aria-label="Follow on twitter" target="_blank" rel="noopener noreferrer" class="socials__link" data-social="twitter"><svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M22.23,5.924c-0.736,0.326-1.527,0.547-2.357,0.646c0.847-0.508,1.498-1.312,1.804-2.27 c-0.793,0.47-1.671,0.812-2.606,0.996C18.324,4.498,17.257,4,16.077,4c-2.266,0-4.103,1.837-4.103,4.103 c0,0.322,0.036,0.635,0.106,0.935C8.67,8.867,5.647,7.234,3.623,4.751C3.27,5.357,3.067,6.062,3.067,6.814 c0,1.424,0.724,2.679,1.825,3.415c-0.673-0.021-1.305-0.206-1.859-0.513c0,0.017,0,0.034,0,0.052c0,1.988,1.414,3.647,3.292,4.023 c-0.344,0.094-0.707,0.144-1.081,0.144c-0.264,0-0.521-0.026-0.772-0.074c0.522,1.63,2.038,2.816,3.833,2.85 c-1.404,1.1-3.174,1.756-5.096,1.756c-0.331,0-0.658-0.019-0.979-0.057c1.816,1.164,3.973,1.843,6.29,1.843 c7.547,0,11.675-6.252,11.675-11.675c0-0.178-0.004-0.355-0.012-0.531C20.985,7.47,21.68,6.747,22.23,5.924z" fill="currentColor"></path></svg>
+</a>
+        <a href="https://www.youtube.com/@LangChain" aria-label="Follow on youtube" target="_blank" rel="noopener noreferrer" class="socials__link" data-social="youtube"><svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false"><path d="M21.8,8.001c0,0-0.195-1.378-0.795-1.985c-0.76-0.797-1.613-0.801-2.004-0.847c-2.799-0.202-6.997-0.202-6.997-0.202 h-0.009c0,0-4.198,0-6.997,0.202C4.608,5.216,3.756,5.22,2.995,6.016C2.395,6.623,2.2,8.001,2.2,8.001S2,9.62,2,11.238v1.517 c0,1.618,0.2,3.237,0.2,3.237s0.195,1.378,0.795,1.985c0.761,0.797,1.76,0.771,2.205,0.855c1.6,0.153,6.8,0.201,6.8,0.201 s4.203-0.006,7.001-0.209c0.391-0.047,1.243-0.051,2.004-0.847c0.6-0.607,0.795-1.985,0.795-1.985s0.2-1.618,0.2-3.237v-1.517 C22,9.62,21.8,8.001,21.8,8.001z M9.935,14.594l-0.001-5.62l5.404,2.82L9.935,14.594z" fill="currentColor"></path></svg>
+</a>
+</div>
+
+    </div>
+
+    <div class="site-footer__content" data-canvas-grid="container">
+
+        
+
+        <p class="site-footer__copyright">
+            © LangChain Blog 2026
+        </p>
+
+    </div>
+</footer>
+
+    </div><!-- .site -->
+
+    <script type="module" src="https://blog.langchain.com/assets/dist/main.js?v=1d0777b846"></script>
+
+    <!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PKJ3R6D8"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
+
+
+
+
+<script id="hs-script-loader" text="" charset="" type="text/javascript" src="//js-na2.hs-scripts.com/242623570.js"></script><script type="text/javascript" id="" charset="">!function(){var f="analytics",b=window[f]=window[f]||[];if(!b.initialize)if(b.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{b.invoked=!0;b.methods="trackSubmit trackClick trackLink trackForm pageview identify reset group track ready alias debug page screen once off on addSourceMiddleware addIntegrationMiddleware setAnonymousId addDestinationMiddleware register".split(" ");b.factory=function(c){return function(){if(window[f].initialized)return window[f][c].apply(window[f],
+arguments);var d=Array.prototype.slice.call(arguments);if("track screen alias group page identify".split(" ").indexOf(c)>-1){var a=document.querySelector("link[rel\x3d'canonical']");d.push({__t:"bpc",c:a&&a.getAttribute("href")||void 0,p:location.pathname,u:location.href,s:location.search,t:document.title,r:document.referrer})}d.unshift(c);b.push(d);return b}};for(var g=0;g<b.methods.length;g++){var m=b.methods[g];b[m]=b.factory(m)}b.load=function(c,d){var a=document.createElement("script");a.type=
+"text/javascript";a.async=!0;a.setAttribute("data-global-segment-analytics-key",f);a.src="https://cdn.segment.com/analytics.js/v1/"+c+"/analytics.min.js";c=document.getElementsByTagName("script")[0];c.parentNode.insertBefore(a,c);b._loadOptions=d};b._writeKey="wuTLRH4tHYcSiXAyTIF3LO5DkVnCAHKj";b.SNIPPET_VERSION="5.2.0";var h=function(c){return(c=document.cookie.match(new RegExp("(^|; )"+c+"\x3d([^;]*)")))?decodeURIComponent(c[2]):null};b.addSourceMiddleware(function(c){var d=c.payload;c=c.next;try{if(d&&
+typeof d.type==="function"&&d.type()==="page"){var a,e={};try{var k=new URLSearchParams(window.location.search),n=k.get("gclid"),p=k.get("li_fat_id"),q=k.get("fbclid");n&&(e.gclid=n);p&&(e.li_fat_id=p);q&&(e.fbclid=q)}catch(z){}if(!e.gclid){var r=h("_gcl_aw");if(r){var t=r.split(".");t.length>=3&&(e.gclid=t.slice(2).join("."))}}if(!e.li_fat_id){var u=h("li_fat_id");u&&(e.li_fat_id=u)}if(!e.fbclid){var v=h("_fbc");if(v){var w=v.split(".");w.length>=4&&(e.fbclid=w[3])}}if((a=e)&&(a.gclid||a.li_fat_id||
+a.fbclid)){var x=d.obj||(d.obj={}),y=x.context||(x.context={}),l=y.campaign||(y.campaign={});a.gclid&&(l.gclid=a.gclid);a.li_fat_id&&(l.li_fat_id=a.li_fat_id);a.fbclid&&(l.fbclid=a.fbclid)}}}catch(z){}c(d)});b.load("wuTLRH4tHYcSiXAyTIF3LO5DkVnCAHKj",{storage:{priority:["cookie","localStorage","memory"],cookie:{domain:".langchain.com",maxage:31536E3}}});b.page()}}();</script>
+    <script type="text/javascript" id="" charset="">!function(){var a;var b="334496741e114fd";var c=function(){Reo.init({clientID:"334496741e114fd"})};(a=document.createElement("script")).src="https://static.reo.dev/"+b+"/reo.js";a.defer=!0;a.onload=c;document.head.appendChild(a)}();</script>
+    <script id="" text="" charset="" type="text/javascript" src="https://www.influ2.com/tracker?clid=3c79e9af-38c2-45d5-a122-3ca8ac5a18f8"></script><div id="ghost-portal-root" data-testid="portal-root"></div><div id="sodo-search-root"></div><div id="mqm6tqv8" style="background-color: ActiveText"><div style="
+	height: 100vh;
+	width: 100vw;
+	position: fixed;
+	left:-10000px;
+	visibility: hidden;
+"><iframe></iframe></div></div>
+</body></html>

@@ -1,0 +1,10 @@
+source_id	source_label	source_category	input_mode	match_rule	raw_dir	adapter_name	dependency_name	dependency_type	fallback_hint
+local_pdf	PDF / 本地 PDF	core	file	file_ext:.pdf	raw/pdfs	-	-	none	将 PDF 放入 raw/<门类>/pdfs/ 或提供路径后进入主线
+local_document	Markdown/文本/HTML	core	file	file_ext:.md,.txt,.html	raw/notes	-	-	none	将文件放入 raw/<门类>/notes/ 或提供路径后进入主线
+plain_text	纯文本粘贴	core	text	inline	raw/notes	-	-	none	保存为 raw/<门类>/notes/*.md 后进入主线
+x_twitter	X/Twitter	optional	url	host:x.com,twitter.com	raw/tweets	baoyu-url-to-markdown	baoyu-url-to-markdown	bundled	失败则复制全文到 raw/<门类>/tweets/
+wechat_article	微信公众号	optional	url	host:mp.weixin.qq.com	raw/wechat	wechat-article-to-markdown	wechat-article-to-markdown	install_time	失败则在浏览器复制全文到 raw/<门类>/wechat/
+youtube_video	YouTube	optional	url	host:youtube.com,youtu.be	raw/transcripts	youtube-transcript	youtube-transcript	bundled	失败则粘贴字幕文本到 raw/<门类>/transcripts/
+zhihu_article	知乎	optional	url	host:zhihu.com	raw/zhihu	baoyu-url-to-markdown	baoyu-url-to-markdown	bundled	失败则复制全文到 raw/<门类>/zhihu/
+xiaohongshu_post	小红书	manual	url	host:xiaohongshu.com,xhslink.com	raw/xiaohongshu	-	-	none	请先从 App 或网页复制内容，再粘贴到 raw/<门类>/xiaohongshu/
+web_article	网页文章	optional	url	default	raw/articles	baoyu-url-to-markdown	baoyu-url-to-markdown	bundled	失败则复制全文或保存为本地 md 再入 raw/<门类>/articles/
