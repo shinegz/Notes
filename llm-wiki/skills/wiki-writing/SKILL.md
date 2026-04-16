@@ -141,21 +141,28 @@ description: >
 3. 调用 html-ppt-skill 生成 HTML 演示文稿
 4. 输出到 `$WIKI_ROOT/slides/<topic>/`
 
-### 3.6 依赖
+### 3.6 依赖安装
 
-使用前确保已安装：
+首次使用时，需要下载依赖 skill：
+
 ```bash
+cd $WIKI_ROOT/skills
+
 # 图表生成
-npx skills add yizhiyanhua-ai/fireworks-tech-graph
+git clone --depth 1 https://github.com/yizhiyanhua-ai/fireworks-tech-graph.git fireworks-tech-graph
 
 # 视频生成
-npx skills add remotion-dev/skills --skill remotion-best-practices
+git clone --depth 1 https://github.com/remotion-dev/skills.git remotion-dev-skills
+mv remotion-dev-skills/skills/remotion remotion-best-practices
+rm -rf remotion-dev-skills
 
 # 演示导出
-npx skills add lewislulu/html-ppt-skill
+git clone --depth 1 https://github.com/lewislulu/html-ppt-skill.git html-ppt-skill
 
 # PNG 导出（macOS）
 brew install librsvg
+# Ubuntu
+sudo apt install librsvg2-bin
 ```
 
 ## 4. 去 AI 味（必读配合）
