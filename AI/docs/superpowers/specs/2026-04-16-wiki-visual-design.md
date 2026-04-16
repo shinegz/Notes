@@ -165,14 +165,57 @@ npx skills add https://github.com/lewislulu/html-ppt-skill
 
 ### Phase 2: 扩展 wiki-writing SKILL.md
 
-- 新增「5. 视觉增强」章节
-- 新增「6. 写作原则（from learning-writer）」章节
+- 新增「5. 视觉增强」章节（对应 4.1 节内容）
+- 新增「6. 写作原则」章节（对应 4.2 节内容）
 - 整合 humanizer-zh 调用说明
+
+### Phase 2.5: 前置检查
+
+在开始实现前，验证外部 skill 可用性：
+
+```bash
+# 验证 fireworks-tech-graph
+ls ~/.claude/skills/fireworks-tech-graph/SKILL.md
+
+# 验证 remotion-best-practices
+ls ~/.claude/skills/remotion-best-practices/SKILL.md
+
+# 验证 html-ppt-skill
+ls ~/.claude/skills/html-ppt-skill/SKILL.md
+
+# 验证 librsvg
+rsvg-convert --version
+```
+
+如遇问题，参考各 skill 的安装文档。
 
 ### Phase 3: 测试验证
 
-- 编写测试用例验证图表生成
-- 验证与现有 wiki 流程的兼容性
+#### 3.1 图表生成测试
+
+- 触发 fireworks-tech-graph 生成架构图
+- 验证 SVG 输出正确
+- 验证 PNG 导出（rsvg-convert）正常
+- 验证嵌入 wiki 后 Obsidian 渲染正常
+
+#### 3.2 视频生成测试
+
+- 创建简单 Remotion composition
+- 渲染 MP4
+- 验证嵌入 wiki 后播放正常
+
+#### 3.3 演示导出测试
+
+- 将现有 wiki 页面导出为 HTML 演示
+- 验证主题/布局正确
+- 验证动画效果正常
+
+#### 3.4 兼容性验证
+
+验证与现有 wiki 流程兼容：
+- `llm-wiki/tools/lint_wiki.py` 不会报错
+- wikilink 解析正常
+- 图片路径符合 `llm-wiki/graph/` 结构
 
 ## 6. 文件改动
 
@@ -182,9 +225,18 @@ npx skills add https://github.com/lewislulu/html-ppt-skill
 
 ## 7. 依赖
 
-| 依赖 | 版本 | 用途 |
-|------|------|------|
-| fireworks-tech-graph | latest | 图表生成 |
-| remotion | latest | 视频生成 |
-| html-ppt-skill | latest | 演示导出 |
-| librsvg | latest | PNG 导出（macOS: `brew install librsvg`）|
+| 依赖 | 版本 | 用途 | 安装方式 |
+|------|------|------|----------|
+| fireworks-tech-graph | latest | 图表生成 | `npx skills add yizhiyanhua-ai/fireworks-tech-graph` |
+| remotion-best-practices | latest | 视频生成 | `npx skills add remotion-dev/skills --skill remotion-best-practices` |
+| html-ppt-skill | latest | 演示导出 | `npx skills add lewislulu/html-ppt-skill` |
+| librsvg | latest | PNG 导出 | macOS: `brew install librsvg` / Ubuntu: `sudo apt install librsvg2-bin` |
+
+**librsvg 调用方式**：通过 Node.js `child_process.exec` 调用 `rsvg-convert`：
+
+```javascript
+const { exec } = require('child_process');
+exec(`rsvg-convert -w 1920 input.svg -o output.png`, (err) => {
+  if (err) console.error('PNG export failed:', err);
+});
+```
