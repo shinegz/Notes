@@ -7,7 +7,5 @@ node_modules
 # llm-wiki skill: web viewer build output (regenerate via npm start / npm run build)
 .agents/skills/llm-wiki/web/dist/
 
-# External skill dependencies (download and manage separately)
-llm-wiki/skills/fireworks-tech-graph/
-llm-wiki/skills/html-ppt-skill/
-llm-wiki/skills/remotion-best-practices/
+# Sensitive config - API keys
+llm-wiki/.env

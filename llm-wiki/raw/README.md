@@ -1,10 +1,15 @@
 # raw/
 
+> ⚠️ **宪法铁律**：本目录是**原始素材库**，只存储未经过任何加工的原始内容。
+> - **原始性**：必须完整保存原始资料，不得摘要、缩写或改写
+> - **Immutable**：素材只增不改，发现错误可另存勘误篇，不覆盖原文件
+> - **工具链**：`articles/` 必须用 `baoyu-url-to-markdown` 完整抓取网页原文
+
 素材**只增不改**（发现错误可另存勘误篇，不覆盖原文件）。
 
 ## 单一事实来源
 
-**每条 `source_id` 对应哪一段 `raw_dir`（如 `raw/zhihu`）以 `tools/source_registry.tsv` 为准。**本文件只说明 **命名含义** 与 **为何分桶**，避免与 TSV 逐行重复；Agent 路由以 **`skills/collect/SKILL.md`** + **`list` / `get` CLI** 为准。
+**每条 `source_id` 对应哪一段 `raw_dir`（如 `raw/zhihu`）以 `tools/source_registry.tsv` 为准。**本文件只说明 **命名含义** 与 **为何分桶**，避免与 TSV 逐行重复；Agent 路由以 **`docs/collect-workflow.md`** + **`list` / `get` CLI** 为准。
 
 ## `raw_dir` 怎么读
 

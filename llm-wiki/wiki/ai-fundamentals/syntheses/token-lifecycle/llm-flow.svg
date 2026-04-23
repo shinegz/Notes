@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 320">
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#64748b"/>
+    </marker>
+  </defs>
+  <rect width="900" height="320" fill="#fafafa"/>
+
+  <!-- Title -->
+  <text x="450" y="25" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="600" fill="#1e293b">从输入到输出：一个具体例子</text>
+  <text x="450" y="45" text-anchor="middle" font-family="system-ui" font-size="13" fill="#64748b">"中国的首都是什么" → "北京"</text>
+
+  <!-- Step 1: Input -->
+  <rect x="20" y="65" width="150" height="70" rx="8" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+  <text x="95" y="90" text-anchor="middle" font-family="system-ui" font-size="13" font-weight="600" fill="#92400e">Step 1: 输入</text>
+  <text x="95" y="115" text-anchor="middle" font-family="system-ui" font-size="20" fill="#92400e">"中国的首都是什么"</text>
+
+  <!-- Arrow 1 -->
+  <line x1="170" y1="100" x2="200" y2="100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="185" y="92" text-anchor="middle" font-family="system-ui" font-size="10" fill="#64748b">Tokenize</text>
+
+  <!-- Step 2: Tokens -->
+  <rect x="200" y="65" width="180" height="70" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+  <text x="290" y="90" text-anchor="middle" font-family="system-ui" font-size="13" font-weight="600" fill="#1e40af">Step 2: 分词</text>
+  <text x="290" y="115" text-anchor="middle" font-family="system-ui" font-size="12" fill="#1e40af">[中, 国, 的, 首, 都, 是, 什, 么]</text>
+
+  <!-- Arrow 2 -->
+  <line x1="380" y1="100" x2="410" y2="100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="395" y="92" text-anchor="middle" font-family="system-ui" font-size="10" fill="#64748b">Embedding</text>
+
+  <!-- Step 3: Vectors -->
+  <rect x="410" y="55" width="200" height="90" rx="8" fill="#e0e7ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="510" y="80" text-anchor="middle" font-family="system-ui" font-size="13" font-weight="600" fill="#4338ca">Step 3: 向量</text>
+  <text x="510" y="102" text-anchor="middle" font-family="monospace" font-size="10" fill="#4338ca">[0.23, -1.45, ...]</text>
+  <text x="510" y="122" text-anchor="middle" font-family="monospace" font-size="10" fill="#4338ca">[0.11, 0.88, ...]</text>
+  <text x="510" y="135" text-anchor="middle" font-family="system-ui" font-size="9" fill="#64748b">4096 维向量 × 8 个 Token</text>
+
+  <!-- Arrow 3 -->
+  <line x1="610" y1="100" x2="640" y2="100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="625" y="92" text-anchor="middle" font-family="system-ui" font-size="10" fill="#64748b">Attention</text>
+
+  <!-- Step 4: Attention -->
+  <rect x="640" y="55" width="160" height="90" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+  <text x="720" y="80" text-anchor="middle" font-family="system-ui" font-size="13" font-weight="600" fill="#9d174d">Step 4: 注意力</text>
+  <text x="720" y="100" text-anchor="middle" font-family="system-ui" font-size="10" fill="#9d174d">"中国" 注意到 "首都"</text>
+  <text x="720" y="118" text-anchor="middle" font-family="system-ui" font-size="10" fill="#9d174d">"首都" 注意到 "什么"</text>
+  <text x="720" y="135" text-anchor="middle" font-family="system-ui" font-size="9" fill="#64748b">Layer × 96</text>
+
+  <!-- Arrow 4 -->
+  <line x1="800" y1="100" x2="830" y2="100" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Step 5: Output -->
+  <rect x="830" y="65" width="60" height="70" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+  <text x="860" y="90" text-anchor="middle" font-family="system-ui" font-size="13" font-weight="600" fill="#166534">Step 5</text>
+  <text x="860" y="115" text-anchor="middle" font-family="system-ui" font-size="20" fill="#166534">北</text>
+
+  <!-- Bottom: Detailed example -->
+  <rect x="20" y="165" width="860" height="140" rx="10" fill="#f1f5f9" stroke="#cbd5e1" stroke-width="1"/>
+  
+  <text x="450" y="190" text-anchor="middle" font-family="system-ui" font-size="14" font-weight="600" fill="#334155">注意力机制的实际例子</text>
+
+  <!-- Left: The sentence -->
+  <text x="80" y="220" font-family="system-ui" font-size="24" fill="#1e293b">"它的鼻子很灵"</text>
+  
+  <!-- Arrow -->
+  <line x1="280" y1="215" x2="330" y2="215" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+  
+  <!-- Middle: What happens -->
+  <text x="450" y="215" text-anchor="middle" font-family="system-ui" font-size="12" fill="#475569">"它" 会注意到：</text>
+  <text x="450" y="235" text-anchor="middle" font-family="system-ui" font-size="11" fill="#64748b">"鼻子" (相关度高)</text>
+  <text x="450" y="252" text-anchor="middle" font-family="system-ui" font-size="11" fill="#64748b">"灵" (相关度高)</text>
+  <text x="450" y="292" text-anchor="middle" font-family="system-ui" font-size="11" fill="#64748b">"桌子" (相关度低)</text>
+
+  <!-- Arrow -->
+  <line x1="560" y1="235" x2="610" y2="235" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Right: Result -->
+  <text x="750" y="220" text-anchor="middle" font-family="system-ui" font-size="12" fill="#475569">推理结果：</text>
+  <text x="750" y="245" text-anchor="middle" font-family="system-ui" font-size="18" font-weight="600" fill="#1e293b">"它" = 某种动物</text>
+  <text x="750" y="270" text-anchor="middle" font-family="system-ui" font-size="11" fill="#64748b">(不是桌子、椅子等)</text>
+  <text x="750" y="290" text-anchor="middle" font-family="system-ui" font-size="11" fill="#16a34a">因为 "鼻子"+"灵" = 动物特征</text>
+</svg>

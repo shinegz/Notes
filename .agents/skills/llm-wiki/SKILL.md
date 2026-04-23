@@ -5,6 +5,30 @@ description: Karpathy 式持久 wiki（llm-wiki/）— 按门类路径组织 raw
 
 # LLM Wiki
 
+## 执行前依赖检查
+
+llm-wiki 工作流依赖以下外部 skill。Agent 在执行任何操作前，**必须强制检查**对应 skill 是否已安装在当前环境中。
+
+**检查方式**：验证 skill 是否存在于 agent skill 目录（如 `.agents/skills/<name>/`、`.qoder/skills/<name>/`）或技能锁文件（`skills-lock.json`）中。
+
+| 操作阶段 | 依赖 Skill | 安装命令 |
+|---------|-----------|---------|
+| Collect | `tavily-search` | `npx skills add https://github.com/tavily-ai/skills --skill tavily-search` |
+| Collect | `baoyu-url-to-markdown` | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-url-to-markdown` |
+| Collect | `wechat-article-to-markdown` | `npx skills add https://github.com/jackwener/wechat-article-to-markdown --skill wechat-article-to-markdown` |
+| Collect | `baoyu-youtube-transcript` | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-youtube-transcript` |
+| Ingest（成稿） | `humanizer-zh` | `npx skills add https://github.com/op7418 --skill humanizer-zh` |
+| Ingest（可视化） | `fireworks-tech-graph` | `npx skills add https://github.com/yizhiyanhua-ai/fireworks-tech-graph --skill fireworks-tech-graph` |
+| Ingest（演示） | `html-ppt-skill` | `npx skills add https://skills.sh/lewislulu/html-ppt-skill/html-ppt` |
+
+**强制规则**：
+1. 执行任何操作前，先检查该阶段所需 skill 是否已安装
+2. 若发现缺失，**必须询问用户是否安装**，列出缺失 skill 及对应安装命令
+3. **未获得用户明确确认前，不得执行该操作**
+4. **不允许跳过检查，不允许静默降级到手动流程**
+
+Do not skip this check. Do not proceed without user confirmation.
+
 ## 知识库根目录
 
 **`llm-wiki/`**（与仓库根相对路径；也可单独拷贝本目录对外开源）

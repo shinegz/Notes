@@ -19,7 +19,7 @@ python3 tools/build_graph.py --wiki-root "$WIKI_ROOT"
 ```
 
 ```bash
-# 终端快速查 URL / 路径对应哪一行登记表（再打开 skills/<adapter_name>/）
+# 终端快速查 URL / 路径对应哪一行登记表（agent 按 adapter_name 在自身 skill 系统中查找）
 python3 tools/source_registry_cli.py match-url "https://mp.weixin.qq.com/s/xxx"
 python3 tools/source_registry_cli.py match-file "./raw/agent/harness-engineering/pdfs/paper.pdf"
 ```

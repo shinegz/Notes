@@ -1,67 +1,188 @@
 # LLM Wiki — Schema & 工作流
 
-> SPDX-License-Identifier: MIT  
-> 设计融合：[llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) 的 wiki 分层与 ingest/query/lint/graph；[llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) 的来源分类与外链处理思路；[graphify](https://github.com/safishamsi/graphify) 强调的图结构视角（本 pack 内工具为**无 API Key**的确定性 wikilink 图 + Louvain）。
->
-> **自洽**：文档与 `tools/` 脚本只假定「本 pack 根目录」（与 `CLAUDE.md` 同级）；不依赖父仓库、编辑器技能目录或其它本地路径。可单独拷贝本目录树使用；许可证与总览见同级 **`LICENSE`**、**`README.md`**。
+## 核心理念
 
----
+### Wiki > RAG
 
-## 核心理念（Karpathy llm-wiki）
+| | RAG | Wiki |
+|--|------|------|
+| 知识处理 | 每次查询时重新推导 | 入库时编译一次，持久保持 |
+| 跨文档引用 | 临时发现 | 预先建立并维护 |
+| 知识积累 | 无，每次从零开始 | 随每个 source 复合增长 |
 
-用 LLM **增量编译**成持久 wiki（Markdown + `[[wikilink]]`），而不是每次提问都从原始片段临时拼答案。每一批素材应更新：来源页、概念/实体页、`overview.md`、矛盾标注与索引。
+### 复合效应
 
-**写作与去 AI 味**：撰写或修订 **`wiki/` 下成稿**（`concepts/`、`syntheses/`、`overview` 等）时，须遵循 **`skills/wiki-writing/SKILL.md`**，并对照 **`skills/humanizer-zh/SKILL.md`**（见 **`skills/README.md`**）。
+Wiki 是**持久、复合的 artifact**。每个 source 加入后，LLM 会更新相关页面、建立引用、标记矛盾点。越用越丰富。
 
-**Collect（URL/素材拉取）**：**`tools/source_registry.tsv`** 为来源类型 / **`raw_dir`** / adapter 的**唯一事实来源**（改表后 `validate`）。**`taxonomy.md`** 只管**有哪些顶层门类**（及子主题说明）；**`raw/README.md`** 只解释分桶含义，不复制 TSV。操作顺序与 CLI 见 **`skills/collect/SKILL.md`**（其中**不**粘贴整张路由表，用 `source_registry_cli.py list` / `get` 查行）。
+### 人机分工
+
+- **人类**：负责 sourcing、exploration、提问
+- **LLM**：负责 summarizing、cross-referencing、filing、bookkeeping
+
+> Obsidian = IDE，LLM = 程序员，Wiki = 代码库
 
 ---
 
 ## 目录布局
 
-```text
+```
 llm-wiki/
 ├── CLAUDE.md           ← 本文件（schema）
-├── AGENTS.md           ← Agent 快速入口
-├── purpose.md          ← 学习目标与边界
-├── taxonomy.md         ← 当前「门类」书架（动态；结构变更须人审）
-├── skills/             ← Agent 能力：collect 路由、URL 适配器、wiki-writing、humanizer-zh（见 skills/README.md）
-├── raw/<shelf>/        ← immutable素材；子目录见 raw/README.md（articles/pdfs/transcripts/notes/refs + 平台桶）
+├── docs/               ← 工作流指南（collect、ingest 写作规范）
+├── purpose.md           ← 学习目标与边界
+├── taxonomy.md         ← 当前「门类」书架
+├── raw/<shelf>/        ← immutable 素材
+│   └── （子目录见 raw/README.md）
 ├── wiki/<shelf>/       ← 编译层（与 shelf 对齐）
-│   ├── sources/        ← 每篇素材对应一页
-│   ├── entities/
-│   ├── concepts/
-│   ├── syntheses/      ← 可查后固化的问答
-│   └── comparisons/    ← 可选：对比文
-├── wiki/index.md       ← 总索引（跨 shelf）
-├── wiki/overview.md    ← Living synthesis
+│   ├── index.md        ← shelf 索引（必须有）
+│   ├── overview.md     ← shelf 综合（可选）
+│   ├── sources/        ← 扁平，kebab-case.md
+│   ├── entities/       ← TitleCase.md
+│   ├── concepts/       ← TitleCase.md
+│   ├── syntheses/      ← kebab-case.md
+│   └── comparisons/    ← 可选
+├── wiki/index.md       ← 总索引
+├── wiki/overview.md     ← Living synthesis（跨 shelf）
 ├── wiki/log.md         ← 操作日志
 ├── graph/              ← build_graph 输出
-├── sessions/           ← Collect 候选表（先审后拉）
-└── tools/              ← source_registry_cli（validate / match-url / layout）+ lint + graph
+├── sessions/           ← Collect 候选表
+└── tools/              ← CLI 工具
 ```
 
-**shelf（门类）**：路径即分类，例如 `前端`、`数据库`、`agent`。新建 shelf 必须先由用户批准，再创建目录并更新 `taxonomy.md`。
+**shelf（门类）**：路径即分类。**新建 shelf 必须由用户批准**。
 
 ---
 
-## 页面 frontmatter（与 llm-wiki-agent 对齐）
+## 命名规范
 
-```yaml
+| 目录 | 命名风格 | 示例 |
+|------|----------|------|
+| sources/ | kebab-case.md（**必须扁平**） | `attention-is-all-you-need.md` |
+| entities/ | TitleCase.md | `OpenAI.md` |
+| concepts/ | TitleCase.md | `ReinforcementLearning.md` |
+| syntheses/ | kebab-case.md | `what-is-rag.md` |
+
+**禁止**：`sources/` 内使用子目录。每篇素材一页，扁平化。
+
 ---
-title: "Page Title"
-type: source | entity | concept | synthesis
-tags: []
-sources: []       # 来源 slug 或相对路径
-last_updated: YYYY-MM-DD
+
+## 核心文件关系
+
+| 文件 | 层级 | 用途 | 更新时机 |
+|------|------|------|----------|
+| `purpose.md` | 项目 | 学习目标 | 初始 + 里程碑 |
+| `taxonomy.md` | 项目 | 门类清单 | shelf 增删改 |
+| `wiki/index.md` | 全局 | 所有 wiki 页索引 | ingest / shelf 变更 |
+| `wiki/overview.md` | 全局 | Living synthesis | ingest |
+| `wiki/log.md` | 全局 | 操作日志 | 任何 wiki 操作 |
+| `wiki/<shelf>/index.md` | shelf | 单 shelf 索引 | ingest / 增删页 |
+| `wiki/<shelf>/overview.md` | shelf | 单 shelf 综合（可选） | ingest |
+
+**命名语义**：
+- `index` = 清单/目录（catalog）
+- `overview` = 综合/概览（synthesis）
+- `log` = 时序记录（append-only）
+- `purpose` = 目标定义
+- `taxonomy` = 分类体系
+
 ---
-```
 
-使用 `[[相对wiki的路径|显示名]]` 互链（路径相对 `wiki/`，不含 `wiki/` 前缀）；跨 shelf 或含子主题时写全路径，如 `[[agent/harness-engineering/concepts/HarnessEngineering|Harness Engineering]]`。
+## Agent 能力依赖
 
-**日期字段**：凡带 `type:` 的页统一使用 **`last_updated: YYYY-MM-DD`**，勿用 `date:`。
+llm-wiki 工作流依赖以下外部 skill，由 agent 在**执行对应操作前**强制检查环境。若缺失，**必须询问用户是否安装**，**未获得用户明确确认前不得执行该操作**。不允许跳过检查或静默降级到手动流程。
 
-### Source 页模板（`wiki/<shelf>/sources/<slug>.md`）
+### Collect 阶段
+
+| Skill | 用途 | 安装命令 |
+|-------|------|---------|
+| `tavily-search` | Web 搜索预验证 | `npx skills add https://github.com/tavily-ai/skills --skill tavily-search` |
+| `baoyu-url-to-markdown` | 网页抓取（含 X/Twitter、知乎、通用网页） | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-url-to-markdown` |
+| `wechat-article-to-markdown` | 微信文章抓取 | `npx skills add https://github.com/jackwener/wechat-article-to-markdown --skill wechat-article-to-markdown` |
+| `baoyu-youtube-transcript` | YouTube 字幕提取 | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-youtube-transcript` |
+
+### Ingest 阶段
+
+| Skill | 用途 | 安装命令 |
+|-------|------|---------|
+| `humanizer-zh` | 去 AI 味（中文成稿） | `npx skills add https://github.com/op7418 --skill humanizer-zh` |
+| `fireworks-tech-graph` | 概念可视化（解释复杂概念时必需考虑） | `npx skills add https://github.com/yizhiyanhua-ai/fireworks-tech-graph --skill fireworks-tech-graph` |
+| `html-ppt-skill` | 演示导出（按需） | `https://skills.sh/lewislulu/html-ppt-skill/html-ppt` |
+
+> 这些 skill 不随 llm-wiki 打包分发。不同 coding agent（Claude Code、Codex 等）的 skill 安装方式可能不同，以上命令以 Qoder 的 `npx skills add` 为准。
+
+## 操作总览
+
+| 操作 | 触发 | 说明 |
+|------|------|------|
+| **A: collect** | 用户给出主题 | 先清单，后落盘 |
+| **B: ingest** | 素材已落盘 | 写 source/更新索引 |
+| **C: query** | 用户提问 | 读 wiki，作答 |
+| **D: lint** | 主动或被动 | 检查断链/矛盾 |
+| **E: graph** | 构建知识图谱 | 生成可视化 |
+
+---
+
+## 操作 A：collect（收集）
+
+**触发**：用户给出主题或学习目标（例：「Transformer 原理」「学 React」）。
+
+### 硬性规则
+
+1. **不得**在用户确认前批量下载或写入 `raw/`（除用户明确给出的单链接/单文件外）。
+2. 若需新建 shelf：先发起 **taxonomy 变更提案**（说明理由、命名、影响），**用户同意前**不得创建目录。
+3. 在 `sessions/YYYYMMDD-HHMM-<slug>/candidates.md` 填写候选表（可用 `_template`）。
+4. 用户勾选后，将内容写入 `raw/<shelf>/…`，并进入 **ingest**。
+
+### 来源类型与提取策略
+
+以 **`tools/source_registry.tsv`** 为准。执行 Collect 时先读 **`docs/collect-workflow.md`**。
+
+### 新建 shelf 的联动
+
+用户批准新建 shelf 时，**必须同时执行**：
+
+| 顺序 | 文件 | 操作 |
+|------|------|------|
+| 1 | `taxonomy.md` | 登记新 shelf |
+| 2 | `raw/<shelf>/` | 创建目录结构 |
+| 3 | `wiki/<shelf>/` | 创建目录 |
+| 4 | `wiki/<shelf>/index.md` | 创建 shelf 索引页 |
+| 5 | `wiki/index.md` | 在「By shelf」小节添加入口 |
+| 6 | `wiki/log.md` | 追加 `## [YYYY-MM-DD] taxonomy \| new shelf: <shelf>` |
+| 7 | `purpose.md` | 如涉及新学习目标则更新（可选） |
+
+**禁止**：只改 `taxonomy.md`，不更新其他联动文件。
+
+---
+
+## 操作 B：ingest（消化素材）
+
+**触发**：`ingest raw/<shelf>/articles/foo.md` 或等价描述。
+
+### 必须同时执行的联动
+
+| 顺序 | 文件 | 操作 |
+|------|------|------|
+| 1 | Read | 源文件；`wiki/index.md`；`wiki/overview.md`；`taxonomy.md` |
+| 2 | `wiki/<shelf>/sources/<slug>.md` | 写 source 摘要页 |
+| 3 | `wiki/<shelf>/index.md` | 添加 source 入口 |
+| 4 | `wiki/index.md` | 在对应 shelf 小节登记 |
+| 5 | `wiki/overview.md` | 必要时更新综合结论 |
+| 6 | `wiki/<shelf>/entities/` 或 `concepts/` | 如有新实体/概念则创建 |
+| 7 | `[[Contradictions]]` | 如有矛盾则标注 |
+| 8 | `wiki/log.md` | 追加 `## [YYYY-MM-DD] ingest \| <标题>` |
+
+### Ingest 成稿规范
+
+写 `concepts/`、`syntheses/`、实质性修订 `overview.md` 时，参考 **`docs/ingest-writing-guide.md`**。Agent 执行前**必须强制检查**环境中是否已安装以下 skill。若缺失，**必须询问用户是否安装**，**未安装完成前不得执行成稿操作**：
+
+| Skill | 用途 | 安装命令 |
+|-------|------|---------|
+| `humanizer-zh` | 去 AI 味（中文成稿） | `npx skills add https://github.com/op7418 --skill humanizer-zh` |
+| `fireworks-tech-graph` | 概念可视化（解释复杂概念时必需考虑） | `npx skills add https://github.com/yizhiyanhua-ai/fireworks-tech-graph --skill fireworks-tech-graph` |
+| `html-ppt-skill` | 演示导出（按需） | `https://skills.sh/lewislulu/html-ppt-skill/html-ppt` |
+
+### Source Page 格式
 
 ```markdown
 ---
@@ -69,61 +190,34 @@ title: "Source Title"
 type: source
 tags: []
 last_updated: YYYY-MM-DD
-source_file: raw/<shelf>/[<子主题>/]articles/....md
-source_url: https://...
+source_file: raw/<shelf>/...
 ---
 
 ## Summary
-2–4 句。
+2–4 句话总结。
 
-## Key claims
-- 
+## Key Claims
+- 主张 1
+- 主张 2
 
-## Key quotes
->
+## Key Quotes
+> "引文" — 上下文
 
 ## Connections
-- [[EntityOrConcept]] — 
+- [[EntityName]] — 关联说明
+- [[ConceptName]] — 关联说明
 
 ## Contradictions
-- 与 [[OtherPage]] 在 … 上不一致（如有）
+- 与 [[OtherPage]] 的矛盾点
 ```
 
----
+### 收尾
 
-## 操作 A：`collect`（收集 — 先清单，后落盘）
-
-**触发**：用户给出主题或学习目标（例：「Transformer 原理」「学 React」「Harness Engineering」）。
-
-**硬性规则**：
-
-1. **不得**在用户确认前批量下载或写入 `raw/`（除用户明确给出的单链接/单文件外）。
-2. 若当前 shelf 不合适或需新建门类：先发起 **taxonomy 变更提案**（说明理由、命名、影响），**用户同意前**不得创建 `raw/<新shelf>/`。
-3. 在 `sessions/YYYYMMDD-HHMM-<slug>/candidates.md` 填写候选表（可用 `_template`）。
-4. 用户勾选或回复采纳项后，再将内容写入 `raw/<shelf>/…`，并进入 **ingest**。
-
-**来源类型与提取策略**：以 **`tools/source_registry.tsv`** 为准（**`dependency_*`**、**`source_category`**、**`raw_dir`**、**`match_rule`**；**`default`** 行唯一且对应 **`web_article`**）。执行 Collect 时先读 **`skills/collect/SKILL.md`**。适配器不可用或 **`adapter_name`** 为 `-` 时按 **`fallback_hint`** 手动处理。
+用几句话汇总——本次**新建/更新了哪些路径**、**矛盾**有无、是否还需补实体/概念页。
 
 ---
 
-## 操作 B：`ingest`（消化单篇已落盘素材）
-
-**触发**：`ingest raw/<shelf>/articles/foo.md` 或等价描述。
-
-**步骤**（顺序）：
-
-1. Read 源文件全文；Read `wiki/index.md`、`wiki/overview.md`、`taxonomy.md`。
-2. 写 `wiki/<shelf>/sources/<slug>.md`（slug 与文件名一致，kebab-case）。
-3. 更新 `wiki/index.md`（在对应 shelf 小节登记）。
-4. 更新 `wiki/overview.md`（必要时修订综合结论）。
-5. 更新/新建 `wiki/<shelf>/entities/`、`concepts/` 相关页。
-6. 标注与既有页面的**矛盾**（写在 source 或 concept 页 `Contradictions`）。
-7. 追加 `wiki/log.md`：`## [YYYY-MM-DD] ingest | <标题>`
-8. **收尾（与 [llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) `/wiki-ingest` 一致）**：用几句话汇总——本次**新建/更新了哪些路径**、**矛盾**有无、是否还需补实体/概念页；便于用户核对，不要求长报告。
-
----
-
-## 操作 C：`query`
+## 操作 C：query（查询）
 
 1. Read `wiki/index.md` 定位相关页。
 2. Read 页面后作答，引用使用 `[[...]]`。
@@ -131,29 +225,19 @@ source_url: https://...
 
 ---
 
-## 操作 D：`lint`
+## 操作 D：lint（检查）
 
-1. **`python3 tools/lint_wiki.py <llm-wiki-root>`** — 断链、孤儿（启发式）、**`type: source` 的 `source_file` 存在性**、**frontmatter**（凡含 **`type:`** 的页须 **`last_updated`**；**禁止 `date:`**；source 另须 **`title` / `source_file`**；缺 `source_url` 仅警告）、**`thin_key_claims`**（仍含「ingest 占位」的统计）。一键：**`bash tools/check_all.sh <llm-wiki-root>`**。精读达标后可 **`--strict-ingest`** 强制无占位。
-2. 修改 **`tools/source_registry.tsv`** 后运行 **`python3 tools/source_registry_cli.py validate <llm-wiki-root>`**（或兼容脚本 **`validate_source_registry.py`**）。需要查 URL/本地路径对应行时：**`python3 tools/source_registry_cli.py match-url '<url>'`** / **`match-file '<path>'`**。新拷贝目录可 **`layout <llm-wiki-root>`** 做最小结构检查。Collect 字段契约见 **`tools/source_record_contract.tsv`**。
-3. **分工（参考 llm-wiki-agent `wiki-lint`）**：**结构性**问题（断链、孤儿、登记表、`source_file`、frontmatter）以 **`bash tools/check_all.sh`** 为准；**语义性**问题（跨页矛盾、摘要是否过时、知识缺口）依赖**阅读与判断**，可记入 `wiki/lint-report.md` 或另开会话，**不**要求在本 pack 内调用 LLM API 做自动 lint。
-
----
-
-## 操作 E：`graph`
-
-运行：`python3 tools/build_graph.py --wiki-root <llm-wiki-root>`  
-生成 `graph/graph.json` 与 `graph/graph.html`（vis.js，来自 wikilink 的 **EXTRACTED** 边；Louvain 着色）。**默认不进行**需 API Key 的语义推断边；若未来扩展，须单独配置。
+1. **`python3 tools/lint_wiki.py <llm-wiki-root>`** — 断链、孤儿、`source_file` 存在性、`last_updated` 缺失。一键：**`bash tools/check_all.sh <llm-wiki-root>`**。
+2. 修改 **`tools/source_registry.tsv`** 后运行 **`python3 tools/source_registry_cli.py validate <llm-wiki-root>`**。
+3. **分工**：**结构性**问题以 check_all.sh 为准；**语义性**问题（矛盾、摘要过时）依赖阅读判断。
 
 ---
 
-## 命名约定
+## 操作 E：graph（知识图谱）
 
-- Source slug：`kebab-case`，与 `raw` 主文件名一致。
-- Entity：`TitleCase.md`
-- Concept：`TitleCase.md` 或子目录 `wiki/<shelf>/concepts/<topic>/index.md` + 分面页
+运行：`python3 tools/build_graph.py --wiki-root <llm-wiki-root>`
+
+生成 `graph/graph.json` 与 `graph/graph.html`（vis.js，Louvain 着色）。默认不进行需 API Key 的语义推断。
 
 ---
 
-## index.md 维护建议
-
-保持顶层 `# Wiki Index` 下分节：**Overview**、**By shelf**（链接到各 shelf 的 index 可选）、**Sources / Entities / Concepts / Syntheses**。每个 shelf 可在 `wiki/<shelf>/index.md` 再设分索引（可选）。

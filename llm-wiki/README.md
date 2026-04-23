@@ -21,17 +21,31 @@ python3 tools/build_graph.py --wiki-root "$WIKI_ROOT"
 ```
 
 Read **`CLAUDE.md`** for ingest / query / lint / graph steps and page templates.  
-For prose quality and de-AI-ing, see **`skills/wiki-writing/SKILL.md`** and **`skills/humanizer-zh/SKILL.md`**. For URL/material collection, start with **`skills/collect/SKILL.md`** and **`tools/source_registry.tsv`** (bundled adapter skills under **`skills/`**).
+For prose quality and de-AI-ing, see **`docs/ingest-writing-guide.md`** and agent 环境中的 **`humanizer-zh`**. For URL/material collection, start with **`docs/collect-workflow.md`** and **`tools/source_registry.tsv`** (external skills installed by agent).
+
+## Design principles
+
+**Source authenticity**: source pages must be created from actual material content, not LLM training knowledge.
+
+**raw/ immutability**: `raw/` is append-only. Once written, content is not modified—edits happen in `wiki/` layers.
+
+
+**Compile once, persist**: knowledge is processed at ingest time and persisted as cross-linked pages. Unlike RAG which re-derives on every query, the wiki builds references once and maintains them.
+
+
+**Provenance chain**: `raw/ → sources/ → concepts/ → syntheses/ → overview/` makes the knowledge origin traceable.
+
+---
 
 ## Inspiration & credits
 
 Design ideas are drawn from (this directory is **not** a fork of any of them):
 
 - [SamurAIGPT/llm-wiki-agent](https://github.com/SamurAIGPT/llm-wiki-agent) — wiki 分层与 **ingest / lint 步骤清单**（如 `.claude/commands/wiki-ingest.md`）；其自带的 `tools/ingest.py` 走 API自动写 wiki，**本目录主流程由 Agent 按 `CLAUDE.md` 执行 + 本地 `tools/` 做结构校验**，不绑同一套脚本。
-- [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) — source-type registry mindset (`tools/source_registry.tsv`).
-- [safishamsi/graphify](https://github.com/safishamsi/graphify) — treating the corpus as a graph.
+- [sdyckjq-lab/llm-wiki-skill](https://github.com/sdyckjq-lab/llm-wiki-skill) — source-type registry mindset (`tools/source_registry.tsv`)。
+- [safishamsi/graphify](https://github.com/safishamsi/graphify) — treating the corpus as a graph。
 
-Core pattern: [Andrej Karpathy — llm-wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f).
+Core pattern: [Andrej Karpathy — llm-wiki gist](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f)。
 
 ## License
 

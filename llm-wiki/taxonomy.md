@@ -9,7 +9,7 @@
 | **本文件 `taxonomy.md`** | **有哪些顶层门类**（及可选子主题说明）；人审门槛；`layout` 会核对 `raw/<shelf>/`、`wiki/<shelf>/` 是否存在 |
 | **`tools/source_registry.tsv`** | **每条来源类型**的匹配规则、**`raw_dir`**、**adapter**（机器与 Agent 路由的单一事实来源） |
 | **`raw/README.md`** | **`raw_dir` 分桶含义**（介质 vs 平台）；不复制 TSV 逐行映射 |
-| **`skills/collect/SKILL.md`** | Collect **操作顺序**、CLI 用法；**不**维护第二张 adapter对照表 |
+| **`docs/collect-workflow.md`** | Collect **操作顺序**、CLI 用法；**不**维护第二张 adapter 对照表 |
 
 新增来源类型：改 TSV +（如需）新 skill 目录；**仅**当新开顶层书架时才改本文件并建 `raw/<shelf>/`、`wiki/<shelf>/`。
 
@@ -17,6 +17,7 @@
 
 | shelf_id | 说明 | raw根路径 | wiki 根路径 |
 |----------|------|------------|-------------|
+| ai-fundamentals | AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理 | `raw/ai-fundamentals/` | `wiki/ai-fundamentals/` |
 | agent | 编码智能体、Harness、工具链与仓库治理 | `raw/agent/` | `wiki/agent/` |
 
 ### 子主题（可选）
@@ -33,5 +34,6 @@
 
 ## 变更记录
 
+- 2026-04-19 — 新增门类 `ai-fundamentals`（AI 理论基础）
 - 2026-04-14 — 新增门类 `agent`；子主题 `harness-engineering/`（用户确认）
 - （历史）— 初始化 taxonomy；移除占位 `_example` 行

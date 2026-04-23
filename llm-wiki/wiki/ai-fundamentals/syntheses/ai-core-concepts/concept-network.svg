@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="680" fill="#fafafa" rx="12"/>
+  <text x="600" y="36" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="20" font-weight="600" fill="#1f2937">AI 核心概念关系网络图</text>
+  <text x="600" y="56" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" fill="#9ca3af">基于 llm-wiki source 资料的概念关联地图 — 连线表示概念关系，非层级依赖</text>
+  <path d="M 200,100 L 280,100" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="224.0" y="91.0" width="32" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="240.0" y="104.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">切分</text>
+  <path d="M 400,100 L 480,100" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="418.5" y="91.0" width="43" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="440.0" y="104.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">向量化</text>
+  <path d="M 535,120 L 535,190 L 535,190" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="519.0" y="146.0" width="32" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="535.0" y="159.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">输入</text>
+  <path d="M 410,210 L 480,210" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="363.0" y="201.0" width="164" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="445.0" y="214.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">Self-Attention</text>
+  <path d="M 540,230 L 590,300" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="538.0" y="256.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="565.0" y="269.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">架构基础</text>
+  <path d="M 150,230 L 150,300 L 150,300" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="123.0" y="256.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="150.0" y="269.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">工作记忆</text>
+  <path d="M 590,356 L 525,410" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="536.0" y="374.0" width="43" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="557.5" y="387.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">规模化</text>
+  <path d="M 590,356 L 700,410" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="629.0" y="374.0" width="32" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="645.0" y="387.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">微调</text>
+  <path d="M 760,430 L 820,430" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="741.0" y="421.0" width="98" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="790.0" y="434.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">RLHF/DPO</text>
+  <path d="M 590,300 L 590,120 L 590,120" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="563.0" y="201.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="590.0" y="214.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">交互接口</text>
+  <path d="M 780,100 L 860,100" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="798.5" y="91.0" width="43" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="820.0" y="104.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">推理链</text>
+  <path d="M 590,300 L 590,230 L 590,230" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="497.0" y="256.0" width="186" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="590.0" y="269.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">Function Calling</text>
+  <path d="M 830,210 L 900,210" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="843.5" y="201.0" width="43" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="865.0" y="214.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">标准化</text>
+  <path d="M 980,210 L 1020,210" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="984.0" y="201.0" width="32" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="1000.0" y="214.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">封装</text>
+  <path d="M 590,356 L 590,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="574.0" y="429.0" width="32" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="590.0" y="442.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">大脑</text>
+  <path d="M 765,230 L 765,520 L 765,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="749.0" y="366.0" width="32" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="765.0" y="379.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">执行</text>
+  <path d="M 920,120 L 920,520 L 920,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="871.0" y="311.0" width="98" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="920.0" y="324.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">ReAct 循环</text>
+  <path d="M 150,230 L 330,410" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="213.0" y="311.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="240.0" y="324.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">短期记忆</text>
+  <path d="M 210,430 L 280,430" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="218.0" y="421.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="245.0" y="434.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">长期记忆</text>
+  <path d="M 330,450 L 330,520 L 330,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="303.0" y="476.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="330.0" y="489.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">记忆组件</text>
+  <path d="M 590,356 L 590,520 L 590,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="563.0" y="429.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="590.0" y="442.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">检索增强</text>
+  <path d="M 155,450 L 155,520 L 155,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="128.0" y="476.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="155.0" y="489.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">语义检索</text>
+  <path d="M 230,560 L 230,520 L 230,520" fill="none" stroke="#d1d5db" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="203.0" y="531.0" width="54" height="18" rx="4" fill="#fafafa" opacity="0.95"/>
+  <text x="230.0" y="544.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="10" fill="#6b7280">知识增强</text>
+  <rect x="100" y="80" width="100" height="40" rx="6" ry="6" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+  <rect x="100" y="80" width="4" height="40" rx="6" ry="6" fill="#ec4899"/>
+  <text x="152.0" y="105.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Token</text>
+  <rect x="280" y="80" width="120" height="40" rx="6" ry="6" fill="#fdf2f8" stroke="#ec4899" stroke-width="1.5"/>
+  <rect x="280" y="80" width="4" height="40" rx="6" ry="6" fill="#ec4899"/>
+  <text x="342.0" y="105.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Tokenization</text>
+  <rect x="480" y="80" width="110" height="40" rx="6" ry="6" fill="#faf5ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="480" y="80" width="4" height="40" rx="6" ry="6" fill="#8b5cf6"/>
+  <text x="537.0" y="105.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Embedding</text>
+  <rect x="680" y="80" width="100" height="40" rx="6" ry="6" fill="#fff7ed" stroke="#f97316" stroke-width="1.5"/>
+  <rect x="680" y="80" width="4" height="40" rx="6" ry="6" fill="#f97316"/>
+  <text x="732.0" y="105.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Prompt</text>
+  <rect x="860" y="80" width="120" height="40" rx="6" ry="6" fill="#fefce8" stroke="#fbbf24" stroke-width="1.5"/>
+  <rect x="860" y="80" width="4" height="40" rx="6" ry="6" fill="#fbbf24"/>
+  <text x="922.0" y="105.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">CoT / ReAct</text>
+  <rect x="100" y="190" width="100" height="40" rx="6" ry="6" fill="#f5f3ff" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="100" y="190" width="4" height="40" rx="6" ry="6" fill="#a78bfa"/>
+  <text x="152.0" y="215.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Context</text>
+  <rect x="300" y="190" width="110" height="40" rx="6" ry="6" fill="#eff6ff" stroke="#1e40af" stroke-width="1.5"/>
+  <rect x="300" y="190" width="4" height="40" rx="6" ry="6" fill="#1e40af"/>
+  <text x="357.0" y="215.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Attention</text>
+  <rect x="480" y="190" width="120" height="40" rx="6" ry="6" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5"/>
+  <rect x="480" y="190" width="4" height="40" rx="6" ry="6" fill="#3b82f6"/>
+  <text x="542.0" y="215.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Transformer</text>
+  <rect x="700" y="190" width="130" height="40" rx="6" ry="6" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="700" y="190" width="4" height="40" rx="6" ry="6" fill="#06b6d4"/>
+  <text x="767.0" y="215.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Tool / Function</text>
+  <rect x="900" y="190" width="80" height="40" rx="6" ry="6" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="900" y="190" width="4" height="40" rx="6" ry="6" fill="#06b6d4"/>
+  <text x="942.0" y="215.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">MCP</text>
+  <rect x="1020" y="190" width="90" height="40" rx="6" ry="6" fill="#fefce8" stroke="#eab308" stroke-width="1.5"/>
+  <rect x="1020" y="190" width="4" height="40" rx="6" ry="6" fill="#eab308"/>
+  <text x="1067.0" y="215.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Skill</text>
+  <rect x="520" y="300" width="140" height="56" rx="6" ry="6" fill="#dbeafe" stroke="#2563eb" stroke-width="2.5" filter="url(#shadow)"/>
+  <rect x="520" y="300" width="4" height="56" rx="6" ry="6" fill="#2563eb"/>
+  <text x="592.0" y="333.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">LLM</text>
+  <rect x="100" y="410" width="110" height="40" rx="6" ry="6" fill="#faf5ff" stroke="#8b5cf6" stroke-width="1.5"/>
+  <rect x="100" y="410" width="4" height="40" rx="6" ry="6" fill="#8b5cf6"/>
+  <text x="157.0" y="435.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Vector DB</text>
+  <rect x="280" y="410" width="100" height="40" rx="6" ry="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="280" y="410" width="4" height="40" rx="6" ry="6" fill="#22c55e"/>
+  <text x="332.0" y="435.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Memory</text>
+  <rect x="460" y="410" width="130" height="40" rx="6" ry="6" fill="#ecfeff" stroke="#06b6d4" stroke-width="1.5"/>
+  <rect x="460" y="410" width="4" height="40" rx="6" ry="6" fill="#06b6d4"/>
+  <text x="527.0" y="435.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Scaling Laws</text>
+  <rect x="640" y="410" width="120" height="40" rx="6" ry="6" fill="#eff6ff" stroke="#60a5fa" stroke-width="1.5"/>
+  <rect x="640" y="410" width="4" height="40" rx="6" ry="6" fill="#60a5fa"/>
+  <text x="702.0" y="435.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Fine-tuning</text>
+  <rect x="820" y="410" width="150" height="40" rx="6" ry="6" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+  <rect x="820" y="410" width="4" height="40" rx="6" ry="6" fill="#22c55e"/>
+  <text x="897.0" y="435.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">Alignment / RLHF</text>
+  <rect x="190" y="520" width="80" height="40" rx="6" ry="6" fill="#fdf4ff" stroke="#c026d3" stroke-width="1.5"/>
+  <rect x="190" y="520" width="4" height="40" rx="6" ry="6" fill="#c026d3"/>
+  <text x="232.0" y="545.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" fill="#1f2937">RAG</text>
+  <rect x="520" y="520" width="140" height="56" rx="6" ry="6" fill="#dcfce7" stroke="#16a34a" stroke-width="2.5" filter="url(#shadow)"/>
+  <rect x="520" y="520" width="4" height="56" rx="6" ry="6" fill="#16a34a"/>
+  <text x="592.0" y="553.0" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="15" font-weight="700" fill="#1f2937">Agent</text>
+  <rect x="860" y="600" width="310" height="56" rx="8" fill="white" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="875" y="622" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" fill="#6b7280">图例</text>
+  <rect x="875" y="630" width="10" height="10" rx="3" fill="#2563eb"/>
+  <text x="889" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">核心枢纽</text>
+  <rect x="939" y="630" width="10" height="10" rx="3" fill="#ec4899"/>
+  <text x="953" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">输入层</text>
+  <rect x="994" y="630" width="10" height="10" rx="3" fill="#3b82f6"/>
+  <text x="1008" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">架构层</text>
+  <rect x="1049" y="630" width="10" height="10" rx="3" fill="#06b6d4"/>
+  <text x="1063" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">工具/训练</text>
+  <rect x="1122" y="630" width="10" height="10" rx="3" fill="#f97316"/>
+  <text x="1136" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">交互层</text>
+  <rect x="1177" y="630" width="10" height="10" rx="3" fill="#22c55e"/>
+  <text x="1191" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">Agent/对齐</text>
+  <rect x="1277" y="630" width="10" height="10" rx="3" fill="#8b5cf6"/>
+  <text x="1291" y="639" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif" font-size="9" fill="#6b7280">记忆/检索</text>
+</svg>
