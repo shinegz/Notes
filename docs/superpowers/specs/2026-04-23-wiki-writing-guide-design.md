@@ -109,6 +109,34 @@ All three live in `syntheses/`. The writer must decide the primary genre before 
 | **Evidence** | "What do sources say about Q?" | `harness-engineering-deep-dive.md` |
 | **Narrative** | "How does this process work?" | `token-lifecycle.md` |
 
+### Type Decision Flowchart
+
+```
+Is the page about a single external source?
+  YES → sources/
+
+Is the page about a factual entity (org, person, product)?
+  YES → entities/
+
+Is the page explaining exactly ONE concept in depth?
+  YES → concepts/
+
+Is the page comparing alternatives neutrally?
+  YES → comparisons/
+
+Is the page synthesizing multiple sources/concepts?
+  YES → syntheses/ (then choose genre):
+    ├─ Showing how concepts relate? → Framework
+    ├─ Answering a question with evidence? → Evidence
+    └─ Walking through a process? → Narrative
+
+Is the page listing all pages in a shelf?
+  YES → index.md
+
+Is the page providing a shelf-level cognitive map?
+  YES → overview.md
+```
+
 ---
 
 ## Structural Models
@@ -376,6 +404,8 @@ Split the current monolithic `ingest-writing-guide.md` into two focused document
 
 **Scope**: Expression quality, visual design, tone, editing checklist.
 
+**Source**: Reorganized from the existing `ingest-writing-guide.md` sections: 结论先行, 简单精准犀利, 视觉增强, 去AI味, 成稿前自检. Not written from scratch.
+
 **Sections**:
 1. Inverted pyramid / conclusion first
 2. Simple, precise, sharp (delete redundancy)
@@ -416,7 +446,7 @@ Split the current monolithic `ingest-writing-guide.md` into two focused document
 | `docs/ingest-structure-guide.md` | **Create** (new) |
 | `docs/ingest-style-guide.md` | **Create** (new) |
 | `docs/ingest-writing-guide.md` | **Delete** (replaced by the two above) |
-| `CLAUDE.md` | **Update** (reference new guides, add `comparisons/` as formal type) |
+| `CLAUDE.md` | **Update** (reference new guides, add `comparisons/` to naming conventions table and directory layout) |
 | `wiki/ai-fundamentals/syntheses/ai-core-concepts.md` | **Rewrite** (apply framework synthesis model) |
 
 ---
