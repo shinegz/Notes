@@ -1,0 +1,291 @@
+# [决策]: docs: add wiki writing guide redesign spec
+
+## 日期
+2026-04-23
+
+## 背景
+从 commit 上下文推断
+
+## 决策
+docs: add wiki writing guide redesign spec
+
+## 影响范围
+- .agents/skills/baoyu-url-to-markdown/SKILL.md
+- .../baoyu-url-to-markdown/references/adapters.md
+- .../references/config/first-time-setup.md
+- .../references/quality-gate.md
+- .../baoyu-url-to-markdown/scripts/baoyu-fetch
+- .../skills/baoyu-url-to-markdown/scripts/bun.lock
+- .../scripts/lib/adapters/generic/index.ts
+- .../scripts/lib/adapters/hn/index.ts
+- .../scripts/lib/adapters/index.ts
+- .../scripts/lib/adapters/types.ts
+- .../scripts/lib/adapters/x/article.ts
+- .../scripts/lib/adapters/x/index.ts
+- .../scripts/lib/adapters/x/login.ts
+- .../scripts/lib/adapters/x/match.ts
+- .../scripts/lib/adapters/x/payloads.ts
+- .../scripts/lib/adapters/x/session.ts
+- .../scripts/lib/adapters/x/shared.ts
+- .../scripts/lib/adapters/x/single.ts
+- .../scripts/lib/adapters/x/thread-loader.ts
+- .../scripts/lib/adapters/x/thread.ts
+- .../scripts/lib/adapters/x/types.ts
+- .../scripts/lib/adapters/youtube/index.ts
+- .../scripts/lib/adapters/youtube/transcript.ts
+- .../scripts/lib/adapters/youtube/utils.ts
+- .../scripts/lib/browser/cdp-client.ts
+- .../scripts/lib/browser/chrome-launcher.ts
+- .../scripts/lib/browser/cookie-sidecar.ts
+- .../scripts/lib/browser/interaction-gates.ts
+- .../scripts/lib/browser/network-journal.ts
+- .../scripts/lib/browser/page-snapshot.ts
+- .../scripts/lib/browser/profile.ts
+- .../scripts/lib/browser/session.ts
+- .../baoyu-url-to-markdown/scripts/lib/cli.ts
+- .../scripts/lib/commands/convert.ts
+- .../scripts/lib/extract/document.ts
+- .../scripts/lib/extract/html-cleaner.ts
+- .../scripts/lib/extract/html-extractor.ts
+- .../scripts/lib/extract/html-to-markdown.ts
+- .../scripts/lib/extract/markdown-renderer.ts
+- .../scripts/lib/media/default-downloader.ts
+- .../scripts/lib/media/markdown-media.ts
+- .../scripts/lib/media/media-utils.ts
+- .../scripts/lib/media/types.ts
+- .../scripts/lib/types/defuddle-node.d.ts
+- .../scripts/lib/types/shims.d.ts
+- .../scripts/lib/utils/logger.ts
+- .../baoyu-url-to-markdown/scripts/lib/utils/url.ts
+- .../baoyu-url-to-markdown/scripts/package.json
+- .../skills/fireworks-tech-graph}/LICENSE
+- .agents/skills/fireworks-tech-graph/README.md
+- .agents/skills/fireworks-tech-graph/README.zh.md
+- .agents/skills/fireworks-tech-graph/SKILL.md
+- .../skills/fireworks-tech-graph/agentloop-core.svg
+- .../skills/fireworks-tech-graph/agents/openai.yaml
+- .../assets/samples/sample-style1-flat.png
+- .../assets/samples/sample-style2-dark.png
+- .../assets/samples/sample-style3-blueprint.png
+- .../assets/samples/sample-style4-notion.png
+- .../assets/samples/sample-style5-glass.png
+- .../assets/samples/sample-style6-claude.png
+- .../assets/samples/sample-style7-openai.png
+- .../fixtures/agent-memory-types-style4.json
+- .../fixtures/api-flow-style7.json
+- .../fireworks-tech-graph/fixtures/mem0-style1.json
+- .../fixtures/microservices-style3.json
+- .../fixtures/multi-agent-style5.json
+- .../fixtures/system-architecture-style6.json
+- .../fixtures/tool-call-style2.json
+- .agents/skills/fireworks-tech-graph/package.json
+- .../fireworks-tech-graph/references/icons.md
+- .../references/style-1-flat-icon.md
+- .../references/style-2-dark-terminal.md
+- .../references/style-3-blueprint.md
+- .../references/style-4-notion-clean.md
+- .../references/style-5-glassmorphism.md
+- .../references/style-6-claude-official.md
+- .../references/style-7-openai.md
+- .../references/style-diagram-matrix.md
+- .../references/svg-layout-best-practices.md
+- .../skills/fireworks-tech-graph/scripts/README.md
+- .../scripts/generate-diagram.sh
+- .../scripts/generate-from-template.py
+- .../scripts/test-all-styles.sh
+- .../fireworks-tech-graph/scripts/validate-svg.sh
+- .../templates/agent-architecture.svg
+- .../templates/architecture.svg
+- .../templates/comparison-matrix.svg
+- .../fireworks-tech-graph/templates/data-flow.svg
+- .../fireworks-tech-graph/templates/er-diagram.svg
+- .../fireworks-tech-graph/templates/flowchart.svg
+- .../fireworks-tech-graph/templates/sequence.svg
+- .../templates/state-machine.svg
+- .../fireworks-tech-graph/templates/timeline.svg
+- .../fireworks-tech-graph/templates/use-case.svg
+- .agents/skills/llm-wiki/SKILL.md
+- .agents/skills/pdf/LICENSE.txt
+- .agents/skills/pdf/SKILL.md
+- .agents/skills/pdf/forms.md
+- .agents/skills/pdf/reference.md
+- .agents/skills/pdf/scripts/check_bounding_boxes.py
+- .../skills/pdf/scripts/check_fillable_fields.py
+- .../skills/pdf/scripts/convert_pdf_to_images.py
+- .../skills/pdf/scripts/create_validation_image.py
+- .../skills/pdf/scripts/extract_form_field_info.py
+- .../skills/pdf/scripts/extract_form_structure.py
+- .agents/skills/pdf/scripts/fill_fillable_fields.py
+- .../pdf/scripts/fill_pdf_form_with_annotations.py
+- .agents/skills/tavily-search/SKILL.md
+- .claude/skills/tavily-search
+- .gitignore
+- .iflow/skills/tavily-search
+- .../2026-04-16-fix-address-spec-review-issues.md
+- ...docs-add-wiki-visual-enhancement-design-spec.md
+- ...twiki-writing-add-visual-enhancement-and-lea.md
+- .promem/promem.log
+- .qoder/skills/baoyu-url-to-markdown
+- .qoder/skills/fireworks-tech-graph
+- .qoder/skills/pdf
+- .qoder/skills/tavily-search
+- .../specs/2026-04-23-wiki-writing-guide-design.md
+- llm-wiki/.env.tpl
+- llm-wiki/AGENTS.md
+- llm-wiki/CLAUDE.md
+- llm-wiki/README.md
+- llm-wiki/docs/collect-workflow.md
+- .../SKILL.md => docs/ingest-writing-guide.md}
+- llm-wiki/raw/README.md
+- .../articles/llm-powered-autonomous-agents.md
+- .../articles/the-illustrated-transformer.md
+- .../transformer-taxonomy-the-last-lit-review.md
+- llm-wiki/raw/ai-fundamentals/pdfs/agentbench.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/alexnet.pdf
+- .../pdfs/attention-is-all-you-need.pdf
+- .../raw/ai-fundamentals/pdfs/bert-pre-training.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/chinchilla.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/dpo.pdf
+- .../raw/ai-fundamentals/pdfs/flash-attention.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/gan.pdf
+- .../pdfs/gpt3-language-models-few-shot.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/gqa.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/instructgpt.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/lora.pdf
+- .../pdfs/react-chain-of-thought.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/resnet.pdf
+- .../ai-fundamentals/pdfs/rlhf-from-feedback.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/rope.pdf
+- .../ai-fundamentals/pdfs/scaling-laws-kaplan.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/toolformer.pdf
+- llm-wiki/raw/ai-fundamentals/pdfs/word2vec.pdf
+- .../ai-fundamentals/refs/ai-index-stanford-hai.md
+- ...history-of-artificial-intelligence-wikipedia.md
+- llm-wiki/requirements.txt
+- .../candidates.md
+- .../20260419-ai-fundamentals/candidates.md
+- .../sessions/20260422-ai-e2e-testing/candidates.md
+- llm-wiki/skills/README.md
+- llm-wiki/skills/baoyu-url-to-markdown/SKILL.md
+- .../skills/baoyu-url-to-markdown/scripts/cdp.ts
+- .../baoyu-url-to-markdown/scripts/constants.ts
+- .../scripts/defuddle-converter.ts
+- .../scripts/html-to-markdown.ts
+- .../scripts/legacy-converter.ts
+- .../skills/baoyu-url-to-markdown/scripts/main.ts
+- .../scripts/markdown-conversion-shared.ts
+- .../scripts/media-localizer.ts
+- .../scripts/package-lock.json
+- .../baoyu-url-to-markdown/scripts/package.json
+- .../skills/baoyu-url-to-markdown/scripts/paths.ts
+- .../scripts/vendor/baoyu-chrome-cdp/package.json
+- .../vendor/baoyu-chrome-cdp/src/index.test.ts
+- .../scripts/vendor/baoyu-chrome-cdp/src/index.ts
+- llm-wiki/skills/collect/SKILL.md
+- llm-wiki/skills/humanizer-zh/LICENSE
+- llm-wiki/skills/humanizer-zh/README.md
+- llm-wiki/skills/humanizer-zh/SKILL.md
+- .../skills/wechat-article-to-markdown/SKILL.md
+- llm-wiki/skills/wiki-writing/evals/evals.json
+- llm-wiki/skills/youtube-transcript/SKILL.md
+- .../youtube-transcript/scripts/get_transcript.py
+- llm-wiki/taxonomy.md
+- llm-wiki/tools/README.md
+- llm-wiki/tools/source_record_contract.tsv
+- llm-wiki/tools/source_registry.tsv
+- .../wiki/ai-fundamentals/concepts/alignment.md
+- .../concepts/attention-mechanism.md
+- .../concepts/chain-of-thought-react.md
+- .../wiki/ai-fundamentals/concepts/embedding.md
+- .../wiki/ai-fundamentals/concepts/fine-tuning.md
+- .../ai-fundamentals/concepts/function-calling.md
+- .../concepts/language-model-training.md
+- .../wiki/ai-fundamentals/concepts/llm-agents.md
+- llm-wiki/wiki/ai-fundamentals/concepts/memory.md
+- llm-wiki/wiki/ai-fundamentals/concepts/rag.md
+- .../wiki/ai-fundamentals/concepts/scaling-laws.md
+- .../wiki/ai-fundamentals/concepts/tokenization.md
+- .../wiki/ai-fundamentals/concepts/transformer.md
+- .../ai-fundamentals/concepts/vector-database.md
+- llm-wiki/wiki/ai-fundamentals/index.md
+- llm-wiki/wiki/ai-fundamentals/overview.md
+- .../wiki/ai-fundamentals/sources/agentbench.md
+- .../sources/ai-index-stanford-hai.md
+- llm-wiki/wiki/ai-fundamentals/sources/alexnet.md
+- .../sources/attention-is-all-you-need.md
+- .../ai-fundamentals/sources/bert-pre-training.md
+- .../wiki/ai-fundamentals/sources/chinchilla.md
+- llm-wiki/wiki/ai-fundamentals/sources/dpo.md
+- .../ai-fundamentals/sources/flash-attention.md
+- llm-wiki/wiki/ai-fundamentals/sources/gan.md
+- .../sources/gpt3-language-models-few-shot.md
+- llm-wiki/wiki/ai-fundamentals/sources/gqa.md
+- .../sources/history-of-artificial-intelligence.md
+- .../wiki/ai-fundamentals/sources/instructgpt.md
+- .../sources/llm-powered-autonomous-agents.md
+- llm-wiki/wiki/ai-fundamentals/sources/lora.md
+- .../sources/react-chain-of-thought.md
+- llm-wiki/wiki/ai-fundamentals/sources/resnet.md
+- .../ai-fundamentals/sources/rlhf-from-feedback.md
+- llm-wiki/wiki/ai-fundamentals/sources/rope.md
+- .../ai-fundamentals/sources/scaling-laws-kaplan.md
+- .../sources/the-illustrated-transformer.md
+- .../wiki/ai-fundamentals/sources/toolformer.md
+- .../sources/transformer-taxonomy.md
+- llm-wiki/wiki/ai-fundamentals/sources/word2vec.md
+- .../ai-fundamentals/syntheses/ai-core-concepts.md
+- .../ai-core-concepts/agent-call-sequence.svg
+- .../syntheses/ai-core-concepts/concept-network.svg
+- .../ai-core-concepts/generate_concept_map.py
+- .../ai-fundamentals/syntheses/token-lifecycle.md
+- .../syntheses/token-lifecycle/llm-flow.svg
+- llm-wiki/wiki/index.md
+- llm-wiki/wiki/log.md
+- llm-wiki/wiki/overview.md
+- skills-lock.json
+## 依赖变更
+- `import type { Adapter } from "../types";`
+- `import { detectInteractionGate } from "../../browser/interaction-gates";`
+- `import { captureNormalizedPageSnapshot } from "../../browser/page-snapshot";`
+- `import { convertHtmlToMarkdown } from "../../extract/html-to-markdown";`
+- `import { JSDOM } from "jsdom";`
+- `import TurndownService from "turndown";`
+- `import { gfm } from "turndown-plugin-gfm";`
+- `import type { Adapter } from "../types";`
+- `import type { ExtractedDocument } from "../../extract/document";`
+- `import { collectMediaFromDocument } from "../../media/markdown-media";`
+
+## 新增的函数/类
+- `match() {`
+- `if (interaction) {`
+- `decodeHtmlText`
+- `if (!value) {`
+- `normalizeMarkdown`
+- `convertHnHtmlToMarkdown`
+- `if (!html?.trim()) {`
+- `if (!root) {`
+- `if (!href) {`
+- `formatIsoTimestamp`
+
+## 删除的函数/类
+- `Copyright (c) 2026 llm-wiki contributors`
+- `if (Test-Path .baoyu-skills/baoyu-url-to-markdown/EXTEND.md)`
+- `if (Test-Path "$xdg/baoyu-skills/baoyu-url-to-markdown/EXTEN`
+- `if (Test-Path "$HOME/.baoyu-skills/baoyu-url-to-markdown/EXT`
+- `findExistingChromePort`
+- `findChromeExecutable`
+- `launchChrome`
+- `if (!chromePath) throw new Error('Chrome executable not foun`
+- `waitForNetworkIdle`
+- `cleanup`
+
+## 相关注释
+> # URL to Markdown
+> ## User Input Tools
+> ## CLI Setup
+> **Important**: The CLI source is vendored in `{baseDir}/scripts/lib`. `scripts/package.json` installs only third-party runtime dependencies.
+> **Agent Execution Instructions**:
+
+
+## 相关链接
+- Commit: d1e7da2e64257f89f41ed1bd26269d1eebe16374

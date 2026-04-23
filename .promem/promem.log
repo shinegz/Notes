@@ -8,3 +8,6 @@
 [2026-04-14 12:23:18] SEARCH index | query="llm-wiki wiki writing" | query=llm-wiki wiki writing top_k=3 results=0 bm25_hits=0 time_ms=5
 [2026-04-14 13:23:13] SEARCH index | query="harness engineering" | query=harness engineering top_k=3 results=0 bm25_hits=0 time_ms=3
 [2026-04-16 22:14:24] SKIP capture | 无匹配规则 | commit=d76abb9 msg=feat(wiki-writing): add visual reason=no_matching_rule files=3
+[2026-04-23 21:13:46] CLASSIFY capture | decisions/decision | commit=d1e7da2 msg=docs: add wiki writing guide r files=233 category=decisions diff_stats=+15852/-2624 functions_modified=[description: Karpathy 式持久 wiki（llm-wiki/）— 按门类路径组织 raw,node_modules,python3 tools/build_graph.py --wiki-root "$WIKI_ROOT"] functions_added=[match() {,if (interaction) {,decodeHtmlText] truncated=True
+[2026-04-23 21:13:46] CAPTURE capture | 成功捕获 | commit=d1e7da2 file=2026-04-23-docs-add-wiki-writing-guide-redesign-spec.md category=decisions diff_lines=18476 functions_modified=9 functions_added=1122
+[2026-04-23 21:20:19] SKIP capture | 无匹配规则 | commit=abb6099 msg=docs: apply spec reviewer reco reason=no_matching_rule files=1

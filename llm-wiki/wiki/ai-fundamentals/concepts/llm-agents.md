@@ -2,8 +2,10 @@
 title: "LLM Agents"
 type: concept
 tags: [agents, llm, tool-use, reasoning]
-sources: []
-last_updated: 2026-04-19
+sources:
+  - ai-fundamentals/sources/llm-powered-autonomous-agents
+  - ai-fundamentals/sources/react-chain-of-thought
+last_updated: 2026-04-23
 ---
 
 # LLM Agents
@@ -84,5 +86,4 @@ Action: finish["北京今天25度，晴天"]
 | 规则驱动 | LLM 驱动 |
 | 固定策略 | 可学习、可适应 |
 | 简单任务 | 开放域任务 |
-
 
