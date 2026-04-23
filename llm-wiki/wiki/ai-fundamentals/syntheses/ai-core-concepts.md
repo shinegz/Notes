@@ -23,12 +23,16 @@ last_updated: 2026-04-23
 
 ## 概念关系总览
 
-![AI核心概念系统架构图](./ai-core-concepts/concept-network.svg)
+![AI核心概念关系架构图](./ai-core-concepts/ai-core-concepts-architecture.svg)
 
 **读图方法**：
-- 灰色连线 = 系统内部组件关系
-- **橙色粗线** = 跨系统集成（LLM → Agent）
-- 所有概念均有独立概念页，详见下方关系表
+- **蓝色箭头** = 数据流（Token → Tokenization → Embedding → Transformer → LLM）
+- **橙色箭头** = 集成/对齐（Scaling Laws → Fine-tuning → Alignment；LLM → Agent 推理引擎）
+- **绿色箭头** = Agent 流（Prompt → CoT/ReAct → Agent）
+- **紫色箭头** = 协议/工具（Tool/Function → MCP → Skill）
+- **青色箭头** = 记忆/检索（Vector DB → Memory → RAG）
+- **灰色虚线** = 反馈/循环（ReAct 循环反馈给 LLM；Context Window 工作记忆上限）
+- 共 18 个核心概念，所有概念均有独立概念页，详见下方关系表
 
 ## 概念关系表
 
