@@ -14,3 +14,5 @@
 [2026-04-23 21:35:40] CLASSIFY capture | decisions/decision | commit=3b9bede msg=docs: redesign wiki writing gu files=12 category=decisions diff_stats=+821/-682 functions_modified=[llm-wiki/,llm-wiki 工作流依赖以下外部 skill，由 agent 在**执行对应操作,Action: finish["北京今天25度，晴天"]] functions_added=[] truncated=True
 [2026-04-23 21:35:40] CAPTURE capture | 成功捕获 | commit=3b9bede file=2026-04-23-docs-redesign-wiki-writing-guides-and-rewrite-ai.md category=decisions diff_lines=1503 functions_modified=4 functions_added=0
 [2026-04-23 21:38:50] SKIP capture | 无匹配规则 | commit=b13ba56 msg=docs(ai-core-concepts): switch reason=no_matching_rule files=3
+[2026-04-24 10:55:06] CLASSIFY capture | decisions/decision | commit=29d008f msg=docs: update markdown links an files=42 category=decisions diff_stats=+662/-910 functions_modified=[sources:,source_url: https://mp.weixin.qq.com/s/-mgf8K7XZrTKoD0pMOIn3w,session 2+ (coding):] functions_added=[] truncated=True
+[2026-04-24 10:55:06] CAPTURE capture | 成功捕获 | commit=29d008f file=2026-04-24-docs-update-markdown-links-and-timestamps-across.md category=decisions diff_lines=1572 functions_modified=38 functions_added=0
