@@ -1,18 +1,1 @@
-[2026-03-22 13:26:30] SEARCH index | query="Harness Engineering agent harn" | query=Harness Engineering agent harness coding agents top_k=3 results=0 bm25_hits=0 time_ms=6
-[2026-03-22 14:26:55] SEARCH index | query="learning assistant skill" | query=learning assistant skill top_k=3 results=1 bm25_hits=1 time_ms=7
-[2026-03-22 14:35:01] SEARCH index | query="Harness Engineering 学习文章 学习笔记" | query=Harness Engineering 学习文章 学习笔记 top_k=3 results=1 bm25_hits=1 time_ms=8
-[2026-04-13 20:44:45] SEARCH index | query="llm-wiki" | query=llm-wiki top_k=3 results=0 bm25_hits=0 time_ms=2
-[2026-04-14 10:01:41] SEARCH index | query="harness engineering" | query=harness engineering top_k=3 results=0 bm25_hits=0 time_ms=5
-[2026-04-14 10:18:20] SEARCH index | query="llm-wiki harness-engineering" | query=llm-wiki harness-engineering top_k=3 results=0 bm25_hits=0 time_ms=4
-[2026-04-14 10:23:49] SEARCH index | query="harness engineering agent" | query=harness engineering agent top_k=3 results=0 bm25_hits=0 time_ms=4
-[2026-04-14 12:23:18] SEARCH index | query="llm-wiki wiki writing" | query=llm-wiki wiki writing top_k=3 results=0 bm25_hits=0 time_ms=5
-[2026-04-14 13:23:13] SEARCH index | query="harness engineering" | query=harness engineering top_k=3 results=0 bm25_hits=0 time_ms=3
-[2026-04-16 22:14:24] SKIP capture | 无匹配规则 | commit=d76abb9 msg=feat(wiki-writing): add visual reason=no_matching_rule files=3
-[2026-04-23 21:13:46] CLASSIFY capture | decisions/decision | commit=d1e7da2 msg=docs: add wiki writing guide r files=233 category=decisions diff_stats=+15852/-2624 functions_modified=[description: Karpathy 式持久 wiki（llm-wiki/）— 按门类路径组织 raw,node_modules,python3 tools/build_graph.py --wiki-root "$WIKI_ROOT"] functions_added=[match() {,if (interaction) {,decodeHtmlText] truncated=True
-[2026-04-23 21:13:46] CAPTURE capture | 成功捕获 | commit=d1e7da2 file=2026-04-23-docs-add-wiki-writing-guide-redesign-spec.md category=decisions diff_lines=18476 functions_modified=9 functions_added=1122
-[2026-04-23 21:20:19] SKIP capture | 无匹配规则 | commit=abb6099 msg=docs: apply spec reviewer reco reason=no_matching_rule files=1
-[2026-04-23 21:35:40] CLASSIFY capture | decisions/decision | commit=3b9bede msg=docs: redesign wiki writing gu files=12 category=decisions diff_stats=+821/-682 functions_modified=[llm-wiki/,llm-wiki 工作流依赖以下外部 skill，由 agent 在**执行对应操作,Action: finish["北京今天25度，晴天"]] functions_added=[] truncated=True
-[2026-04-23 21:35:40] CAPTURE capture | 成功捕获 | commit=3b9bede file=2026-04-23-docs-redesign-wiki-writing-guides-and-rewrite-ai.md category=decisions diff_lines=1503 functions_modified=4 functions_added=0
-[2026-04-23 21:38:50] SKIP capture | 无匹配规则 | commit=b13ba56 msg=docs(ai-core-concepts): switch reason=no_matching_rule files=3
-[2026-04-24 10:55:06] CLASSIFY capture | decisions/decision | commit=29d008f msg=docs: update markdown links an files=42 category=decisions diff_stats=+662/-910 functions_modified=[sources:,source_url: https://mp.weixin.qq.com/s/-mgf8K7XZrTKoD0pMOIn3w,session 2+ (coding):] functions_added=[] truncated=True
-[2026-04-24 10:55:06] CAPTURE capture | 成功捕获 | commit=29d008f file=2026-04-24-docs-update-markdown-links-and-timestamps-across.md category=decisions diff_lines=1572 functions_modified=38 functions_added=0
+[2026-04-24 11:16:39] SKIP capture | 无匹配规则 | commit=0339679 msg=feat(lint): add taxonomy, inde reason=no_matching_rule files=3

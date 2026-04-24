@@ -210,18 +210,27 @@ def check_index_coverage(index_path: Path, wiki_dir: Path, id_lower: dict[str, s
 
     missing: list[str] = []
     index_dir = index_path.parent
+    is_global_index = index_path == wiki_dir / "index.md"
 
     for subdir_name in ("sources", "concepts", "syntheses", "comparisons", "entities"):
-        subdir = index_dir / subdir_name
-        if not subdir.is_dir():
-            continue
-        for p in subdir.rglob("*.md"):
-            if p.name in SKIP_NAMES:
+        if is_global_index:
+            # 全局索引只检查同级目录（不深入各 shelf）
+            subdir = index_dir / subdir_name
+            if not subdir.is_dir():
                 continue
-            rel = p.relative_to(wiki_dir)
-            pid = page_id(rel)
-            if pid not in referenced:
-                missing.append(pid)
+            dirs_to_check = [subdir]
+        else:
+            # Shelf 级索引递归检查整个目录树
+            dirs_to_check = [d for d in index_dir.rglob(subdir_name) if d.is_dir()]
+
+        for subdir in dirs_to_check:
+            for p in subdir.rglob("*.md"):
+                if p.name in SKIP_NAMES or p.name == ".gitkeep":
+                    continue
+                rel = p.relative_to(wiki_dir)
+                pid = page_id(rel)
+                if pid not in referenced:
+                    missing.append(pid)
 
     for subdir in index_dir.iterdir():
         if not subdir.is_dir() or subdir.name in ("sources", "concepts", "syntheses", "comparisons", "entities"):

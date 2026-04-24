@@ -61,12 +61,12 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 - [[ai-fundamentals/concepts/fine-tuning|Fine-tuning]]
 - [[ai-fundamentals/concepts/function-calling|Function Calling]]
 
-## 参见
-
-- [[index]] — 总索引
-- [[ai-fundamentals/overview]] — AI Fundamentals 总览
-
 ## 综合文
 
 - [[ai-fundamentals/syntheses/ai-core-concepts|AI核心概念体系]] — 基于 source 资料的概念地图（Token、Context、Prompt、LLM、Tool、Agent、MCP、Skill）
 - [[ai-fundamentals/syntheses/token-lifecycle|一个 Token 的一生]] — 用图文故事解释 LLM 运行原理
+
+## 参见
+
+- [[index]] — 总索引
+- [[ai-fundamentals/overview]] — AI Fundamentals 总览

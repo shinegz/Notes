@@ -1,3 +1,2 @@
-# llm-wiki tools — graph build (Louvain) + PDF parsing
+# llm-wiki tools — graph build (Louvain)
 networkx>=3.0
-pymupdf>=1.23.0  # PDF text extraction
