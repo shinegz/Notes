@@ -4,7 +4,7 @@ type: concept
 tags: [alignment, rlhf, reinforcement-learning]
 sources:
   - ai-fundamentals/sources/instructgpt
-last_updated: 2026-04-19
+last_updated: 2026-04-24
 ---
 
 # Alignment
@@ -67,4 +67,4 @@ loss = -E[reward(prompt, response)] + β * KL(π || π_sft)
 
 ## 来源
 
-- [[../sources/instructgpt|InstructGPT]]
+- [[ai-fundamentals/sources/instructgpt|InstructGPT]]

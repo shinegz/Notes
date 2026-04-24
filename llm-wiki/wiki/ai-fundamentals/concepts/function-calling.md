@@ -5,7 +5,7 @@ tags: [function-calling, tool, api, agent]
 sources:
   - ai-fundamentals/sources/toolformer
   - ai-fundamentals/sources/llm-powered-autonomous-agents
-last_updated: 2026-04-23
+last_updated: 2026-04-24
 ---
 
 # Function Calling
@@ -38,7 +38,7 @@ last_updated: 2026-04-23
 
 ### 2. LLM 决策
 
-[Toolformer](../sources/toolformer.md) 的核心发现：模型可以自动判断：
+[[ai-fundamentals/sources/toolformer|Toolformer]] 的核心发现：模型可以自动判断：
 - **是否**需要调用工具
 - **调用哪个**工具
 - **传递什么**参数
@@ -57,7 +57,7 @@ LLM 输出函数调用请求 → 外部程序解析并执行 → 结果返回 LL
 
 ## 能力层级
 
-[LLM Powered Autonomous Agents](../sources/llm-powered-autonomous-agents.md) 引用 API-Bank 的研究，将 function calling 能力分为三级：
+[[ai-fundamentals/sources/llm-powered-autonomous-agents|LLM Powered Autonomous Agents]] 引用 API-Bank 的研究，将 function calling 能力分为三级：
 
 1. **调用 API**：知道什么时候用哪个 API
 2. **检索 API**：从大量 API 中找到合适的
@@ -73,5 +73,5 @@ Function Calling 是 Agent 的**行动层**基础：
 
 ## 来源
 
-- [Toolformer](../sources/toolformer.md) — 语言模型自学使用工具的原始论文
-- [LLM Powered Autonomous Agents](../sources/llm-powered-autonomous-agents.md) — Tool Use 能力分级与框架综述
+- [[ai-fundamentals/sources/toolformer|Toolformer]] — 语言模型自学使用工具的原始论文
+- [[ai-fundamentals/sources/llm-powered-autonomous-agents|LLM Powered Autonomous Agents]] — Tool Use 能力分级与框架综述

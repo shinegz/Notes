@@ -5,7 +5,7 @@ tags: [llm, pre-training, scaling-laws]
 sources:
   - ai-fundamentals/sources/scaling-laws-kaplan
   - ai-fundamentals/sources/gpt3
-last_updated: 2026-04-19
+last_updated: 2026-04-24
 ---
 
 # Language Model Training
@@ -69,5 +69,5 @@ L(C) ∝ C^(-0.054)  # C = 计算量
 
 ## 来源
 
-- [[../sources/scaling-laws-kaplan|Scaling Laws]]
-- [[../sources/gpt3-language-models-few-shot|GPT-3]]
+- [[ai-fundamentals/sources/scaling-laws-kaplan|Scaling Laws — Kaplan]]
+- [[ai-fundamentals/sources/gpt3-language-models-few-shot|GPT-3]]

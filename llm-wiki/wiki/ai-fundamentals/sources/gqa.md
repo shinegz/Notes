@@ -1,38 +1,33 @@
 ---
-title: "GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints"
+title: "GQA: Grouped Query Attention"
 type: source
-tags: [attention, multi-query, inference, transformer]
-sources: []
-last_updated: 2026-04-23
+tags: [gqa, efficiency, attention, inference]
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/gqa.pdf
+source_url: https://arxiv.org/abs/2305.13245
 ---
 
-# GQA: Training Generalized Multi-Query Transformer Models from Multi-Head Checkpoints
+## Summary
 
-**Joshua Ainslie, James Lee-Thorp, Michiel de Jong, Yury Zemlyanskiy, Federico Lebrón, Sumit Sanghai**  
-*Google Research*
+Ainslie et al. propose **Grouped Query Attention (GQA)**—a variant of multi-head attention with fewer key/value heads than query heads. GQA reduces memory bandwidth during inference while maintaining quality close to MHA.
 
-## Abstract
+## Key Claims
 
-Multi-query attention (MQA), which only uses a single key-value head, drastically speeds up decoder inference. However, MQA can lead to quality degradation, and it may not be desirable to train a separate model just for faster inference. We (1) propose a recipe for uptraining existing multi-head language model checkpoints into models with MQA using 5% of original pre-training compute, and (2) introduce grouped-query attention (GQA), a generalization of multi-query attention which uses an intermediate number of key-value heads.
+- **Fewer KV heads**: GQA uses N_kv < N_q key/value heads
+- **Quality close to MHA**: Better than MQA with similar inference speed
+- **Faster inference**: Reduces memory bandwidth requirements
+- Used in LLaMA 2 and many modern LLMs
 
-## Key Contributions
+## Attention Variants
 
-- **Grouped-Query Attention (GQA)** — intermediate number of key-value heads between MHA (all) and MQA (one)
-- **Uptraining recipe** — convert existing multi-head checkpoints to MQA with only 5% of original compute
-- **Quality close to MHA** with inference speed comparable to MQA
-- **Addresses memory bandwidth bottleneck** in autoregressive decoder inference
-- **Practical** — enables faster inference without training separate models from scratch
+| Variant | Query Heads | Key Heads | Value Heads |
+|---------|-------------|-----------|-------------|
+| MHA | N | N | N |
+| MQA | N | 1 | 1 |
+| GQA | N | G (1 < G < N) | G |
 
 ## Connections
 
-- [[attention-is-all-you-need]] — Original multi-head attention mechanism
-- [[transformer-taxonomy]] — Catalogues MQA and GQA as architectural changes
-- [[flash-attention]] — Complementary optimization for attention memory efficiency
-
-## Key Facts
-
-- Published 2023
-- Proposes **Grouped-Query Attention (GQA)** as a middle ground between Multi-Head Attention and Multi-Query Attention
-- Groups attention heads to share key/value projections, reducing memory bandwidth at inference
-- Interpolates between MHA (high quality, high memory) and MQA (lower quality, low memory)
+- [[ai-fundamentals/sources/rope|RoPE]] — Often combined with GQA
+- [[ai-fundamentals/sources/flash-attention|Flash Attention]] — Often combined with GQA
+- [[ai-fundamentals/concepts/attention-mechanism|Attention Mechanism]] — Variant of attention

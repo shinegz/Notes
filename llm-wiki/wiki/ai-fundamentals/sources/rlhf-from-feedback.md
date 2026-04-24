@@ -1,32 +1,25 @@
 ---
-title: "Learning to Summarize from Human Feedback"
+title: "RLHF: Learning to Summarize from Human Feedback"
 type: source
-tags: [rlhf, alignment, human-feedback, summarization]
-sources: []
-last_updated: 2026-04-23
+tags: [rlhf, alignment, summarization, openai]
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/rlhf-from-feedback.pdf
+source_url: https://arxiv.org/abs/2009.01325
 ---
 
-# Learning to Summarize from Human Feedback
+## Summary
 
-**Nisan Stiennon, Long Ouyang, Jeff Wu, Daniel M. Ziegler, Ryan Lowe, Chelsea Voss, Alec Radford, Dario Amodei, Paul Christiano**  
-*OpenAI*
+Stiennon et al. demonstrate that training a model to summarize text using human feedback significantly improves quality over models trained purely on reference summaries. This paper establishes RLHF as a viable approach for aligning language models with human preferences.
 
-## Abstract
+## Key Claims
 
-As language models become more powerful, training and evaluation are increasingly bottlenecked by the data and metrics used for a particular task. For example, summarization models are often trained to predict human reference summaries and evaluated using ROUGE, but both of these metrics are rough proxies for what we really care about — summary quality. In this work, we show that it is possible to significantly improve summary quality by training a model to optimize for human preferences.
-
-## Key Contributions
-
-- **RLHF for summarization** — one of the first large-scale applications of RLHF to language models
-- **Human comparison dataset** — collected high-quality human preferences between summaries
-- **Reward model training** — trained a model to predict the human-preferred summary
-- **PPO fine-tuning** — used the reward model to fine-tune a summarization policy with reinforcement learning
-- **Outperforms larger supervised models** — RLHF model beats much larger models fine-tuned with supervised learning alone
-- **Generalization** — models transfer from Reddit TL;DR to CNN/DM news articles
+- **Human feedback > Reference summaries**: Models trained with human preferences outperform those trained on curated references
+- **Reward model**: Trained to predict human preferences, enables scalable feedback
+- **Transfer to non-supervised objectives**: Improves perplexity on held-out text
+- Foundation for InstructGPT and modern alignment techniques
 
 ## Connections
 
-- [[instructgpt]] — Direct successor that applies the same RLHF pipeline to instruction following
-- [[dpo]] — DPO is a simpler alternative to the PPO-based RLHF approach used here
-- [[scaling-laws-kaplan|Scaling Laws]] — RLHF adds a post-training alignment stage beyond scaling
+- [[ai-fundamentals/sources/instructgpt|InstructGPT]] — Extends RLHF with PPO
+- [[ai-fundamentals/sources/dpo|Direct Preference Optimization]] — Simplifies the pipeline
+- [[ai-fundamentals/concepts/alignment|Alignment]] — Concept page

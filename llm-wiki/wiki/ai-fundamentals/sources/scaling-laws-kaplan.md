@@ -2,43 +2,33 @@
 title: "Scaling Laws for Neural Language Models"
 type: source
 tags: [scaling-laws, kaplan, compute-optimal, training-dynamics]
-sources: []
-last_updated: 2026-04-19
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/scaling-laws-kaplan.pdf
+source_url: https://arxiv.org/abs/2001.08361
 ---
 
-# Scaling Laws for Neural Language Models
+## Summary
 
-**Jared Kaplan, Jeff McFee, Ben Mann, Henrik Milczarek, Rewon Child, Scott Gray, Alec Radford, Jeffrey Wu, Dario Amodei**  
-*OpenAI*
+Kaplan et al. establish empirical **scaling laws** for language model performance: loss scales as a power-law with model size (N), dataset size (D), and compute (C). Larger models are more compute-efficient than smaller models trained longer. Critical insight: for every 10x increase in compute, model size should increase ~5x.
 
-## Abstract
+## Key Claims
 
-We study empirical scaling laws for language model performance on the cross-entropy loss. The loss scales as a power-law with model size, dataset size, and the amount of compute used for training, with some trends spanning more than seven orders of magnitude. We also describe the compute-optimal allocation of training compute across model size and dataset size.
+- **Power-law scaling**: `L(N) ∝ N^(-0.076)`, `L(D) ∝ D^(-0.095)`, `L(C) ∝ C^(-0.050)`
+- **Compute-optimal allocation**: Larger models are more sample-efficient
+- For 10x compute: model size ↑5x, dataset size ↑2x
+- Optimal batch size scales with learning rate and compute
+- Performance improves predictably over 7+ orders of magnitude
 
-## Key Contributions
+## Scaling Exponents
 
-- **Power-law scaling**: Model loss scales as L(N) ∝ N^(-α) where α ≈ 0.076
-- **Compute-optimal training**: Larger models are more efficient than smaller models trained longer
-- **Optimal batch size**: Scales roughly proportionally to learning rate with compute
-- **Critical insight**: For every 10x increase in compute, model size should increase 5x
-
-## Scaling Laws
-
-| Resource | Scaling Exponent |
-|----------|-----------------|
-| Model size (N) | L(N) ∝ N^(-0.076) |
-| Dataset size (D) | L(D) ∝ D^(-0.095) |
-| Compute (C) | L(C) ∝ C^(-0.050) |
-
-## Compute-Optimal Allocation
-
-| Compute Budget | Optimal Model Size | Optimal Dataset Size |
-|----------------|-------------------|---------------------|
-| 10^18 FLOPs | 85M | 22B tokens |
-| 10^20 FLOPs | 2.7B | 283B tokens |
-| 10^22 FLOPs | 85B | 3.7T tokens |
+| Resource | Exponent |
+|---------|----------|
+| Model size (N) | α = 0.076 |
+| Dataset size (D) | α = 0.095 |
+| Compute (C) | α = 0.050 |
 
 ## Connections
 
-- [[gpt3-language-models-few-shot|GPT-3]] — GPT-3 follows scaling laws for model size selection
+- [[ai-fundamentals/sources/gpt3-language-models-few-shot|GPT-3]] — Follows these scaling laws
+- [[ai-fundamentals/sources/chinchilla|Chinchilla]] — Challenges Kaplan's allocation; suggests equal scaling
+- [[ai-fundamentals/concepts/scaling-laws|Scaling Laws]] — Concept page

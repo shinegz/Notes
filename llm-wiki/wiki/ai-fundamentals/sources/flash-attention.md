@@ -1,49 +1,29 @@
 ---
-title: "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness"
+title: "Flash Attention: Fast and Memory-Efficient Attention"
 type: source
-tags: [flash-attention, attention, optimization, efficiency]
-sources: []
-last_updated: 2026-04-19
+tags: [flash-attention, efficiency, attention, io-aware]
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/flash-attention.pdf
+source_url: https://arxiv.org/abs/2205.14135
 ---
 
-# FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness
+## Summary
 
-**Tri Dao, Daniel Y. Fu, Stefano Ermon, Atri Rudra, Christopher Ré**  
-*Stanford University, UC Berkeley*
+Dao et al. introduce **Flash Attention**—an IO-aware exact attention algorithm that computes attention faster by exploiting GPU memory hierarchy (SRAM vs HBM). Reduces memory complexity from O(N²) to O(N) and significantly speeds up training.
 
-## Abstract
+## Key Claims
 
-Attention is a core primitive in neural network architectures, but the standard attention mechanism has quadratic time and memory complexity in the sequence length. We propose FlashAttention, an exact attention algorithm that computes the attention output faster and with less memory by exploiting the memory hierarchy of modern hardware (GPU). Our algorithm achieves 2-4x speedup over standard attention implementations and up to 10-16x memory reduction.
+- **IO-aware**: Minimizes HBM (high-bandwidth memory) reads/writes
+- **Exact attention**: Algorithmically identical to standard attention
+- **Memory efficient**: O(N) instead of O(N²) memory
+- 2-4x speedup on standard attention implementations
+- Enables training with longer sequences
 
-## Key Contributions
+## Key Insight
 
-- **IO-aware algorithm**: Exploits GPU memory hierarchy (SRAM vs HBM)
-- **Exact attention**: Mathematically equivalent to standard attention
-- **2-4x faster**: Significant speedup on standard benchmarks
-- **10-16x less memory**: Enables attention on very long sequences
-
-## Memory Hierarchy
-
-| Level | Size | Bandwidth |
-|-------|------|-----------|
-| HBM (GPU memory) | ~40GB | ~1 TB/s |
-| L2 cache | ~6MB | ~4 TB/s |
-| SRAM (per thread block) | ~128KB | ~19 TB/s |
-
-FlashAttention keeps data in fast SRAM and only writes to slow HBM when necessary.
-
-## Algorithm Overview
-
-```
-1. Divide K, V into blocks
-2. For each block of Q:
-   - Load Q block to SRAM
-   - Compute attention with K, V blocks (tiling)
-   - Update output in HBM
-3. Return final attention output
-```
+Standard attention materializes the N×N attention matrix to HBM, then reads it back. Flash Attention keeps attention in SRAM, computing in tiles to avoid the expensive HBM round-trips.
 
 ## Connections
 
-- [[attention-is-all-you-need]] — Flash Attention implements exact Transformer attention
+- [[ai-fundamentals/concepts/attention-mechanism|Attention Mechanism]] — Improves attention efficiency
+- [[ai-fundamentals/sources/gqa|Grouped Query Attention]] — Often combined with Flash Attention

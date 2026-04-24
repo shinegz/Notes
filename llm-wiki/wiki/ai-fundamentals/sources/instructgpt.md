@@ -1,45 +1,34 @@
 ---
-title: "Training Language Models to Follow Instructions with Human Feedback"
+title: "Training Language Models to Follow Instructions with Human Feedback (InstructGPT)"
 type: source
-tags: [instructgpt, rlhf, alignment, instruction-following]
-sources: []
-last_updated: 2026-04-19
+tags: [instructgpt, rlhf, alignment, openai]
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/instructgpt.pdf
+source_url: https://arxiv.org/abs/2203.02155
 ---
 
-# Training Language Models to Follow Instructions with Human Feedback (InstructGPT)
+## Summary
 
-**Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, John Schulman, Jacob Hilton, Fraser Kelton, Luke Miller, Maddie Simens, Amanda Askell, Peter Welinder, Paul Christiano, Jan Leike, Ryan Lowe**  
-*OpenAI*
+Ouyang et al. introduce **InstructGPT** (also known as GPT-3.5), which uses RLHF to align language models with human preferences. The three-step process—SFT, Reward Model, PPO—becomes the standard alignment pipeline for modern LLMs.
 
-## Abstract
+## Key Claims
 
-Making language models larger does not inherently make them better at following a user's intent. While the 175B GPT-3 is few-shot capable, it can generate outputs that are untruthful, toxic, or simply not helpful. We train large language models using a combination of human feedback to make them more helpful, truthful, and harmless. Our technique, called Reinforcement Learning from Human Feedback (RLHF), consists of three steps: supervised fine-tuning (SFT), reward model training, and proximal policy optimization (PPO).
+- **RLHF pipeline**: SFT → Reward Model → PPO optimization
+- Dramatically improves alignment on human preferences vs. pre-training alone
+- Smaller models fine-tuned with RLHF outperform much larger pre-trained models
+- Reduces hallucinations and harmful outputs
+- Misaligned models can still be useful but not what users want
 
-## Key Contributions
+## RLHF Pipeline
 
-- **RLHF pipeline**: Three-step training process (SFT → Reward Model → PPO)
-- **Helpful, harmless, and honest**: Alignment with human preferences
-- **GPT-3.5 series**: Powers ChatGPT and API
-- **Significantly reduced hallucinations**: Better truthfulness than fine-tuned GPT-3
-
-## Three-Stage Training
-
-| Stage | Description |
-|-------|-------------|
-| SFT | Supervised fine-tuning with demonstrations |
-| Reward Model | Train model to predict human preference |
-| PPO | Fine-tune with RL using reward model |
-
-## Results
-
-| Model | Preference Rate vs. SFT |
-|-------|------------------------|
-| 1.3B SFT | 0% (baseline) |
-| 1.3B PPO | 61% |
-| 175B SFT | 0% (baseline) |
-| 175B PPO | **71%** |
+| Step | Description |
+|------|-------------|
+| 1. SFT | Supervised fine-tuning on human demonstrations |
+| 2. Reward Model | Train model to predict human preference |
+| 3. PPO | Fine-tune SFT model with RL to maximize reward |
 
 ## Connections
 
-- [[gpt3-language-models-few-shot|GPT-3]] — InstructGPT is trained from GPT-3 base model
+- [[ai-fundamentals/sources/rlhf-from-feedback|RLHF from Human Feedback]] — Foundation paper
+- [[ai-fundamentals/sources/dpo|Direct Preference Optimization]] — Simplifies RLHF
+- [[ai-fundamentals/concepts/alignment|Alignment]] — Concept page

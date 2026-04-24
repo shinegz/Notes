@@ -4,7 +4,7 @@ type: concept
 tags: [attention, deep-learning, transformer]
 sources:
   - ai-fundamentals/sources/attention-is-all-you-need
-last_updated: 2026-04-19
+last_updated: 2026-04-24
 ---
 
 # Attention Mechanism
@@ -59,4 +59,4 @@ scores = scores / sqrt(64)  # 归一化
 
 ## 来源
 
-- [[../sources/attention-is-all-you-need|Attention Is All You Need]]
+- [[ai-fundamentals/sources/attention-is-all-you-need|Attention Is All You Need]]

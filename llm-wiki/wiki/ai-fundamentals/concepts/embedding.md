@@ -5,7 +5,7 @@ tags: [embedding, word2vec, representation-learning]
 sources:
   - ai-fundamentals/sources/word2vec
   - ai-fundamentals/sources/attention-is-all-you-need
-last_updated: 2026-04-23
+last_updated: 2026-04-24
 ---
 
 # Embedding
@@ -31,7 +31,7 @@ Embedding 解决了 one-hot 的两个问题：
 
 ### 著名示例：Vector Arithmetic
 
-[word2vec](../sources/word2vec.md) 的经典发现：
+[[ai-fundamentals/sources/word2vec|word2vec]] 的经典发现：
 
 ```
 king - man + woman ≈ queen
@@ -47,7 +47,7 @@ paris - france + italy ≈ rome
 | **CBOW** | 用上下文词预测中心词 | 训练更快，对高频词效果好 |
 | **Skip-gram** | 用中心词预测上下文词 | 对低频词和罕见词效果好 |
 
-[word2vec](../sources/word2vec.md) 训练了 1.6B 词的语料，一天内完成训练。
+[[ai-fundamentals/sources/word2vec|word2vec]] 训练了 1.6B 词的语料，一天内完成训练。
 
 ## 从 Word Embedding 到 Contextual Embedding
 
@@ -57,15 +57,15 @@ paris - france + italy ≈ rome
 | Contextual Embedding | ELMo | 基于双向 LSTM，词向量随上下文变化 |
 | Transformer Embedding | BERT, GPT | 基于 Self-Attention，每个 token 的表示取决于整句话 |
 
-在 [Transformer](../sources/attention-is-all-you-need.md) 中，Input Embedding 和 Positional Encoding 相加后进入 Encoder，Embedding 维度为 512。
+在 [[ai-fundamentals/sources/attention-is-all-you-need|Transformer]] 中，Input Embedding 和 Positional Encoding 相加后进入 Encoder，Embedding 维度为 512。
 
 ## 现代应用
 
 - **LLM 输入层**：所有现代 LLM 的第一层都是 Embedding 层
-- **Vector DB**：文档/查询先 embedding 再存储/检索（见 [Vector Database](./vector-database.md)）
+- **Vector DB**：文档/查询先 embedding 再存储/检索（见 [[ai-fundamentals/concepts/vector-database|Vector Database]]）
 - **类比推理**：Vector arithmetic 成为评估 embedding 质量的标准测试
 
 ## 来源
 
-- [word2vec](../sources/word2vec.md) — 词嵌入奠基论文（Google）
-- [Attention Is All You Need](../sources/attention-is-all-you-need.md) — Transformer 中的 Embedding + Positional Encoding
+- [[ai-fundamentals/sources/word2vec|word2vec]] — 词嵌入奠基论文（Google）
+- [[ai-fundamentals/sources/attention-is-all-you-need|Attention Is All You Need]] — Transformer 中的 Embedding + Positional Encoding

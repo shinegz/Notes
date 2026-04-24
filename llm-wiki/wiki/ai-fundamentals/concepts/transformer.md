@@ -4,7 +4,7 @@ type: concept
 tags: [transformer, deep-learning, nlp]
 sources:
   - ai-fundamentals/sources/attention-is-all-you-need
-last_updated: 2026-04-19
+last_updated: 2026-04-24
 ---
 
 # Transformer
@@ -78,4 +78,4 @@ FFN(x) = ReLU(x @ W1 + b1) @ W2 + b2
 
 ## 来源
 
-- [[../sources/attention-is-all-you-need|Attention Is All You Need]]
+- [[ai-fundamentals/sources/attention-is-all-you-need|Attention Is All You Need]]

@@ -1,40 +1,24 @@
 ---
-title: "Deep Residual Learning for Image Recognition (ResNet)"
+title: "ResNet: Deep Residual Learning for Image Recognition"
 type: source
-tags: [deep-learning, cnn, residual-learning, computer-vision]
-sources: []
-last_updated: 2026-04-23
+tags: [resnet, deep-learning, residual-connections, computer-vision]
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/resnet.pdf
+source_url: https://arxiv.org/abs/1512.03385
 ---
 
-# Deep Residual Learning for Image Recognition (ResNet)
+## Summary
 
-**Kaiming He, Xiangyu Zhang, Shaoqing Ren, Jian Sun**  
-*Microsoft Research*
+He et al. introduce **ResNet**—a residual learning framework with skip connections that enables training of very deep networks (152 layers). ResNet won CVPR 2016 Best Paper and became the backbone for many computer vision models.
 
-## Abstract
+## Key Claims
 
-Deeper neural networks are more difficult to train. We present a residual learning framework to ease the training of networks that are substantially deeper than those used previously. We explicitly reformulate the layers as learning residual functions with reference to the layer inputs, instead of learning unreferenced functions. We provide comprehensive empirical evidence showing that these residual networks are easier to optimize, and can gain accuracy from considerably increased depth.
-
-## Key Contributions
-
-- **Residual connections (skip connections)** — F(x) + x formulation enables gradient to flow directly
-- **ResNet-152** — 8× deeper than VGG nets, yet lower complexity; won ImageNet 2015 with 3.57% top-5 error
-- **Addresses vanishing gradient problem** that prevented training networks deeper than ~20 layers
-- **Residual blocks with identity mapping** — when dimensions match, skip connection is simple identity
-- **Became foundational** for both computer vision (CNNs) and NLP (transformer residual connections)
+- **Skip connections**: Enable training of very deep networks (100+ layers)
+- **Residual learning**: H(x) = F(x) + x instead of learning H(x) directly
+- **152 layers**: 8x deeper than VGG nets
+- **Foundation for modern architectures**: Preceded and influenced Transformers
 
 ## Connections
 
-- [[alexnet]] — ResNet builds on CNN foundations, solving the depth limitation AlexNet faced
-- [[attention-is-all-you-need]] — Transformer uses residual connections inspired by ResNet
-- [[rope]] — Modern LLM architecture combines RoPE with residual Transformer blocks
-
-## Key Facts
-
-- Published at CVPR 2016 (Best Paper)
-- Introduces **residual connections** (skip connections) enabling training of very deep networks
-- ResNet-152 won ImageNet 2015 with 3.57% top-5 error
-- Addressed the vanishing gradient problem that prevented training networks deeper than ~20 layers
-- Residual block: output = F(x) + x
-- Became foundational architecture for computer vision and later adapted for NLP (e.g., transformer residuals)
+- [[ai-fundamentals/sources/alexnet|AlexNet]] — Earlier CNN architecture
+- [[ai-fundamentals/concepts/transformer|Transformer]] — Residual connections inspired by ResNet

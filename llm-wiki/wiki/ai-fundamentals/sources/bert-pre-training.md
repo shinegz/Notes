@@ -1,45 +1,31 @@
 ---
-title: "BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding"
+title: "BERT: Pre-training of Deep Bidirectional Transformers"
 type: source
-tags: [bert, transformer, nlp, pre-training]
-sources: []
-last_updated: 2026-04-19
+tags: [bert, pre-training, masked-lm, nlp]
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/bert-pre-training.pdf
+source_url: https://arxiv.org/abs/1810.04805
 ---
 
-# BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding
+## Summary
 
-**Jacob Devlin, Ming-Wei Chang, Kenton Lee, Kristina Toutanova**  
-*Google AI Language*
+Devlin et al. introduce **BERT**—a method for pre-training bidirectional language representations from unlabeled text. BERT uses Masked Language Modeling (MLM) and Next Sentence Prediction (NSP) to achieve state-of-the-art results on NLP benchmarks.
 
-## Abstract
+## Key Claims
 
-We introduce a new language representation model called BERT, which stands for Bidirectional Encoder Representations from Transformers. Unlike recent language representation models, BERT is designed to pre-train deep bidirectional representations from unlabeled text by jointly conditioning on both left and right context in all layers. As a result, the pre-trained BERT model can be fine-tuned with just one additional output layer for state-of-the-art performance on a wide range of NLP tasks.
+- **Bidirectional pre-training**: Unlike GPT's unidirectional approach
+- **Masked LM**: 15% tokens masked, predict from context
+- **Next Sentence Prediction**: Understanding sentence relationships
+- **Fine-tuning paradigm**: Pre-train once, fine-tune for any task
 
-## Key Contributions
+## Pre-training Tasks
 
-- **Bidirectional pre-training**: First system to pre-train a deep bidirectional Transformer encoder
-- **Masked Language Model (MLM)**: Randomly masks some tokens and predicts them based on context
-- **Next Sentence Prediction (NSP)**: Pre-training task to understand sentence relationships
-- **State-of-the-art**: Achieves new results on 11 NLP benchmarks
-
-## Architecture
-
-| Component | Description |
-|-----------|-------------|
-| Encoder | Bidirectional Transformer encoder (12 or 24 layers) |
-| Pre-training | Masked LM + Next Sentence Prediction |
-| Fine-tuning | Add task-specific output layer |
-
-## Results
-
-| Task | Model | Score |
-|------|-------|-------|
-| SQuAD 1.1 | BERT (ensemble) | **93.2 F1** |
-| SQuAD 2.0 | BERT (ensemble) | **83.1 F1** |
-| MultiNLI | BERT | **86.6%** |
-| SST-2 | BERT | **93.5%** |
+| Task | Description |
+|------|-------------|
+| MLM | Mask 15% tokens, predict from both left and right context |
+| NSP | Predict if sentence B follows sentence A |
 
 ## Connections
 
-- [[attention-is-all-you-need]] — BERT uses Transformer encoder architecture
+- [[ai-fundamentals/sources/attention-is-all-you-need|Attention Is All You Need]] — Transformer encoder architecture
+- [[ai-fundamentals/sources/gpt3-language-models-few-shot|GPT-3]] — Decoder-only alternative

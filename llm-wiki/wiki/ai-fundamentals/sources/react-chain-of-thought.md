@@ -2,39 +2,39 @@
 title: "ReAct: Synergizing Reasoning and Acting in Language Models"
 type: source
 tags: [react, reasoning, agent, tool-use, chain-of-thought]
-sources: []
-last_updated: 2026-04-23
+last_updated: 2026-04-24
 source_file: raw/ai-fundamentals/pdfs/react-chain-of-thought.pdf
+source_url: https://arxiv.org/abs/2210.03629
 ---
 
-# ReAct: Synergizing Reasoning and Acting in Language Models
+## Summary
 
-**Shunyu Yao, Jeffrey Zhao, Dian Yu, Nan Du, Izhak Shafran, Karthik Narasimhan, Yuan Cao**  
-*Princeton University, Google Research*
+Yao et al. propose **ReAct**—interleaving reasoning (Thought) traces with acting (Action) steps and external observations. This synergistic approach outperforms both chain-of-thought-only and action-only baselines on knowledge-intensive reasoning and decision-making tasks, while reducing hallucination by grounding thoughts in real observations.
 
-## Abstract
+## Key Claims
 
-While large language models have demonstrated impressive performance across tasks, their abilities for reasoning (e.g. chain-of-thought prompting) and acting (e.g. action plan generation) have primarily been studied as separate topics. This paper explores the use of LLMs to generate both reasoning traces and task-specific actions in an interleaved manner. Reasoning traces help the model induce, track, and update action plans, while actions allow it to interface with external sources to gather additional information.
+- **ReAct loop**: `Thought → Action → Observation → Thought → ...`
+- Outperforms both CoT-only and Act-only baselines
+- Reduces hallucination by grounding reasoning in external observations
+- Works across diverse environments: Wikipedia, web search, text games, embodied tasks
+- Action space combines task-specific discrete actions with language
 
-## Key Contributions
+## ReAct Template
 
-- **ReAct framework** — interleaving reasoning (Thought) and acting (Action) traces
-- **Outperforms both CoT-only and Act-only baselines** on knowledge-intensive and decision-making tasks
-- **Reduces hallucination** in reasoning by grounding thoughts in external observations
-- **Generalizes across environments** — Wikipedia, web, interactive text games, embodied tasks
-- **Open-sourced** prompting templates and evaluation framework
+```
+Thought: I need to find X
+Action: search[X]
+Observation: Result shows...
+Thought: Based on the observation...
+Action: finish[answer]
+```
+
+## Key Quotes
+
+> "Reasoning traces help the model induce, track, and update action plans, while actions allow it to interface with external sources to gather additional information."
 
 ## Connections
 
-- [[llm-powered-autonomous-agents]] — Surveys ReAct as a key planning/self-reflection technique
-- [[toolformer]] — Complementary: ReAct reasons about tools, Toolformer learns to call them
-- [[gpt3-language-models-few-shot|GPT-3]] — Base model for ReAct experiments
-
-## Key Facts
-
-- Published at ICLR 2023
-- Proposes **ReAct** — interleaving reasoning (Thought) and acting (Action) traces
-- Action space combines task-specific discrete actions and language space
-- Outperforms both chain-of-thought-only and action-only baselines
-- Enables LLMs to interact with external environments (Wikipedia, web, tools)
-- Foundation for many LLM agent frameworks
+- [[ai-fundamentals/sources/llm-powered-autonomous-agents|LLM-powered Autonomous Agents]] — Surveys ReAct as a key planning technique
+- [[ai-fundamentals/sources/toolformer|Toolformer]] — ReAct reasons about tools; Toolformer learns to call them
+- [[ai-fundamentals/concepts/chain-of-thought-react|CoT & ReAct]] — Concept page

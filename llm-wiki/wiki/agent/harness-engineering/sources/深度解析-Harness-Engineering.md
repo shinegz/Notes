@@ -35,12 +35,12 @@ source_url: https://mp.weixin.qq.com/s/-mgf8K7XZrTKoD0pMOIn3w
 
 ## Connections
 
-- [[anthropic-effective-harnesses-long-running-agents]] — Anthropic 官方实践，planner/generator/evaluator 三角色系统
-- [[openai-harness-engineering-zh]] — OpenAI 五个月百万行代码实验
-- [[martin-fowler-harness-engineering]] — 2×2 控制矩阵（Guides/Sensors + Computational/Inferential）
-- [[langchain-anatomy-of-an-agent-harness]] — LangChain Terminal Bench 2.0 实验结果
-- [[mitchellh-ai-adoption-journey-step-5-harness]] — "Engineer the Harness" 术语来源之一
-- [[HarnessEngineering]] — 概念页
+- [[agent/harness-engineering/sources/anthropic-effective-harnesses-long-running-agents|Anthropic — Long-running]] — Anthropic 官方实践，planner/generator/evaluator 三角色系统
+- [[agent/harness-engineering/sources/openai-harness-engineering-zh|OpenAI 中文]] — OpenAI 五个月百万行代码实验
+- [[agent/harness-engineering/sources/martin-fowler-harness-engineering|Martin Fowler]] — 2×2 控制矩阵（Guides/Sensors + Computational/Inferential）
+- [[agent/harness-engineering/sources/langchain-anatomy-of-an-agent-harness|LangChain — Anatomy]] — LangChain Terminal Bench 2.0 实验结果
+- [[agent/harness-engineering/sources/mitchellh-ai-adoption-journey-step-5-harness|Mitchell Hashimoto]] — "Engineer the Harness" 术语来源之一
+- [[agent/harness-engineering/concepts/HarnessEngineering|Harness Engineering]] — 概念页
 
 ## Timeline
 
