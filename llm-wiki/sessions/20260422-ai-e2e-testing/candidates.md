@@ -28,7 +28,8 @@
 
 | OK | Type | URL 或路径 | 建议 shelf | 建议 raw 子路径 | 一行理由 |
 |----|------|------------|------------|-----------------|----------|
-| [x] | paper | https://arxiv.org/abs/2504.01495 | agent | `articles/arxiv-autonomous-web-agents-testers.md` | 学术论文：自主 Web Agent 作为测试者的能力评估，E2E 自动化新范式 |
+| [x] | paper | https://arxiv.org/abs/2504.01495
+  - PDF: https://arxiv.org/pdf/2504.01495.pdf | agent | `articles/arxiv-autonomous-web-agents-testers.md` + `.pdf` | 学术论文：自主 Web Agent 作为测试者的能力评估，E2E 自动化新范式 |
 | [x] | blog | https://medium.com/transforming-testing-with-generative-ai/transforming-end-to-end-testing-with-generative-agentic-workflows-c29f4aae6a0a | agent | `articles/generative-agentic-e2e-workflows.md` | 生成式 AI Agent 工作流改造 E2E 测试：自主规划、执行、验证的闭环设计 |
 | [x] | blog | https://medium.com/codex/has-anthropic-just-wiped-out-the-software-testing-industry-0bb6305adcc2 | agent | `articles/anthropic-computer-use-ui-testing.md` | Claude Computer Use 在 UI/UX 测试中的实战应用：零先验知识的自主测试场景 |
 | [x] | doc | https://platform.claude.com/docs/en/agents-and-tools/tool-use/computer-use-tool | agent | `articles/anthropic-computer-use-api-docs.md` | Anthropic Computer Use API 官方文档：Agent 浏览器自动化的原语能力 |
@@ -51,16 +52,17 @@
 |----------|------|
 | `raw/agent/e2e-testing/articles/google-just-say-no-to-e2e.md` | OK |
 | `raw/agent/e2e-testing/articles/martin-fowler-test-pyramid.md` | OK |
-| `raw/agent/e2e-testing/articles/ibm-e2e-best-practices.md` | OK |
+| `raw/agent/e2e-testing/articles/ibm-e2e-best-practices.md` | OK (partial, fallback) |
 | `raw/agent/e2e-testing/articles/bunnyshell-e2e-best-practices-2025.md` | OK |
 | `raw/agent/e2e-testing/articles/playwright-official-best-practices.md` | OK |
-| `raw/agent/e2e-testing/articles/playwright-test-data-strategies.md` | **FAILED** (403) → 已写入 `refs/` 并附 fallback 提示 |
-| `raw/agent/e2e-testing/articles/msw-best-practices.md` | OK (注：MSW 官网为索引页，已抓取核心原则与 Playwright 集成示例) |
+| `raw/agent/e2e-testing/articles/playwright-test-data-strategies.md` | **FAILED** (403) → fallback placeholder |
+| `raw/agent/e2e-testing/articles/msw-best-practices.md` | OK (index page only) |
 | `raw/agent/e2e-testing/articles/playwright-e2e-cheatsheet.md` | OK |
-| `raw/agent/e2e-testing/articles/arxiv-autonomous-web-agents-testers.md` | OK (摘要 + 关键发现) |
-| `raw/agent/e2e-testing/articles/generative-agentic-e2e-workflows.md` | **FAILED** (Medium timeout) → 已写入 `refs/` 并附 fallback 提示 |
-| `raw/agent/e2e-testing/articles/anthropic-computer-use-ui-testing.md` | **FAILED** (Medium timeout) → 已写入 `refs/` 并附 fallback 提示 |
-| `raw/agent/e2e-testing/articles/anthropic-computer-use-api-docs.md` | **FAILED** (403) → 已写入 `refs/` 并附 fallback 提示 |
+| `raw/agent/e2e-testing/articles/arxiv-autonomous-web-agents-testers.md` | OK |
+| `raw/agent/e2e-testing/pdfs/arxiv-autonomous-web-agents-testers.pdf` | OK (1.8MB, 23 pages) |
+| `raw/agent/e2e-testing/articles/generative-agentic-e2e-workflows.md` | **FAILED** (timeout) → fallback placeholder |
+| `raw/agent/e2e-testing/articles/anthropic-computer-use-ui-testing.md` | **FAILED** (timeout) → fallback placeholder |
+| `raw/agent/e2e-testing/articles/anthropic-computer-use-api-docs.md` | **FAILED** (403/region) → fallback placeholder |
 | `raw/agent/e2e-testing/articles/e2e-test-ai-agent-dev-to.md` | OK |
-| `raw/agent/e2e-testing/refs/fugazi-test-automation-skills-agents.md` | OK (GitHub README 完整内容) |
-| `raw/agent/e2e-testing/refs/qaskills-e2e-testing.md` | OK (目录站完整内容) |
+| `raw/agent/e2e-testing/refs/fugazi-test-automation-skills-agents.md` | OK |
+| `raw/agent/e2e-testing/refs/qaskills-e2e-testing.md` | OK |

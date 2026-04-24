@@ -1,0 +1,197 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1300 800">
+  <style>
+    text { font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  </style>
+  <defs>
+    <marker id="arr-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#3b82f6"/>
+    </marker>
+    <marker id="arr-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#f97316"/>
+    </marker>
+    <marker id="arr-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#22c55e"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#a855f7"/>
+    </marker>
+    <marker id="arr-cyan" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#06b6d4"/>
+    </marker>
+    <marker id="arr-gray" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+    </marker>
+    <filter id="sh" x="-5%" y="-5%" width="110%" height="115%">
+      <feDropShadow dx="1" dy="2" stdDeviation="3" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="1300" height="800" fill="#ffffff"/>
+  <text x="650" y="32" text-anchor="middle" font-size="22" font-weight="700" fill="#1e293b">AI 核心概念关系架构图</text>
+  <text x="650" y="52" text-anchor="middle" font-size="12" fill="#64748b">LLM 架构 · Agent 架构 · 概念关系</text>
+  <!-- LLM Architecture Domain -->
+  <rect x="25" y="68" width="600" height="580" rx="14" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5"/>
+  <rect x="25" y="68" width="600" height="36" rx="14" fill="#1e3a8a"/>
+  <rect x="25" y="90" width="600" height="14" fill="#1e3a8a"/>
+  <text x="325" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">LLM 架构</text>
+  <rect x="42" y="118" width="566" height="80" rx="8" fill="#eff6ff" fill-opacity="0.5" stroke="#bfdbfe" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="60" y="136" font-size="10" font-weight="600" fill="#3b82f6">输入层</text>
+  <rect x="60" y="144" width="90" height="42" rx="7" fill="#ffffff" stroke="#93c5fd" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="105" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">Token</text>
+  <text x="105" y="178" text-anchor="middle" font-size="8" fill="#3b82f6">文本 → ID</text>
+  <rect x="175" y="144" width="105" height="42" rx="7" fill="#ffffff" stroke="#93c5fd" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="227" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#1e40af">Embedding</text>
+  <text x="227" y="178" text-anchor="middle" font-size="8" fill="#3b82f6">符号 → 向量</text>
+  <rect x="308" y="144" width="130" height="42" rx="7" fill="#ffffff" stroke="#86efac" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="373" y="163" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">Transformer</text>
+  <text x="373" y="178" text-anchor="middle" font-size="8" fill="#15803d">Self-Attention + FFN</text>
+  <line x1="150" y1="165" x2="175" y2="165" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <line x1="280" y1="165" x2="308" y2="165" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <line x1="373" y1="186" x2="373" y2="210" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <rect x="270" y="210" width="210" height="72" rx="10" fill="#dbeafe" stroke="#3b82f6" stroke-width="2.5" filter="url(#sh)"/>
+  <rect x="274" y="214" width="202" height="64" rx="8" fill="none" stroke="#93c5fd" stroke-width="0.8" opacity="0.4"/>
+  <text x="375" y="244" text-anchor="middle" font-size="20" font-weight="700" fill="#1e3a8a">LLM</text>
+  <text x="375" y="264" text-anchor="middle" font-size="10" fill="#2563eb">Next Token Prediction</text>
+  <rect x="42" y="302" width="566" height="80" rx="8" fill="#fff7ed" fill-opacity="0.5" stroke="#fdba74" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="60" y="320" font-size="10" font-weight="600" fill="#c2410c">训练层</text>
+  <rect x="60" y="328" width="130" height="42" rx="7" fill="#ffffff" stroke="#fb923c" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="125" y="347" text-anchor="middle" font-size="12" font-weight="600" fill="#c2410c">Scaling Laws</text>
+  <text x="125" y="362" text-anchor="middle" font-size="8" fill="#9a3412">算力 / 参数 / 数据</text>
+  <rect x="218" y="328" width="130" height="42" rx="7" fill="#ffffff" stroke="#fb923c" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="283" y="347" text-anchor="middle" font-size="12" font-weight="600" fill="#c2410c">Fine-tuning</text>
+  <text x="283" y="362" text-anchor="middle" font-size="8" fill="#9a3412">SFT / RLHF / DPO</text>
+  <rect x="376" y="328" width="120" height="42" rx="7" fill="#ffffff" stroke="#f97316" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="436" y="347" text-anchor="middle" font-size="12" font-weight="600" fill="#c2410c">Alignment</text>
+  <text x="436" y="362" text-anchor="middle" font-size="8" fill="#9a3412">行为对齐</text>
+  <line x1="190" y1="349" x2="218" y2="349" stroke="#f97316" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+  <line x1="348" y1="349" x2="376" y2="349" stroke="#f97316" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+  <path d="M 436,328 L 436,296 L 375,296 L 375,282" stroke="#f97316" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-orange)"/>
+  <rect x="375" y="286" width="72" height="16" rx="4" fill="#1c1917"/>
+  <text x="411" y="298" text-anchor="middle" font-size="9" font-weight="600" fill="#ffffff">产出模型</text>
+  <rect x="42" y="400" width="566" height="100" rx="8" fill="#f0fdfa" fill-opacity="0.5" stroke="#99f6e4" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="60" y="418" font-size="10" font-weight="600" fill="#0891b2">接口层 · Context Window</text>
+  <rect x="60" y="428" width="115" height="40" rx="6" fill="#ffffff" stroke="#93c5fd" stroke-width="1.2"/>
+  <text x="117" y="446" text-anchor="middle" font-size="11" font-weight="600" fill="#1e40af">Prompt</text>
+  <text x="117" y="460" text-anchor="middle" font-size="8" fill="#3b82f6">用户指令</text>
+  <rect x="192" y="428" width="115" height="40" rx="6" fill="#ffffff" stroke="#c084fc" stroke-width="1.2"/>
+  <text x="249" y="446" text-anchor="middle" font-size="11" font-weight="600" fill="#7c3aed">Tool Schema</text>
+  <text x="249" y="460" text-anchor="middle" font-size="8" fill="#7c3aed">函数定义</text>
+  <rect x="324" y="428" width="115" height="40" rx="6" fill="#ffffff" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="381" y="446" text-anchor="middle" font-size="11" font-weight="600" fill="#0e7490">Memory</text>
+  <text x="381" y="460" text-anchor="middle" font-size="8" fill="#0891b2">记忆注入</text>
+  <rect x="456" y="428" width="115" height="40" rx="6" fill="#ffffff" stroke="#14b8a6" stroke-width="1.2"/>
+  <text x="513" y="446" text-anchor="middle" font-size="11" font-weight="600" fill="#0f766e">RAG</text>
+  <text x="513" y="460" text-anchor="middle" font-size="8" fill="#0d9488">检索结果注入</text>
+  <path d="M 375,428 L 375,400 L 375,282" stroke="#06b6d4" stroke-width="1.2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <text x="388" y="395" font-size="8" fill="#0891b2">输入容器</text>
+  <rect x="42" y="518" width="566" height="110" rx="8" fill="#f0fdfa" fill-opacity="0.3" stroke="#99f6e4" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="60" y="536" font-size="10" font-weight="600" fill="#0891b2">记忆层</text>
+  <rect x="60" y="546" width="130" height="42" rx="7" fill="#ffffff" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="125" y="565" text-anchor="middle" font-size="12" font-weight="600" fill="#0e7490">Context</text>
+  <text x="125" y="580" text-anchor="middle" font-size="8" fill="#0891b2">短期记忆</text>
+  <rect x="215" y="546" width="110" height="42" rx="7" fill="#ffffff" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="270" y="565" text-anchor="middle" font-size="12" font-weight="600" fill="#0e7490">Vector DB</text>
+  <text x="270" y="580" text-anchor="middle" font-size="8" fill="#0891b2">长期记忆</text>
+  <rect x="350" y="546" width="105" height="42" rx="7" fill="#ffffff" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="402" y="565" text-anchor="middle" font-size="12" font-weight="600" fill="#0e7490">Memory</text>
+  <text x="402" y="580" text-anchor="middle" font-size="8" fill="#0891b2">记忆管理</text>
+  <line x1="190" y1="567" x2="215" y2="567" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arr-cyan)"/>
+  <line x1="325" y1="567" x2="350" y2="567" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arr-cyan)"/>
+  <path d="M 270,546 L 270,500 L 513,500 L 513,468" stroke="#06b6d4" stroke-width="1.2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <text x="390" y="495" font-size="8" fill="#0891b2">检索增强</text>
+  <path d="M 227,186 L 227,246 L 270,246 L 270,546" stroke="#a855f7" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-purple)"/>
+  <text x="278" y="492" font-size="7" fill="#7c3aed">向量化存储</text>
+  <path d="M 125,546 L 125,500 L 60,500 L 60,468" stroke="#06b6d4" stroke-width="1" stroke-dasharray="3,3" fill="none"/>
+  <!-- Agent Architecture Domain -->
+  <rect x="650" y="68" width="625" height="580" rx="14" fill="#f0fdf4" fill-opacity="0.3" stroke="#86efac" stroke-width="1.5"/>
+  <rect x="650" y="68" width="625" height="36" rx="14" fill="#166534"/>
+  <rect x="650" y="90" width="625" height="14" fill="#166534"/>
+  <text x="962" y="92" text-anchor="middle" font-size="15" font-weight="700" fill="#ffffff">Agent 架构</text>
+  <rect x="668" y="118" width="590" height="90" rx="8" fill="#dbeafe" fill-opacity="0.3" stroke="#93c5fd" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="686" y="136" font-size="10" font-weight="600" fill="#3b82f6">推理核心（来自 LLM 架构）</text>
+  <rect x="686" y="144" width="150" height="52" rx="8" fill="#dbeafe" stroke="#3b82f6" stroke-width="2" filter="url(#sh)"/>
+  <text x="761" y="167" text-anchor="middle" font-size="16" font-weight="700" fill="#1e3a8a">LLM</text>
+  <text x="761" y="184" text-anchor="middle" font-size="9" fill="#2563eb">推理引擎</text>
+  <rect x="868" y="144" width="128" height="52" rx="8" fill="#ffffff" stroke="#4ade80" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="932" y="167" text-anchor="middle" font-size="13" font-weight="600" fill="#166534">CoT / ReAct</text>
+  <text x="932" y="184" text-anchor="middle" font-size="9" fill="#15803d">推理 + 行动</text>
+  <rect x="1028" y="144" width="122" height="52" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" filter="url(#sh)"/>
+  <text x="1089" y="167" text-anchor="middle" font-size="15" font-weight="700" fill="#166534">Agent</text>
+  <text x="1089" y="184" text-anchor="middle" font-size="9" fill="#15803d">自主决策循环</text>
+  <line x1="836" y1="170" x2="868" y2="170" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <line x1="996" y1="170" x2="1028" y2="170" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <rect x="668" y="226" width="590" height="110" rx="8" fill="#f0fdf4" fill-opacity="0.3" stroke="#86efac" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="686" y="244" font-size="10" font-weight="600" fill="#166534">决策循环 · ReAct Loop</text>
+  <rect x="700" y="256" width="120" height="42" rx="7" fill="#ffffff" stroke="#4ade80" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="760" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">Thought</text>
+  <text x="760" y="290" text-anchor="middle" font-size="8" fill="#15803d">LLM 推理</text>
+  <rect x="860" y="256" width="120" height="42" rx="7" fill="#ffffff" stroke="#a855f7" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="920" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">Action</text>
+  <text x="920" y="290" text-anchor="middle" font-size="8" fill="#6b21a8">Function Calling</text>
+  <rect x="1020" y="256" width="120" height="42" rx="7" fill="#ffffff" stroke="#6b7280" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="1080" y="275" text-anchor="middle" font-size="12" font-weight="600" fill="#374151">Observation</text>
+  <text x="1080" y="290" text-anchor="middle" font-size="8" fill="#6b7280">执行结果</text>
+  <line x1="820" y1="277" x2="860" y2="277" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <line x1="980" y1="277" x2="1020" y2="277" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <path d="M 1080,298 L 1080,322 L 760,322 L 760,298" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-gray)"/>
+  <rect x="860" y="310" width="108" height="18" rx="4" fill="#374151"/>
+  <text x="914" y="323" text-anchor="middle" font-size="9" font-weight="600" fill="#ffffff">循环反馈给 LLM</text>
+  <path d="M 1089,196 L 1089,220 L 760,220 L 760,256" stroke="#22c55e" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-green)"/>
+  <rect x="668" y="356" width="590" height="90" rx="8" fill="#faf5ff" fill-opacity="0.5" stroke="#e9d5ff" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="686" y="374" font-size="10" font-weight="600" fill="#7c3aed">工具层</text>
+  <rect x="686" y="384" width="110" height="42" rx="7" fill="#ffffff" stroke="#c084fc" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="741" y="403" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">Tool</text>
+  <text x="741" y="418" text-anchor="middle" font-size="8" fill="#6b21a8">外部能力扩展</text>
+  <rect x="824" y="384" width="130" height="42" rx="7" fill="#ffffff" stroke="#c084fc" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="889" y="403" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">Function Calling</text>
+  <text x="889" y="418" text-anchor="middle" font-size="8" fill="#6b21a8">结构化工具接口</text>
+  <rect x="982" y="384" width="95" height="42" rx="7" fill="#ffffff" stroke="#a855f7" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="1029" y="403" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">MCP</text>
+  <text x="1029" y="418" text-anchor="middle" font-size="8" fill="#6b21a8">标准化协议</text>
+  <rect x="1105" y="384" width="95" height="42" rx="7" fill="#ffffff" stroke="#a855f7" stroke-width="1.5" filter="url(#sh)"/>
+  <text x="1152" y="403" text-anchor="middle" font-size="12" font-weight="600" fill="#7c3aed">Skill</text>
+  <text x="1152" y="418" text-anchor="middle" font-size="8" fill="#6b21a8">模块化能力</text>
+  <line x1="796" y1="405" x2="824" y2="405" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <line x1="954" y1="405" x2="982" y2="405" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <line x1="1077" y1="405" x2="1105" y2="405" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <path d="M 920,298 L 920,346 L 889,346 L 889,384" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-purple)"/>
+  <text x="932" y="342" font-size="8" fill="#7c3aed">调用工具</text>
+  <rect x="668" y="468" width="590" height="80" rx="8" fill="#f0fdfa" fill-opacity="0.3" stroke="#99f6e4" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="686" y="486" font-size="10" font-weight="600" fill="#0891b2">知识层（来自 LLM 架构的记忆层）</text>
+  <rect x="686" y="496" width="140" height="36" rx="6" fill="#ffffff" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="756" y="512" text-anchor="middle" font-size="11" font-weight="600" fill="#0e7490">Memory</text>
+  <text x="756" y="524" text-anchor="middle" font-size="8" fill="#0891b2">短期 + 长期</text>
+  <rect x="852" y="496" width="120" height="36" rx="6" fill="#ffffff" stroke="#22d3ee" stroke-width="1.2"/>
+  <text x="912" y="512" text-anchor="middle" font-size="11" font-weight="600" fill="#0e7490">Vector DB</text>
+  <text x="912" y="524" text-anchor="middle" font-size="8" fill="#0891b2">长期记忆</text>
+  <rect x="1000" y="496" width="120" height="36" rx="6" fill="#ffffff" stroke="#14b8a6" stroke-width="1.5"/>
+  <text x="1060" y="512" text-anchor="middle" font-size="12" font-weight="700" fill="#0f766e">RAG</text>
+  <text x="1060" y="524" text-anchor="middle" font-size="8" fill="#0d9488">检索增强生成</text>
+  <line x1="826" y1="514" x2="852" y2="514" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arr-cyan)"/>
+  <line x1="972" y1="514" x2="1000" y2="514" stroke="#06b6d4" stroke-width="1.2" marker-end="url(#arr-cyan)"/>
+  <path d="M 1060,496 L 1060,460 L 760,460 L 760,298" stroke="#06b6d4" stroke-width="1.2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <text x="900" y="455" font-size="8" fill="#0891b2">知识注入</text>
+  <!-- Bridge -->
+  <path d="M 480,246 L 625,246 L 625,170 L 686,170" stroke="#f97316" stroke-width="2" stroke-dasharray="8,4" fill="none" marker-end="url(#arr-orange)"/>
+  <rect x="596" y="192" width="90" height="22" rx="5" fill="#1e1b4b" stroke="#f97316" stroke-width="1"/>
+  <text x="641" y="207" text-anchor="middle" font-size="10" font-weight="700" fill="#ffffff">推理引擎</text>
+  <path d="M 307,448 L 625,448 L 625,405 L 824,405" stroke="#a855f7" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-purple)"/>
+  <rect x="600" y="434" width="72" height="16" rx="4" fill="#faf5ff"/>
+  <text x="636" y="446" text-anchor="middle" font-size="8" fill="#7c3aed">函数定义</text>
+  <path d="M 455,567 L 625,567 L 625,514 L 686,514" stroke="#06b6d4" stroke-width="1" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <text x="636" y="548" font-size="8" fill="#0891b2">记忆共享</text>
+  <!-- Legend -->
+  <rect x="120" y="668" width="1060" height="42" rx="8" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <line x1="140" y1="689" x2="170" y2="689" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr-blue)"/>
+  <text x="176" y="693" font-size="11" fill="#6b7280">数据流</text>
+  <line x1="265" y1="689" x2="295" y2="689" stroke="#f97316" stroke-width="1.5" marker-end="url(#arr-orange)"/>
+  <text x="301" y="693" font-size="11" fill="#6b7280">训练/桥接</text>
+  <line x1="415" y1="689" x2="445" y2="689" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arr-green)"/>
+  <text x="451" y="693" font-size="11" fill="#6b7280">Agent 流</text>
+  <line x1="555" y1="689" x2="585" y2="689" stroke="#a855f7" stroke-width="1.5" marker-end="url(#arr-purple)"/>
+  <text x="591" y="693" font-size="11" fill="#6b7280">协议/工具</text>
+  <line x1="715" y1="689" x2="745" y2="689" stroke="#06b6d4" stroke-width="1.5" marker-end="url(#arr-cyan)"/>
+  <text x="751" y="693" font-size="11" fill="#6b7280">记忆/检索</text>
+  <line x1="875" y1="689" x2="905" y2="689" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arr-gray)"/>
+  <text x="911" y="693" font-size="11" fill="#6b7280">反馈/循环</text>
+  <text x="1250" y="770" text-anchor="end" font-size="10" fill="#94a3b8">共 18 个核心概念 · V10</text>
+</svg>

@@ -30,9 +30,49 @@
 | Skill | 用途 | 安装命令 |
 |-------|------|---------|
 | **`tavily-search`** | Web 搜索预验证 | `npx skills add https://github.com/tavily-ai/skills --skill tavily-search` |
-| **`baoyu-url-to-markdown`** | 网页抓取（含 X/Twitter、知乎） | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-url-to-markdown` |
+| **`baoyu-url-to-markdown`** | 网页抓取（含 X/Twitter、知乎、通用网页） | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-url-to-markdown` |
 | **`wechat-article-to-markdown`** | 微信文章抓取 | `npx skills add https://github.com/jackwener/wechat-article-to-markdown --skill wechat-article-to-markdown` |
 | **`baoyu-youtube-transcript`** | YouTube 字幕提取 | `npx skills add https://github.com/jimliu/baoyu-skills --skill baoyu-youtube-transcript` |
+| **`pdf`** | 学术论文 PDF 处理（提取文本/表格、OCR） | `npx skills add https://github.com/anthropics/skills --skill pdf` |
+
+**下载 PDF**：无需 skill，直接用 `curl` 即可：
+```bash
+curl -L -o raw/<shelf>/pdfs/<slug>.pdf "https://arxiv.org/pdf/<id>.pdf"
+```
+
+### Skill 工具调用后的执行流程
+
+当调用 `Skill` 工具获取 skill 说明后：
+
+1. **读取**返回的 SKILL.md 文档
+2. **找到** CLI 命令（通常在 `## CLI Setup` 或 `## Usage` 部分）
+3. **手动执行**该命令，而非寻找其他工具
+4. 如命令需要参数（URL、output path），从 candidates.md 或用户提供的信息中获取
+
+**错误示例**：
+```
+Skill tool 返回 SKILL.md → 误以为没有可用工具 → 使用 fetch_content
+```
+
+**正确流程**：
+```
+Skill tool 返回 SKILL.md → 找到 CLI 命令 → 在终端执行该命令
+```
+
+### 特殊来源处理规则
+
+| 来源类型 | 处理方式 | 工具 | URL 要求 |
+|---------|---------|------|---------|
+| 通用网页 | HTML 转 Markdown | `baoyu-url-to-markdown` | 直接使用原始 URL |
+| **学术论文（arXiv、IEEE、ACM 等）** | **下载 PDF 原文** | **`curl` 直接下载** | 使用 `/pdf/` 链接；存入 `pdfs/` |
+| 视频字幕 | 提取字幕 | `baoyu-youtube-transcript` | YouTube 视频 URL |
+| 微信文章 | 专用抓取 | `wechat-article-to-markdown` | 微信文章链接 |
+| GitHub README | 下载源码/文档 | `baoyu-url-to-markdown` | GitHub 仓库 URL |
+
+**特别注意**：
+- arXiv 论文使用 `https://arxiv.org/pdf/<id>.pdf` 下载 PDF
+- 不要只抓取摘要页（`/abs/<id>`），摘要信息不完整
+- Collect 阶段仅下载 PDF，不转换；PDF 处理在 ingest 阶段按需进行
 
 > Agent 在执行 Collect 前，**必须强制检查**环境中是否已安装对应 skill。若缺失，**必须询问用户是否安装**，**未安装完成前不得执行 Collect 操作**。不允许跳过检查。
 

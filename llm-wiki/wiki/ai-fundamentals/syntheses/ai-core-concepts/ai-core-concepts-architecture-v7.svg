@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800">
+  <defs>
+    <marker id="arr-orange" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#f97316"/>
+    </marker>
+    <marker id="arr-green" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#22c55e"/>
+    </marker>
+    <marker id="arr-purple" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#a855f7"/>
+    </marker>
+    <marker id="arr-cyan" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#06b6d4"/>
+    </marker>
+    <marker id="arr-blue" markerWidth="8" markerHeight="6" refX="7" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#3b82f6"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  <rect width="1200" height="800" fill="#ffffff"/>
+  <text x="600" y="35" text-anchor="middle" font-family="system-ui,sans-serif" font-size="24" font-weight="700" fill="#1e293b">AI 核心概念关系图</text>
+  <text x="600" y="58" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" fill="#64748b">系统内部关系 + 系统间协作</text>
+  <rect x="40" y="80" width="220" height="360" rx="12" fill="#fff7ed" stroke="#fed7aa" stroke-width="2"/>
+  <text x="60" y="108" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#c2410c">训练系统</text>
+  <rect x="60" y="130" width="180" height="55" rx="8" fill="#ffffff" stroke="#fb923c" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="150" y="155" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#c2410c">Scaling Laws</text>
+  <text x="150" y="175" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#9a3412">算力/参数/数据 分配规律</text>
+  <path d="M 150 185 L 150 210" stroke="#f97316" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <rect x="60" y="215" width="180" height="55" rx="8" fill="#ffffff" stroke="#fb923c" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="150" y="240" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#c2410c">Pre-training</text>
+  <text x="150" y="260" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#9a3412">Next Token Prediction</text>
+  <path d="M 150 270 L 150 295" stroke="#f97316" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <rect x="60" y="300" width="180" height="55" rx="8" fill="#ffffff" stroke="#fb923c" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="150" y="325" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#c2410c">Fine-tuning</text>
+  <text x="150" y="345" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#9a3412">SFT / LoRA / PEFT</text>
+  <path d="M 150 355 L 150 380" stroke="#f97316" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <rect x="60" y="385" width="180" height="55" rx="8" fill="#ffffff" stroke="#f97316" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="150" y="410" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#c2410c">Alignment</text>
+  <text x="150" y="430" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#9a3412">RLHF / DPO</text>
+  <rect x="310" y="80" width="280" height="360" rx="12" fill="#fef3c7" stroke="#fde68a" stroke-width="2"/>
+  <text x="330" y="108" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#92400e">LLM 核心</text>
+  <ellipse cx="450" cy="170" rx="100" ry="50" fill="#fef3c7" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="450" y="165" text-anchor="middle" font-family="system-ui,sans-serif" font-size="22" font-weight="700" fill="#92400e">LLM</text>
+  <text x="450" y="188" text-anchor="middle" font-family="system-ui,sans-serif" font-size="12" fill="#b45309">Next Token Prediction</text>
+  <path d="M 240 412 L 360 200" stroke="#f97316" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-orange)"/>
+  <rect x="248" y="320" width="65" height="24" rx="6" fill="#1c1917" stroke="#fb923c" stroke-width="1"/>
+  <text x="280" y="337" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#ffffff">行为对齐</text>
+  <rect x="360" y="245" width="180" height="55" rx="10" fill="#dcfce7" stroke="#22c55e" stroke-width="2"/>
+  <text x="450" y="270" text-anchor="middle" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#166534">Transformer</text>
+  <text x="450" y="290" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" fill="#15803d">Self-Attention + FFN</text>
+  <path d="M 450 215 L 450 245" stroke="#22c55e" stroke-width="2" marker-end="url(#arr-green)"/>
+  <text x="330" y="335" font-family="system-ui,sans-serif" font-size="12" font-weight="600" fill="#64748b">输入管道</text>
+  <rect x="330" y="350" width="90" height="50" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="375" y="375" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#1e40af">Token</text>
+  <text x="375" y="392" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#3b82f6">Tokenization</text>
+  <path d="M 425 375 L 460 375" stroke="#3b82f6" stroke-width="2" marker-end="url(#arr-blue)"/>
+  <rect x="465" y="350" width="105" height="50" rx="8" fill="#eff6ff" stroke="#3b82f6" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="517" y="375" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#1e40af">Embedding</text>
+  <text x="517" y="392" text-anchor="middle" font-family="system-ui,sans-serif" font-size="9" fill="#3b82f6">+ Positional Encoding</text>
+  <path d="M 517 350 L 517 300" stroke="#3b82f6" stroke-width="2" marker-end="url(#arr-blue)"/>
+  <rect x="640" y="80" width="220" height="360" rx="12" fill="#faf5ff" stroke="#e9d5ff" stroke-width="2"/>
+  <text x="660" y="108" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#7c3aed">Agent 系统</text>
+  <path d="M 550 170 L 660 170" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,3" fill="none" marker-end="url(#arr-purple)"/>
+  <rect x="585" y="148" width="68" height="26" rx="6" fill="#1e1b4b" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="619" y="166" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#ffffff">推理引擎</text>
+  <rect x="660" y="130" width="180" height="50" rx="8" fill="#ffffff" stroke="#c084fc" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="750" y="155" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#7c3aed">Prompt</text>
+  <text x="750" y="172" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6b21a8">用户输入 + 上下文</text>
+  <path d="M 750 180 L 750 205" stroke="#a855f7" stroke-width="2" marker-end="url(#arr-purple)"/>
+  <rect x="660" y="210" width="180" height="55" rx="8" fill="#ffffff" stroke="#c084fc" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="750" y="235" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#7c3aed">CoT / ReAct</text>
+  <text x="750" y="252" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6b21a8">Thought → Action → Observation</text>
+  <path d="M 750 265 L 750 290" stroke="#a855f7" stroke-width="2" marker-end="url(#arr-purple)"/>
+  <rect x="660" y="295" width="180" height="55" rx="8" fill="#ffffff" stroke="#c084fc" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="750" y="320" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="600" fill="#7c3aed">Tool / Function</text>
+  <text x="750" y="337" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#6b21a8">MCP / API / Code</text>
+  <path d="M 750 350 L 750 375" stroke="#a855f7" stroke-width="2" marker-end="url(#arr-purple)"/>
+  <rect x="660" y="380" width="180" height="50" rx="8" fill="#f3e8ff" stroke="#a855f7" stroke-width="2" filter="url(#shadow)"/>
+  <text x="750" y="410" text-anchor="middle" font-family="system-ui,sans-serif" font-size="18" font-weight="700" fill="#6b21a8">Agent</text>
+  <path d="M 700 380 Q 700 340 730 340 Q 760 340 760 290" stroke="#a855f7" stroke-width="2.5" stroke-dasharray="6,3" fill="none" marker-end="url(#arr-purple)"/>
+  <rect x="710" y="325" width="58" height="24" rx="6" fill="#1e1b4b" stroke="#c084fc" stroke-width="1.5"/>
+  <text x="739" y="341" text-anchor="middle" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#ffffff">ReAct 循环</text>
+  <rect x="40" y="470" width="520" height="140" rx="12" fill="#ecfeff" stroke="#a5f3fc" stroke-width="2"/>
+  <text x="60" y="500" font-family="system-ui,sans-serif" font-size="15" font-weight="700" fill="#0891b2">记忆系统</text>
+  <text x="60" y="520" font-family="system-ui,sans-serif" font-size="11" fill="#0e7490">为 LLM 和 Agent 提供记忆能力</text>
+  <rect x="60" y="535" width="100" height="60" rx="8" fill="#ffffff" stroke="#22d3ee" stroke-width="2" filter="url(#shadow)"/>
+  <text x="110" y="562" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#0e7490">Context</text>
+  <text x="110" y="580" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#0891b2">工作记忆</text>
+  <path d="M 165 565 L 200 565" stroke="#06b6d4" stroke-width="2" marker-end="url(#arr-cyan)"/>
+  <rect x="205" y="535" width="90" height="60" rx="8" fill="#ffffff" stroke="#22d3ee" stroke-width="2" filter="url(#shadow)"/>
+  <text x="250" y="562" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#0e7490">Memory</text>
+  <text x="250" y="580" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#0891b2">信息组织</text>
+  <path d="M 300 565 L 335 565" stroke="#06b6d4" stroke-width="2" marker-end="url(#arr-cyan)"/>
+  <rect x="340" y="535" width="100" height="60" rx="8" fill="#ffffff" stroke="#22d3ee" stroke-width="2" filter="url(#shadow)"/>
+  <text x="390" y="562" text-anchor="middle" font-family="system-ui,sans-serif" font-size="13" font-weight="600" fill="#0e7490">Vector DB</text>
+  <text x="390" y="580" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#0891b2">长期记忆</text>
+  <path d="M 445 565 L 470 565" stroke="#14b8a6" stroke-width="2" marker-end="url(#arr-cyan)"/>
+  <rect x="475" y="535" width="75" height="60" rx="8" fill="#ffffff" stroke="#14b8a6" stroke-width="2" filter="url(#shadow)"/>
+  <text x="512" y="562" text-anchor="middle" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#0f766e">RAG</text>
+  <text x="512" y="580" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" fill="#0d9488">检索增强</text>
+  <path d="M 110 535 L 110 450 L 320 220 L 360 220" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <rect x="125" y="340" width="70" height="22" rx="5" fill="#0c4a6e" stroke="#22d3ee" stroke-width="1"/>
+  <text x="160" y="356" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="#ffffff">上下文注入</text>
+  <path d="M 250 535 L 250 420 L 640 130" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <rect x="380" y="390" width="70" height="22" rx="5" fill="#0c4a6e" stroke="#22d3ee" stroke-width="1"/>
+  <text x="415" y="406" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="#ffffff">上下文增强</text>
+  <path d="M 512 535 L 512 420 L 540 220 L 560 220" stroke="#14b8a6" stroke-width="1.5" stroke-dasharray="4,3" fill="none" marker-end="url(#arr-cyan)"/>
+  <rect x="530" y="320" width="60" height="22" rx="5" fill="#134e4a" stroke="#14b8a6" stroke-width="1"/>
+  <text x="560" y="336" text-anchor="middle" font-family="system-ui,sans-serif" font-size="10" font-weight="600" fill="#ffffff">外部知识</text>
+  <rect x="580" y="470" width="160" height="140" rx="10" fill="#ffffff" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="600" y="495" font-family="system-ui,sans-serif" font-size="13" font-weight="700" fill="#374151">图例</text>
+  <line x1="600" y1="520" x2="630" y2="520" stroke="#f97316" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="640" y="524" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">训练系统内部</text>
+  <line x1="600" y1="544" x2="630" y2="544" stroke="#a855f7" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="640" y="548" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">Agent 系统内部</text>
+  <line x1="600" y1="568" x2="630" y2="568" stroke="#3b82f6" stroke-width="2"/>
+  <text x="640" y="572" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">数据流</text>
+  <line x1="600" y1="592" x2="630" y2="592" stroke="#22c55e" stroke-width="2"/>
+  <text x="640" y="596" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">架构核心</text>
+  <line x1="600" y1="616" x2="630" y2="616" stroke="#06b6d4" stroke-width="1.5" stroke-dasharray="4,3"/>
+  <text x="640" y="620" font-family="system-ui,sans-serif" font-size="11" fill="#6b7280">记忆/协作</text>
+  <rect x="760" y="470" width="400" height="140" rx="10" fill="#fff1f2" stroke="#fecdd3" stroke-width="1.5"/>
+  <text x="780" y="495" font-family="system-ui,sans-serif" font-size="14" font-weight="700" fill="#be123c">系统间协作关系</text>
+  <path d="M 800 530 L 800 555" stroke="#f97316" stroke-width="2" marker-end="url(#arr-orange)"/>
+  <text x="810" y="550" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#c2410c">训练→LLM</text>
+  <path d="M 900 530 L 900 555" stroke="#a855f7" stroke-width="2" marker-end="url(#arr-purple)"/>
+  <text x="910" y="550" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#7c3aed">LLM→Agent</text>
+  <path d="M 1000 530 L 1000 555" stroke="#06b6d4" stroke-width="2" marker-end="url(#arr-cyan)"/>
+  <text x="1010" y="550" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#0891b2">Memory→LLM</text>
+  <path d="M 1110 530 L 1110 555" stroke="#14b8a6" stroke-width="2" marker-end="url(#arr-cyan)"/>
+  <text x="1120" y="550" font-family="system-ui,sans-serif" font-size="11" font-weight="600" fill="#0f766e">RAG→LLM</text>
+  <text x="780" y="585" font-family="system-ui,sans-serif" font-size="12" fill="#9f1239">训练系统塑造 LLM 能力 → LLM 驱动 Agent 推理</text>
+  <text x="780" y="603" font-family="system-ui,sans-serif" font-size="12" fill="#9f1239">记忆系统提供上下文 → RAG 注入外部知识 → LLM</text>
+</svg>
