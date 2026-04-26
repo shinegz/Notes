@@ -37,12 +37,12 @@ graph TD
 
 ### 1. Planning
 
-| 方法 | 描述 | 来源 |
-|------|------|------|
-| [[ai-fundamentals/concepts/chain-of-thought-react|CoT]] | 链式思考，一步一步推理 | — |
-| [[ai-fundamentals/concepts/chain-of-thought-react|ReAct]] | Thought → Action → Observation | [[ai-fundamentals/sources/react-chain-of-thought|2]] |
-| Reflexion | 加入自我反思 | — |
-| ToT | 探索多条推理路径 | — |
+| 方法        | 描述                             | 来源                                                        |
+| --------- | ------------------------------ | --------------------------------------------------------- |
+| CoT       | 链式思考，一步一步推理                    | —                                                         |
+| ReAct     | Thought → Action → Observation | [[ai-fundamentals/sources/react-chain-of-thought|ReAct]] |
+| Reflexion | 加入自我反思                         | —                                                         |
+| ToT       | 探索多条推理路径                       | —                                                         |
 
 ### 2. Memory
 

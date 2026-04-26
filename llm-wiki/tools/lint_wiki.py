@@ -24,6 +24,10 @@ from pathlib import Path
 
 SKIP_NAMES = {"log.md", "lint-report.md"}
 WIKILINK_RE = re.compile(r"\[\[([^\]]+)\]\]")
+# Regex to detect WikiLink with display text: [[path|display]]
+WIKILINK_WITH_DISPLAY_RE = re.compile(r"\[\[([^\]|]+)\s+\|\s*([^\]]+)\]\]")
+# Regex to detect malformed WikiLink (path before | has trailing whitespace)
+WIKILINK_PATH_SPACE_RE = re.compile(r"\[\[([^\]|]+)\s+\|[^\]]+\]\]")
 
 
 def norm_target(raw: str) -> str:
@@ -105,6 +109,41 @@ def key_claims_section_has_placeholder(text: str) -> bool:
             if "ingest 占位" in line or "ingest占位" in line:
                 return True
     return False
+
+
+def check_wikilink_format(text: str, src_id: str) -> list[tuple[str, str, str]]:
+    """Check WikiLink formatting issues: path before | has trailing spaces, missing display text."""
+    errors = []
+    for match in WIKILINK_PATH_SPACE_RE.finditer(text):
+        path = match.group(1)
+        errors.append((src_id, path, "wikilink_path_has_trailing_space"))
+    for match in WIKILINK_WITH_DISPLAY_RE.finditer(text):
+        path = match.group(1)
+        if path != path.strip():
+            errors.append((src_id, path, "wikilink_path_has_trailing_space"))
+    for raw_match in WIKILINK_RE.finditer(text):
+        inner = raw_match.group(1)
+        if "|" not in inner and not inner.startswith("http"):
+            errors.append((src_id, inner, "wikilink_missing_display_text"))
+    return errors
+
+
+def check_table_alignment(text: str, src_id: str) -> list[tuple[str, str, str]]:
+    """Check table separator column count matches header column count."""
+    errors = []
+    lines = text.splitlines()
+    i = 0
+    while i < len(lines):
+        line = lines[i].rstrip()
+        if line.startswith("|") and "---" in line:
+            prev_line = lines[i - 1] if i > 0 else ""
+            if prev_line.startswith("|"):
+                header_cols = prev_line.count("|") - 1
+                separator_cols = line.count("|") - 1
+                if separator_cols != header_cols:
+                    errors.append((src_id, f"header={header_cols} sep={separator_cols}", "table_separator_col_mismatch"))
+        i += 1
+    return errors
 
 
 def parse_taxonomy_shelves(root: Path) -> list[str]:
@@ -265,10 +304,14 @@ def main() -> int:
 
     broken: list[tuple[str, str, str]] = []
     inbound: dict[str, int] = defaultdict(int)
+    wikilink_format_errors: list[tuple[str, str, str]] = []
+    table_errors: list[tuple[str, str, str]] = []
 
     for p in pages:
         text = p.read_text(encoding="utf-8", errors="ignore")
         src_id = page_id(p.relative_to(wiki_dir))
+        wikilink_format_errors.extend(check_wikilink_format(text, src_id))
+        table_errors.extend(check_table_alignment(text, src_id))
         for raw in extract_links(text):
             if not raw or raw.startswith("http"):
                 continue
@@ -378,7 +421,18 @@ def main() -> int:
         if len(issues) > 5:
             print(f"  ... ({len(issues) - 5} more in {idx_id})")
 
-    fail = bool(broken or missing_raw or frontmatter_errors or taxonomy_missing or taxonomy_unregistered or global_index_missing or index_coverage_issues)
+    print(f"wikilink_format_errors: {len(wikilink_format_errors)}")
+    for src, path, err in wikilink_format_errors[:40]:
+        print(f"  {src} -> {err}: [[{path}]]")
+    if len(wikilink_format_errors) > 40:
+        print(f"  ... ({len(wikilink_format_errors) - 40} more)")
+    print(f"table_errors: {len(table_errors)}")
+    for src, detail, err in table_errors[:40]:
+        print(f"  {src} -> {err}: {detail}")
+    if len(table_errors) > 40:
+        print(f"  ... ({len(table_errors) - 40} more)")
+
+    fail = bool(broken or missing_raw or frontmatter_errors or taxonomy_missing or taxonomy_unregistered or global_index_missing or index_coverage_issues or wikilink_format_errors or table_errors)
     if args.strict_ingest and thin_ingest:
         fail = True
     return 1 if fail else 0

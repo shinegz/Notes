@@ -22,11 +22,18 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 - [[ai-fundamentals/sources/rlhf-from-feedback|RLHF from Human Feedback]] — RLHF 奠基论文（summarization）
 - [[ai-fundamentals/sources/dpo|DPO]] — 直接偏好优化，无需显式奖励模型
 
+### Prompt Engineering
+- [[ai-fundamentals/sources/openai-prompt-engineering|OpenAI Prompt Engineering]] — 官方 Prompt 最佳实践
+
 ### 效率优化
 - [[ai-fundamentals/sources/flash-attention|Flash Attention]] — IO感知的精确注意力
 - [[ai-fundamentals/sources/lora|LoRA]] — 低秩适配，参数高效微调
 - [[ai-fundamentals/sources/gqa|GQA]] — Grouped-Query Attention，推理内存优化
 - [[ai-fundamentals/sources/rope|RoPE]] — 旋转位置编码
+
+### MoE / Benchmark
+- [[ai-fundamentals/sources/mixtral|Mixtral]] — 开源 MoE 代表作
+- [[ai-fundamentals/sources/mmlu|MMLU]] — 多学科知识评测基准
 
 ### Agent / Tool Use
 - [[ai-fundamentals/sources/llm-powered-autonomous-agents|LLM Powered Autonomous Agents]] — Lilian Weng 的 Agent 系统综述
@@ -44,6 +51,9 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 - [[ai-fundamentals/sources/word2vec|word2vec]] — 词嵌入与向量语义
 - [[ai-fundamentals/sources/gan|GAN]] — 生成对抗网络
 
+### 基础概念
+- 待补充 sources：Machine Learning, Deep Learning, Reinforcement Learning, Neural Network, Backpropagation, Gradient Descent
+
 ## 概念页
 
 - [[ai-fundamentals/concepts/transformer|Transformer]]
@@ -60,13 +70,23 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 - [[ai-fundamentals/concepts/chain-of-thought-react|Chain-of-Thought & ReAct]]
 - [[ai-fundamentals/concepts/fine-tuning|Fine-tuning]]
 - [[ai-fundamentals/concepts/function-calling|Function Calling]]
+- [[ai-fundamentals/concepts/direct-preference-optimization|DPO]]
+- [[ai-fundamentals/concepts/lora|LoRA]]
+- [[ai-fundamentals/concepts/prompt-engineering|Prompt Engineering]]
+- [[ai-fundamentals/concepts/context-window|Context Window]]
+- [[ai-fundamentals/concepts/mixture-of-experts|Mixture of Experts]]
+- [[ai-fundamentals/concepts/llm-benchmark|LLM Benchmark]]
+- [[ai-fundamentals/concepts/machine-learning|Machine Learning]]
+- [[ai-fundamentals/concepts/deep-learning|Deep Learning]]
+- [[ai-fundamentals/concepts/neural-network|Neural Network]]
+- [[ai-fundamentals/concepts/reinforcement-learning|Reinforcement Learning]]
+- [[ai-fundamentals/concepts/backpropagation|Backpropagation]]
+- [[ai-fundamentals/concepts/gradient-descent|Gradient Descent]]
 
 ## 综合文
 
-- [[ai-fundamentals/syntheses/ai-core-concepts|AI核心概念体系]] — 基于 source 资料的概念地图（Token、Context、Prompt、LLM、Tool、Agent、MCP、Skill）
 - [[ai-fundamentals/syntheses/token-lifecycle|一个 Token 的一生]] — 用图文故事解释 LLM 运行原理
 
 ## 参见
 
-- [[index]] — 总索引
-- [[ai-fundamentals/overview]] — AI Fundamentals 总览
+- [[ai-fundamentals/index|index]] — 总索引

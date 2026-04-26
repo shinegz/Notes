@@ -38,5 +38,5 @@ A comprehensive historical overview of AI from antiquity (myths of artificial be
 
 ## Connections
 
-- [[attention-is-all-you-need]] — Transformer architecture (2017) as latest major milestone
-- [[ai-index-stanford-hai]] — Modern quantitative tracking of AI's trajectory
+- [[ai-fundamentals/sources/attention-is-all-you-need|Attention Is All You Need]] — Transformer architecture (2017) as latest major milestone
+- [[ai-fundamentals/sources/ai-index-stanford-hai|AI Index]] — Modern quantitative tracking of AI's trajectory

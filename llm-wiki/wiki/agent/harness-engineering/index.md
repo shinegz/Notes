@@ -32,5 +32,4 @@
 ## 参见
 
 - [[agent/index|agent 门类]]
-- [[index]] — 总索引
-- [[overview]] — Living overview
+- [[agent/harness-engineering/index|index]] — 总索引

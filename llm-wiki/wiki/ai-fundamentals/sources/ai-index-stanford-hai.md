@@ -40,5 +40,5 @@ While AI continues rapid integration into the global economy — with technical 
 
 ## Connections
 
-- [[history-of-artificial-intelligence]] — Historical context for AI development trends
+- [[ai-fundamentals/sources/history-of-artificial-intelligence|AI History]] — Historical context for AI development trends
 - [[scaling-laws-kaplan|Scaling Laws]] — Technical trends measured in the Index

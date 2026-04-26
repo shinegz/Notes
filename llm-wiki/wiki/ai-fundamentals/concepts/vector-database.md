@@ -46,8 +46,8 @@ ANN 算法通过索引结构近似搜索，将复杂度降到 O(log N) 或更低
 ## Agent 中的 Memory 分层
 
 | 记忆类型 | 实现 | 容量 | 来源 |
-|----------|------|------|------|
-| **短期记忆** | In-context learning / Prompt | 有限（context window）| [[ai-fundamentals/sources/llm-powered-autonomous-agents|Agent Survey]] |
+|---------|------|------|------|
+| **短期记忆** | In-context learning / Prompt | 有限（context window） | [[ai-fundamentals/sources/llm-powered-autonomous-agents|Agent Survey]] |
 | **长期记忆** | Vector DB + ANN 检索 | 理论上无限 | [[ai-fundamentals/sources/llm-powered-autonomous-agents|Agent Survey]] |
 
 短期记忆和长期记忆的区别：

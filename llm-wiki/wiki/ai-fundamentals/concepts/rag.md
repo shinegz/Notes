@@ -46,12 +46,12 @@ RAG 通过引入外部检索步骤解决这两个问题：
 
 ## 关键组件
 
-| 组件 | 作用 | 相关概念 |
-|------|------|----------|
-| **Embedding 模型** | 将查询和文档转化为向量 | [[ai-fundamentals/concepts/embedding|Embedding]] |
-| **Vector DB** | 存储文档向量并快速检索 | [[ai-fundamentals/concepts/vector-database|Vector Database]] |
-| **LLM** | 基于检索结果生成回答 | [[ai-fundamentals/concepts/language-model-training|LLM]] |
-| **重排序（Rerank）** | 对初步检索结果精排，提升相关性 | — |
+| 组件 | 作用 | 相关概念 | |
+|------|------|----------|---|
+| **Embedding 模型** | 将查询和文档转化为向量 | [[ai-fundamentals/concepts/embedding|Embedding]] | — |
+| **Vector DB** | 存储文档向量并快速检索 | [[ai-fundamentals/concepts/vector-database|Vector DB]] | — |
+| **LLM** | 基于检索结果生成回答 | [[ai-fundamentals/concepts/language-model-training|LLM]] | — |
+| **重排序（Rerank）** | 对初步检索结果精排，提升相关性 | — | |
 
 ## 来源
 

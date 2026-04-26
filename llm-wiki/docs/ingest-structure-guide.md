@@ -277,34 +277,7 @@
 
 **认知功能**：准确总结和索引一篇外部来源。
 
-**结构**：沿用 `CLAUDE.md` 的 Source Page 格式：
-
-```markdown
----
-title: "Source Title"
-type: source
-tags: []
-last_updated: YYYY-MM-DD
-source_file: raw/<shelf>/...
----
-
-## Summary
-2-4 句话总结。
-
-## Key Claims
-- 主张 1
-- 主张 2
-
-## Key Quotes
-> "引文" — 上下文
-
-## Connections
-- [[EntityName]] — 关联说明
-- [[ConceptName]] — 关联说明
-
-## Contradictions
-- 与 [[OtherPage]] 的矛盾点
-```
+**结构**：完整规范见 **`docs/source-template.md`**。
 
 **约束**：
 - Summary 和 Claims 必须用作者自己的话，不是你的解读

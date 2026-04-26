@@ -4,17 +4,21 @@
     "type": "split",
     "children": [
       {
-        "id": "c1aec5319e1e56df",
+        "id": "8f1147c9ddb9f180",
         "type": "tabs",
         "children": [
           {
-            "id": "47468bec7f4d7a2f",
+            "id": "80d4d9b706e03af5",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {},
+              "type": "markdown",
+              "state": {
+                "file": "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle.md",
+                "mode": "source",
+                "source": false
+              },
               "icon": "lucide-file",
-              "title": "新标签页"
+              "title": "token-lifecycle"
             }
           }
         ]
@@ -74,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 316.5
+    "width": 242.5
   },
   "right": {
     "id": "97b9b14318c4f5dc",
@@ -174,7 +178,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 423.5
+    "width": 202.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -189,14 +193,51 @@
       "claudian:Open Claudian": false
     }
   },
-  "active": "50cd6b7c684b63a2",
+  "active": "80d4d9b706e03af5",
   "lastOpenFiles": [
-    "AI/AGENTS.md",
+    "llm-wiki/docs/source-template.md",
+    "llm-wiki/raw/ai-fundamentals/articles/gradient-descent-overview.md",
+    "llm-wiki/raw/ai-fundamentals/articles/backpropagation-explained.md",
+    "llm-wiki/raw/ai-fundamentals/articles/reinforcement-learning-overview.md",
+    "llm-wiki/raw/ai-fundamentals/articles/neural-network-basics.md",
+    "llm-wiki/raw/ai-fundamentals/articles/deep-learning-overview.md",
+    "llm-wiki/raw/ai-fundamentals/articles/machine-learning-overview.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/gradient-descent.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/backpropagation.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/reinforcement-learning.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/neural-network.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/deep-learning.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/machine-learning.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/llm-benchmark.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/mixture-of-experts.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/context-window.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/prompt-engineering.md",
+    "llm-wiki/wiki/ai-fundamentals/sources/mmlu.md",
+    "llm-wiki/wiki/ai-fundamentals/sources/mixtral.md",
+    "llm-wiki/wiki/ai-fundamentals/sources/openai-prompt-engineering.md",
+    "llm-wiki/raw/ai-fundamentals/articles/openai-prompt-engineering.md",
+    "llm-wiki/raw/ai-fundamentals/pdfs/mmlu.pdf",
+    "llm-wiki/raw/ai-fundamentals/pdfs/mixtral.pdf",
+    "llm-wiki/sessions/20260426-concept-gap/candidates.md",
+    "llm-wiki/sessions/20260426-concept-gap",
+    "llm-wiki/wiki/ai-fundamentals/concepts/llm-agents.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/lora.md",
+    "llm-wiki/wiki/ai-fundamentals/concepts/direct-preference-optimization.md",
+    "llm-wiki/docs/concept-template.md",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-concept-architecture/concept-schematic.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-concept-architecture/concept-network.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-concept-architecture/ai-concept-architecture.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-concept-architecture",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-concept-framework/ai-concept-framework.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-concept-framework",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle/llm-flow.png",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle/vector-arithmetic.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle/transformer-architecture.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle/self-attention.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle/rlhf-flow.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/token-lifecycle/bpe-tokenization.svg",
+    "llm-wiki/wiki/ai-fundamentals/syntheses/ai-core-concepts/ai-core-concepts",
     "Untitled.canvas",
-    "计算机基础/计算机网络/计算机网络学习笔记.md",
-    "AI/agent/Agent-开发技术.md",
-    "AI/python/python学习笔记.md",
-    "AI/vibeCoding/学习总结.md",
     "Untitled.base",
     "Untitled 1.base"
   ]

@@ -1,3 +1,37 @@
+## [2026-04-26] collect | Prompt Engineering (OpenAI Prompt Engineering Guide)
+## [2026-04-26] collect | RoPE - Rotary Position Embedding (arxiv 2104.09864)
+## [2026-04-26] collect | Mixtral 8x7B - Mixture of Experts (arxiv 2401.04088)
+## [2026-04-26] collect | MMLU - Measuring Massive Multitask Language Understanding (arxiv 2009.03300)
+
+## [2026-04-26] collect | Machine Learning Overview (Wikipedia)
+## [2026-04-26] collect | Deep Learning Overview (Wikipedia)
+## [2026-04-26] collect | Neural Network Basics (Wikipedia)
+## [2026-04-26] collect | Reinforcement Learning Overview (Wikipedia)
+## [2026-04-26] collect | Backpropagation Explained (Wikipedia)
+## [2026-04-26] collect | Gradient Descent Overview (Wikipedia)
+
+## [2026-04-26] synthesis | AI Concept Architecture（三层架构 + 跨层关系）
+
+- 新增 `wiki/ai-fundamentals/syntheses/ai-concept-architecture.md`
+- **核心框架**：训练范式层 → LLM 架构层 → Agent 架构层
+- **关系视角**（非分类视角）：使能 / 依赖 / 演进 / 叠加 / 手段 / 实现
+- 覆盖所有 AI 核心概念，包括你提到的机器学习、神经网络、深度学习、强化学习、Transformer、Context、Token、Function Calling、Tool Use、MCP、Skill、Agent、Memory、RAG 等
+- SVG 图：三层架构 + 关系类型 + 跨层连接示例（Dark Terminal 风格）
+- 更新 `wiki/index.md`、`wiki/ai-fundamentals/index.md`
+
+## [2026-04-26] synthesis | 一个 Token 的一生（重写+配图）
+
+- 重写 `wiki/ai-fundamentals/syntheses/token-lifecycle.md`（图文版）
+- 应用 `humanizer-zh` 去除 AI 写作痕迹
+- 用 `fireworks-tech-graph` 生成 5 张 SVG+PNG 图：
+  - `self-attention.svg` — Q/K/V 交互与注意力权重矩阵
+  - `transformer-architecture.svg` — Transformer 层层堆叠架构
+  - `bpe-tokenization.svg` — BPE 分词合并过程
+  - `vector-arithmetic.svg` — king-man+woman≈queen 向量空间
+  - `rlhf-flow.svg` — RLHF 三步法流程
+- 所有图存放于 `wiki/ai-fundamentals/syntheses/token-lifecycle/`（PNG 由 Chrome headless 导出）
+- 更新 `wiki/ai-fundamentals/index.md`、`wiki/index.md`、`wiki/log.md`
+
 ## [2026-04-23] ingest | PDF source summaries completed（pdf skill）
 
 - 使用 `pdf` skill + `pypdf` 提取 13 个 PDF 的文本内容

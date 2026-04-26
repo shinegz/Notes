@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540">
+  <style>
+    text { font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#dc2626"/>
+    </marker>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="960" height="540" fill="#ffffff"/>
+  <text x="480" y="38" text-anchor="middle" font-size="20" font-weight="600" fill="#111827">BPE Tokenization：字节对编码过程</text>
+  <text x="60" y="105" font-size="14" font-weight="600" fill="#6b7280">Step 0: 初始状态</text>
+  <text x="60" y="122" font-size="11" fill="#9ca3af">每个字符单独成 token</text>
+  <rect x="80" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="97" y="169" text-anchor="middle" font-size="14" fill="#374151">l</text>
+  <rect x="118" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="135" y="169" text-anchor="middle" font-size="14" fill="#374151">o</text>
+  <rect x="156" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="173" y="169" text-anchor="middle" font-size="14" fill="#374151">w</text>
+  <rect x="194" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="211" y="169" text-anchor="middle" font-size="14" fill="#374151">_</text>
+  <rect x="232" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="249" y="169" text-anchor="middle" font-size="14" fill="#374151">l</text>
+  <rect x="270" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="287" y="169" text-anchor="middle" font-size="14" fill="#374151">o</text>
+  <rect x="308" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="325" y="169" text-anchor="middle" font-size="14" fill="#374151">w</text>
+  <rect x="346" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="363" y="169" text-anchor="middle" font-size="14" fill="#374151">e</text>
+  <rect x="384" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="401" y="169" text-anchor="middle" font-size="14" fill="#374151">r</text>
+  <rect x="422" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="439" y="169" text-anchor="middle" font-size="14" fill="#374151">_</text>
+  <rect x="460" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="477" y="169" text-anchor="middle" font-size="14" fill="#374151">l</text>
+  <rect x="498" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="515" y="169" text-anchor="middle" font-size="14" fill="#374151">o</text>
+  <rect x="536" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="553" y="169" text-anchor="middle" font-size="14" fill="#374151">w</text>
+  <rect x="574" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="591" y="169" text-anchor="middle" font-size="14" fill="#374151">e</text>
+  <rect x="612" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="629" y="169" text-anchor="middle" font-size="14" fill="#374151">s</text>
+  <rect x="650" y="145" width="34" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="667" y="169" text-anchor="middle" font-size="14" fill="#374151">t</text>
+  <text x="700" y="145" font-size="12" fill="#9ca3af">词频统计：</text>
+  <text x="700" y="163" font-size="11" fill="#6b7280">"low"×3, "er"×2, "est"×1</text>
+  <line x1="480" y1="183" x2="480" y2="218" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <text x="490" y="215" font-size="11" fill="#2563eb">merge "l","o","w"</text>
+  <text x="60" y="228" font-size="14" font-weight="600" fill="#6b7280">Step 1: 合并 "low"</text>
+  <text x="60" y="245" font-size="11" fill="#9ca3af">最高频 pair → 新 token</text>
+  <rect x="80.0" y="253" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="103.0" y="277" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="121.80000000000001" y="253" width="46" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="144.8" y="277" text-anchor="middle" font-size="12" fill="#374151">_</text>
+  <rect x="163.60000000000002" y="253" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="186.60000000000002" y="277" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="205.4" y="253" width="46" height="38" rx="5" fill="#fce7f3" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="228.4" y="277" text-anchor="middle" font-size="12" fill="#374151">er</text>
+  <rect x="247.20000000000002" y="253" width="46" height="38" rx="5" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="270.20000000000005" y="277" text-anchor="middle" font-size="12" fill="#374151">_</text>
+  <rect x="289.0" y="253" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="312.0" y="277" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="330.8" y="253" width="46" height="38" rx="5" fill="#fef3c7" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="353.8" y="277" text-anchor="middle" font-size="12" fill="#374151">est</text>
+  <rect x="80.0" y="253" width="46" height="38" rx="5" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <rect x="163.60000000000002" y="253" width="46" height="38" rx="5" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <rect x="289.0" y="253" width="46" height="38" rx="5" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+  <text x="900" y="273" font-size="11" fill="#dc2626">3×</text>
+  <path d="M 900 273 L 500 170" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,3" fill="none"/>
+  <line x1="480" y1="296" x2="480" y2="331" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <text x="490" y="335" font-size="11" fill="#2563eb">merge "er"</text>
+  <text x="60" y="341" font-size="14" font-weight="600" fill="#6b7280">Step 2: 合并 "er"</text>
+  <text x="60" y="358" font-size="11" fill="#9ca3af">次高频 pair</text>
+  <rect x="80.0" y="366" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="103.0" y="390" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="121.80000000000001" y="366" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="144.8" y="390" text-anchor="middle" font-size="12" fill="#374151">_</text>
+  <rect x="163.60000000000002" y="366" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="186.60000000000002" y="390" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="205.4" y="366" width="46" height="38" rx="5" fill="#fce7f3" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="228.4" y="390" text-anchor="middle" font-size="12" fill="#374151">er</text>
+  <rect x="247.20000000000002" y="366" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="270.20000000000005" y="390" text-anchor="middle" font-size="12" fill="#374151">_</text>
+  <rect x="289.0" y="366" width="46" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="312.0" y="390" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="330.8" y="366" width="46" height="38" rx="5" fill="#fef3c7" stroke="#d1d5db" stroke-width="1.5"/>
+  <text x="353.8" y="390" text-anchor="middle" font-size="12" fill="#374151">est</text>
+  <rect x="205.4" y="366" width="46" height="38" rx="5" fill="#fce7f3" stroke="#db2777" stroke-width="2"/>
+  <text x="900" y="386" font-size="11" fill="#dc2626">2×</text>
+  <path d="M 900 386 L 228.4 390" stroke="#dc2626" stroke-width="1" stroke-dasharray="3,3" fill="none"/>
+  <line x1="480" y1="409" x2="480" y2="444" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <text x="490" y="435" font-size="11" fill="#2563eb">merge "est"</text>
+  <text x="60" y="454" font-size="14" font-weight="600" fill="#6b7280">Step 3: 合并 "est"</text>
+  <text x="60" y="471" font-size="11" fill="#9ca3af">最终状态 → lowest</text>
+  <rect x="80.0" y="479" width="56" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="108.0" y="503" text-anchor="middle" font-size="12" fill="#374151">low</text>
+  <rect x="129.4" y="479" width="56" height="38" rx="5" fill="#fef3c7" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="157.4" y="503" text-anchor="middle" font-size="12" fill="#374151">_</text>
+  <rect x="178.8" y="479" width="56" height="38" rx="5" fill="#dbeafe" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="206.8" y="503" text-anchor="middle" font-size="12" fill="#374151">lower</text>
+  <rect x="228.20000000000002" y="479" width="56" height="38" rx="5" fill="#fef3c7" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="256.20000000000005" y="503" text-anchor="middle" font-size="12" fill="#374151">_</text>
+  <rect x="277.6" y="479" width="56" height="38" rx="5" fill="#fef3c7" stroke="#d1d5db" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="305.6" y="503" text-anchor="middle" font-size="12" fill="#374151">lowest</text>
+  <rect x="700" y="80" width="230" height="100" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="815" y="105" text-anchor="middle" font-size="14" font-weight="600" fill="#15803d">效果对比</text>
+  <text x="815" y="130" text-anchor="middle" font-size="13" fill="#374151">原始: 16 tokens</text>
+  <text x="815" y="152" text-anchor="middle" font-size="13" fill="#374151">BPE后: 5 tokens</text>
+  <text x="815" y="172" text-anchor="middle" font-size="12" fill="#16a34a">压缩率 69%</text>
+  <rect x="700" y="200" width="230" height="80" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="815" y="225" text-anchor="middle" font-size="13" font-weight="600" fill="#6d28d9">GPT-3 Vocab</text>
+  <text x="815" y="248" text-anchor="middle" font-size="12" fill="#7c3aed">50,257 tokens</text>
+  <text x="815" y="268" text-anchor="middle" font-size="11" fill="#9ca3af">常见词 1 token，罕见词拆分子词</text>
+</svg>

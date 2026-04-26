@@ -36,5 +36,4 @@ _暂无。_
 
 ## 参见
 
-- [[index]] — 总索引
-- [[overview]] — Living overview
+- [[index|index]] — 总索引

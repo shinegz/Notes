@@ -1,0 +1,169 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 720">
+  <style>
+    text { font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#059669"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ea580c"/>
+    </marker>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+    </filter>
+  </defs>
+  <rect width="960" height="720" fill="#ffffff"/>
+  <text x="480" y="40" text-anchor="middle" font-size="20" font-weight="600" fill="#111827">Self-Attention 机制：Q/K/V 交互示意</text>
+  <rect x="95" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="120" y="95" text-anchor="middle" font-size="16" fill="#111827">深</text>
+  <rect x="175" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="200" y="95" text-anchor="middle" font-size="16" fill="#111827">度</text>
+  <rect x="255" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="280" y="95" text-anchor="middle" font-size="16" fill="#111827">学</text>
+  <rect x="335" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="360" y="95" text-anchor="middle" font-size="16" fill="#111827">习</text>
+  <rect x="415" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="440" y="95" text-anchor="middle" font-size="16" fill="#111827">是</text>
+  <rect x="495" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="520" y="95" text-anchor="middle" font-size="16" fill="#111827">机</text>
+  <rect x="575" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="600" y="95" text-anchor="middle" font-size="16" fill="#111827">器</text>
+  <rect x="655" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="680" y="95" text-anchor="middle" font-size="16" fill="#111827">学</text>
+  <rect x="735" y="70" width="50" height="40" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="760" y="95" text-anchor="middle" font-size="16" fill="#111827">习</text>
+  <rect x="335" y="70" width="50" height="40" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="360" y="95" text-anchor="middle" font-size="16" font-weight="600" fill="#92400e">学</text>
+  <text x="480" y="155" text-anchor="middle" font-size="13" fill="#6b7280">输入序列：深度学习是机器学习</text>
+  <text x="360" y="195" text-anchor="middle" font-size="14" font-weight="600" fill="#7c3aed">Query 向量（查找相关词）</text>
+  <rect x="98" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="120" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="178" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="200" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="258" y="220" width="44" height="32" rx="4" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="280" y="241" text-anchor="middle" font-size="12" fill="#7c3aed">q₂</text>
+  <rect x="338" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="360" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="418" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="440" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="498" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="520" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="578" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="600" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="658" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="680" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <rect x="738" y="220" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="760" y="241" text-anchor="middle" font-size="12" fill="#9ca3af">—</text>
+  <line x1="360" y1="110" x2="360" y2="215" stroke="#7c3aed" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-purple)"/>
+  <text x="480" y="290" text-anchor="middle" font-size="14" font-weight="600" fill="#2563eb">Key 向量（每个词的索引键）</text>
+  <rect x="98" y="315" width="44" height="32" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="120" y="336" text-anchor="middle" font-size="12" fill="#2563eb">k0</text>
+  <rect x="178" y="315" width="44" height="32" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="200" y="336" text-anchor="middle" font-size="12" fill="#2563eb">k1</text>
+  <rect x="258" y="315" width="44" height="32" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="280" y="336" text-anchor="middle" font-size="12" fill="#2563eb">k2</text>
+  <rect x="338" y="315" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="360" y="336" text-anchor="middle" font-size="12" fill="#9ca3af">k3</text>
+  <rect x="418" y="315" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="440" y="336" text-anchor="middle" font-size="12" fill="#9ca3af">k4</text>
+  <rect x="498" y="315" width="44" height="32" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="520" y="336" text-anchor="middle" font-size="12" fill="#2563eb">k5</text>
+  <rect x="578" y="315" width="44" height="32" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="600" y="336" text-anchor="middle" font-size="12" fill="#2563eb">k6</text>
+  <rect x="658" y="315" width="44" height="32" rx="4" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="680" y="336" text-anchor="middle" font-size="12" fill="#2563eb">k7</text>
+  <rect x="738" y="315" width="44" height="32" rx="4" fill="#f3f4f6" stroke="#d1d5db" stroke-width="1"/>
+  <text x="760" y="336" text-anchor="middle" font-size="12" fill="#9ca3af">k8</text>
+  <line x1="120" y1="110" x2="120" y2="310" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="200" y1="110" x2="200" y2="310" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="280" y1="110" x2="280" y2="310" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="520" y1="110" x2="520" y2="310" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="600" y1="110" x2="600" y2="310" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="680" y1="110" x2="680" y2="310" stroke="#2563eb" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="480" y="385" text-anchor="middle" font-size="14" font-weight="600" fill="#059669">Attention 权重（Q·Kᵀ / √d）</text>
+  <rect x="85" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="120" y="429" text-anchor="middle" font-size="11" fill="#374151">深</text>
+  <rect x="165" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="200" y="429" text-anchor="middle" font-size="11" fill="#374151">度</text>
+  <rect x="245" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="280" y="429" text-anchor="middle" font-size="11" fill="#374151">学</text>
+  <rect x="325" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="360" y="429" text-anchor="middle" font-size="11" fill="#374151">习</text>
+  <rect x="405" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="440" y="429" text-anchor="middle" font-size="11" fill="#374151">是</text>
+  <rect x="485" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="520" y="429" text-anchor="middle" font-size="11" fill="#374151">机</text>
+  <rect x="565" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="600" y="429" text-anchor="middle" font-size="11" fill="#374151">器</text>
+  <rect x="645" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="680" y="429" text-anchor="middle" font-size="11" fill="#374151">学</text>
+  <rect x="725" y="410" width="70" height="28" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="760" y="429" text-anchor="middle" font-size="11" fill="#374151">习</text>
+  <rect x="140" y="438" width="60" height="32" rx="0" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="170" y="459" text-anchor="middle" font-size="11" fill="#374151">q₂ (学)</text>
+  <rect x="85" y="470" width="70" height="32" fill="#bbf7d0" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="120" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.15</text>
+  <rect x="165" y="470" width="70" height="32" fill="#bbf7d0" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="200" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.15</text>
+  <rect x="245" y="470" width="70" height="32" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="280" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.05</text>
+  <rect x="325" y="470" width="70" height="32" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="360" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.05</text>
+  <rect x="405" y="470" width="70" height="32" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="440" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.02</text>
+  <rect x="485" y="470" width="70" height="32" fill="#6ee7b7" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="520" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.20</text>
+  <rect x="565" y="470" width="70" height="32" fill="#6ee7b7" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="600" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.20</text>
+  <rect x="645" y="470" width="70" height="32" fill="#86efac" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="680" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.10</text>
+  <rect x="725" y="470" width="70" height="32" fill="#f3f4f6" stroke="#d1d5db" stroke-width="0.5"/>
+  <text x="760" y="491" text-anchor="middle" font-size="12" fill="#065f46">0.03</text>
+  <text x="850" y="510" text-anchor="middle" font-size="12" fill="#6b7280">softmax</text>
+  <path d="M 780 500 L 830 500" stroke="#6b7280" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <text x="480" y="560" text-anchor="middle" font-size="14" font-weight="600" fill="#ea580c">加权求和：Σ(attention_weight × Value)</text>
+  <text x="100" y="600" text-anchor="start" font-size="12" fill="#6b7280">每个 Value 向量</text>
+  <rect x="98" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="120" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v0</text>
+  <rect x="178" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="200" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v1</text>
+  <rect x="258" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="280" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v2</text>
+  <rect x="338" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="360" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v3</text>
+  <rect x="418" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="440" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v4</text>
+  <rect x="498" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="520" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v5</text>
+  <rect x="578" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="600" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v6</text>
+  <rect x="658" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="680" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v7</text>
+  <rect x="738" y="585" width="44" height="28" rx="4" fill="#fed7aa" stroke="#ea580c" stroke-width="1"/>
+  <text x="760" y="604" text-anchor="middle" font-size="11" fill="#ea580c">v8</text>
+  <path d="M 480 555 L 480 575" stroke="#ea580c" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+  <rect x="390" y="620" width="180" height="45" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+  <text x="480" y="637" text-anchor="middle" font-size="13" font-weight="600" fill="#92400e">输出向量（融合上下文）</text>
+  <text x="480" y="654" text-anchor="middle" font-size="11" fill="#b45309">"学习" now understands 深度+机器</text>
+  <g transform="translate(20, 680)">
+    <rect x="0" y="0" width="12" height="12" fill="#ede9fe" stroke="#7c3aed"/>
+    <text x="18" y="10" font-size="11" fill="#6b7280">Query（查找）</text>
+    <rect x="120" y="0" width="12" height="12" fill="#dbeafe" stroke="#2563eb"/>
+    <text x="138" y="10" font-size="11" fill="#6b7280">Key（索引）</text>
+    <rect x="220" y="0" width="12" height="12" fill="#fed7aa" stroke="#ea580c"/>
+    <text x="238" y="10" font-size="11" fill="#6b7280">Value（内容）</text>
+    <rect x="320" y="0" width="12" height="12" fill="#fef3c7" stroke="#d97706"/>
+    <text x="338" y="10" font-size="11" fill="#6b7280">目标 Token</text>
+  </g>
+  <g transform="translate(580, 680)">
+    <rect x="0" y="-15" width="360" height="30" rx="4" fill="#f9fafb" stroke="#e5e7eb"/>
+    <text x="180" y="5" text-anchor="middle" font-size="12" fill="#374151">Attention(Q,K,V) = softmax(QKᵀ/√dₖ) × V</text>
+  </g>
+</svg>

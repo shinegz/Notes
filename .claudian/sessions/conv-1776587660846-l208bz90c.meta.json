@@ -4,20 +4,20 @@
   "title": "Greeting exchange",
   "titleGenerationStatus": "success",
   "createdAt": 1776587660848,
-  "updatedAt": 1776587667304,
-  "lastResponseAt": 1776587667304,
+  "updatedAt": 1777195436387,
+  "lastResponseAt": 1777195436387,
   "sessionId": "3d2877bd-f64c-47c6-896e-6b214f26cdad",
   "providerState": {
     "providerSessionId": "3d2877bd-f64c-47c6-896e-6b214f26cdad"
   },
   "usage": {
     "model": "haiku",
-    "inputTokens": 126,
-    "cacheCreationInputTokens": 19040,
+    "inputTokens": 14229,
+    "cacheCreationInputTokens": 0,
     "cacheReadInputTokens": 0,
     "contextWindow": 200000,
-    "contextTokens": 19166,
-    "percentage": 10,
+    "contextTokens": 14229,
+    "percentage": 7,
     "contextWindowIsAuthoritative": true
   }
 }

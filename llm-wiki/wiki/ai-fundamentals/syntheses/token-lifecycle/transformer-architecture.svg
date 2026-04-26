@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 800">
+  <style>
+    text { font-family: "Helvetica Neue", Helvetica, Arial, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  </style>
+  <defs>
+    <marker id="arrow-blue" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-purple" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#7c3aed"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#059669"/>
+    </marker>
+    <marker id="arrow-orange" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#ea580c"/>
+    </marker>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  <rect width="960" height="800" fill="#ffffff"/>
+  <text x="480" y="35" text-anchor="middle" font-size="20" font-weight="600" fill="#111827">Transformer 架构：Token 的层层旅程</text>
+  <text x="480" y="55" text-anchor="middle" font-size="12" fill="#9ca3af">Input → Embedding+Positional → [Self-Attention+FFN] × N → Output Prob</text>
+  <rect x="30" y="72" width="50" height="32" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="55" y="{y}" text-anchor="middle" font-size="14" fill="#1e40af">深</text>
+  <rect x="90" y="72" width="50" height="32" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="115" y="{y}" text-anchor="middle" font-size="14" fill="#1e40af">度</text>
+  <rect x="150" y="72" width="50" height="32" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="175" y="{y}" text-anchor="middle" font-size="14" fill="#1e40af">学</text>
+  <rect x="210" y="72" width="50" height="32" rx="6" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="235" y="{y}" text-anchor="middle" font-size="14" fill="#1e40af">习</text>
+  <text x="55" y="120" text-anchor="middle" font-size="11" fill="#9ca3af">Token 序列</text>
+  <line x1="235" y1="108" x2="235" y2="138" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="60" y="145" width="180" height="50" rx="8" fill="#e0e7ff" stroke="#4f46e5" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="150" y="165" text-anchor="middle" font-size="13" font-weight="600" fill="#3730a3">Embedding</text>
+  <text x="150" y="183" text-anchor="middle" font-size="11" fill="#6366f1">Token ID → Vector[d_model]</text>
+  <text x="270" y="175" text-anchor="middle" font-size="16" font-weight="700" fill="#374151">+</text>
+  <rect x="290" y="145" width="180" height="50" rx="8" fill="#fce7f3" stroke="#db2777" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="380" y="165" text-anchor="middle" font-size="13" font-weight="600" fill="#9d174d">Positional Encoding</text>
+  <text x="380" y="183" text-anchor="middle" font-size="11" fill="#ec4899">Sinusoidal / RoPE / ALiBi</text>
+  <line x1="150" y1="199" x2="150" y2="229" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="40" y="235" width="880" height="105" rx="10" fill="#f0fdf4" stroke="#16a34a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="48" y="253" font-size="12" font-weight="600" fill="#15803d">Layer 1</text>
+  <rect x="55" y="243" width="280" height="55" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="195" y="265" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">Multi-Head Self-Attention</text>
+  <text x="195" y="283" text-anchor="middle" font-size="11" fill="#3b82f6">8/16 heads · Q,K,V projections</text>
+  <line x1="335" y1="270" x2="347" y2="270" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="347" y="243" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="380" y="268" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="380" y="283" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <line x1="413" y1="270" x2="425" y2="270" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="425" y="243" width="208" height="55" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="529" y="265" text-anchor="middle" font-size="13" font-weight="600" fill="#6d28d9">Feed-Forward Network</text>
+  <text x="529" y="283" text-anchor="middle" font-size="11" fill="#8b5cf6">ReLU → W₂  (参数量占 2/3)</text>
+  <line x1="633" y1="270" x2="645" y2="270" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="645" y="243" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="678" y="268" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="678" y="283" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <path d="M 40 282 C 15 295 15 295 55 301" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <path d="M 347 298 C 365 310 365 310 443 298" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <line x1="480" y1="340" x2="480" y2="350" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="40" y="350" width="880" height="105" rx="10" fill="#ecfdf5" stroke="#16a34a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="48" y="368" font-size="12" font-weight="600" fill="#15803d">Layer 2</text>
+  <rect x="55" y="358" width="280" height="55" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="195" y="380" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">Multi-Head Self-Attention</text>
+  <text x="195" y="398" text-anchor="middle" font-size="11" fill="#3b82f6">8/16 heads · Q,K,V projections</text>
+  <line x1="335" y1="385" x2="347" y2="385" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="347" y="358" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="380" y="383" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="380" y="398" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <line x1="413" y1="385" x2="425" y2="385" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="425" y="358" width="208" height="55" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="529" y="380" text-anchor="middle" font-size="13" font-weight="600" fill="#6d28d9">Feed-Forward Network</text>
+  <text x="529" y="398" text-anchor="middle" font-size="11" fill="#8b5cf6">ReLU → W₂  (参数量占 2/3)</text>
+  <line x1="633" y1="385" x2="645" y2="385" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="645" y="358" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="678" y="383" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="678" y="398" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <path d="M 40 397 C 15 410 15 410 55 416" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <path d="M 347 413 C 365 425 365 425 443 413" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <line x1="480" y1="455" x2="480" y2="465" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="40" y="465" width="880" height="105" rx="10" fill="#dcfce7" stroke="#16a34a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="48" y="483" font-size="12" font-weight="600" fill="#15803d">Layer 3</text>
+  <rect x="55" y="473" width="280" height="55" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="195" y="495" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">Multi-Head Self-Attention</text>
+  <text x="195" y="513" text-anchor="middle" font-size="11" fill="#3b82f6">8/16 heads · Q,K,V projections</text>
+  <line x1="335" y1="500" x2="347" y2="500" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="347" y="473" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="380" y="498" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="380" y="513" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <line x1="413" y1="500" x2="425" y2="500" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="425" y="473" width="208" height="55" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="529" y="495" text-anchor="middle" font-size="13" font-weight="600" fill="#6d28d9">Feed-Forward Network</text>
+  <text x="529" y="513" text-anchor="middle" font-size="11" fill="#8b5cf6">ReLU → W₂  (参数量占 2/3)</text>
+  <line x1="633" y1="500" x2="645" y2="500" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="645" y="473" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="678" y="498" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="678" y="513" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <path d="M 40 512 C 15 525 15 525 55 531" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <path d="M 347 528 C 365 540 365 540 443 528" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <line x1="480" y1="570" x2="480" y2="580" stroke="#16a34a" stroke-width="1" stroke-dasharray="3,3"/>
+  <rect x="40" y="580" width="880" height="105" rx="10" fill="#bbf7d0" stroke="#16a34a" stroke-width="1" stroke-dasharray="5,3"/>
+  <text x="48" y="598" font-size="12" font-weight="600" fill="#15803d">Layer 4</text>
+  <rect x="55" y="588" width="280" height="55" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="195" y="610" text-anchor="middle" font-size="13" font-weight="600" fill="#1e40af">Multi-Head Self-Attention</text>
+  <text x="195" y="628" text-anchor="middle" font-size="11" fill="#3b82f6">8/16 heads · Q,K,V projections</text>
+  <line x1="335" y1="615" x2="347" y2="615" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="347" y="588" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="380" y="613" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="380" y="628" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <line x1="413" y1="615" x2="425" y2="615" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="425" y="588" width="208" height="55" rx="8" fill="#ede9fe" stroke="#7c3aed" stroke-width="1.5" filter="url(#shadow)"/>
+  <text x="529" y="610" text-anchor="middle" font-size="13" font-weight="600" fill="#6d28d9">Feed-Forward Network</text>
+  <text x="529" y="628" text-anchor="middle" font-size="11" fill="#8b5cf6">ReLU → W₂  (参数量占 2/3)</text>
+  <line x1="633" y1="615" x2="645" y2="615" stroke="#2563eb" stroke-width="1.5" marker-end="url(#arrow-blue)"/>
+  <rect x="645" y="588" width="66" height="55" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="678" y="613" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Add &amp;</text>
+  <text x="678" y="628" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Norm</text>
+  <path d="M 40 627 C 15 640 15 640 55 646" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <path d="M 347 643 C 365 655 365 655 443 643" stroke="#16a34a" stroke-width="1" stroke-dasharray="4,3" fill="none"/>
+  <line x1="480" y1="685" x2="480" y2="713" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <rect x="250" y="723" width="460" height="50" rx="8" fill="#fef3c7" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+  <text x="480" y="743" text-anchor="middle" font-size="15" font-weight="600" fill="#92400e">Language Model Head</text>
+  <text x="480" y="761" text-anchor="middle" font-size="12" fill="#b45309">vocab_size 维度 → softmax → Next Token 概率分布</text>
+  <line x1="480" y1="778" x2="480" y2="805" stroke="#ea580c" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+  <rect x="320" y="815" width="320" height="42" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+  <text x="480" y="833" text-anchor="middle" font-size="15" font-weight="700" fill="#15803d">预测：下一个 Token</text>
+  <text x="480" y="848" text-anchor="middle" font-size="12" fill="#16a34a">"深度学习是机器学习" → "的"</text>
+  <rect x="690" y="710" width="250" height="75" rx="8" fill="#f9fafb" stroke="#e5e7eb" stroke-width="1"/>
+  <text x="815" y="728" text-anchor="middle" font-size="12" font-weight="600" fill="#374151">Multi-Head 注意力模式</text>
+  <text x="815" y="748" text-anchor="middle" font-size="11" fill="#6b7280">Head 1: 关注语法关系</text>
+  <text x="815" y="763" text-anchor="middle" font-size="11" fill="#6b7280">Head 2: 关注语义相似</text>
+  <text x="815" y="778" text-anchor="middle" font-size="11" fill="#6b7280">Head 3: 关注指代关系</text>
+  <text x="815" y="705" text-anchor="middle" font-size="14" font-weight="600" fill="#16a34a">N = 12 / 24 / 96 ...</text>
+</svg>

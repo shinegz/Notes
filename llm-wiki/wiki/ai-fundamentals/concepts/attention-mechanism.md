@@ -44,7 +44,7 @@ Query:        q1    q2    q3    q4    q5    q6
 防止点积结果过大，导致 softmax 梯度消失。
 
 ```python
-# d_k = 64 时
+# d_k = 64 时的示例
 scores = q @ k.T  # 值可能很大
 scores = scores / sqrt(64)  # 归一化
 ```

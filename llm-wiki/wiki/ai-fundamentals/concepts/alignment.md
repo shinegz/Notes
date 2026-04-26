@@ -37,14 +37,17 @@ graph TB
 
 ### Step 1: SFT (Supervised Fine-Tuning)
 
+使用人工标注的问答对进行监督学习。
+
 ```python
-# 人工标注的问答对
 prompt = "什么是量子计算？"
 response = "量子计算是一种..."
 loss = CE(model(response), target_response)
 ```
 
 ### Step 2: Reward Model
+
+训练一个模型预测人类偏好。
 
 ```python
 reward = RewardModel(prompt, response)
@@ -53,18 +56,19 @@ loss = -log(sigmoid(reward_pos - reward_neg))
 
 ### Step 3: PPO 优化
 
+用 Reward Model 指导策略优化，同时保持与 SFT 模型的 KL 散度约束。
+
 ```python
 loss = -E[reward(prompt, response)] + β * KL(π || π_sft)
 ```
 
-## Fine-tuning vs Alignment
-
-| 方法 | 目标 | 数据 |
-|------|------|------|
-| SFT | 格式对齐 | 人工标注 |
-| RLHF | 偏好对齐 | 人类反馈 |
-| DPO | 偏好对齐 | 偏好对 |
+| 方法 | 目标 | 数据 | 概念页 |
+|------|------|------|--------|
+| SFT | 格式对齐 | 人工标注 | [[ai-fundamentals/concepts/fine-tuning|Fine-tuning]] |
+| RLHF | 偏好对齐 | 人类反馈 | [[ai-fundamentals/concepts/alignment|Alignment]] |
+| DPO | 偏好对齐 | 偏好对 | [[ai-fundamentals/concepts/direct-preference-optimization|DPO]] |
 
 ## 来源
 
 - [[ai-fundamentals/sources/instructgpt|InstructGPT]]
+- [[ai-fundamentals/concepts/direct-preference-optimization|DPO]] — 偏好优化的简化方法
