@@ -1,0 +1,23 @@
+{
+  "id": "conv-1776587660846-l208bz90c",
+  "providerId": "claude",
+  "title": "Greeting exchange",
+  "titleGenerationStatus": "success",
+  "createdAt": 1776587660848,
+  "updatedAt": 1776587667304,
+  "lastResponseAt": 1776587667304,
+  "sessionId": "3d2877bd-f64c-47c6-896e-6b214f26cdad",
+  "providerState": {
+    "providerSessionId": "3d2877bd-f64c-47c6-896e-6b214f26cdad"
+  },
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 126,
+    "cacheCreationInputTokens": 19040,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 19166,
+    "percentage": 10,
+    "contextWindowIsAuthoritative": true
+  }
+}
