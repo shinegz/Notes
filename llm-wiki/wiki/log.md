@@ -1,3 +1,73 @@
+## [2026-04-30] graph | rebuilt (wikilink-only)
+
+99 nodes, 441 edges.
+
+## [2026-04-30] graph | rebuilt (wikilink-only)
+
+99 nodes, 428 edges.
+
+## [2026-04-30] ingest | software-fundamentals Ingest 完成（规范重写）
+
+- **重新执行 Ingest**，严格按照 `ingest-structure-guide.md` 和 `source-template.md` 规范
+- **本次新增文件**（共 8 个）：
+  - **Sources** (3): `domain-driven-design.md`, `mythical-man-month.md`, `pragmatic-programmer-20th-anniversary.md`
+  - **Entities** (1): `FrederickBrooks.md`
+  - **Concepts** (4): `ObjectOrientedDesign.md`, `DesignPatterns.md`, `SoftwareArchitecture.md`, `DomainDrivenDesign.md`
+- **结构规范**：
+  - Concepts: `Epitome` → `Boundary Clarification` → `Mechanism` → `Types/Applications` → `Connections` → `Sources`
+  - Sources: `Summary`（结论先行）→ `Key Claims` → `Architecture Table`（可选）→ `Key Quotes`（可选）→ `Connections`
+  - Entities: `Definition` → `Key Attributes` → `Key Works` → `Key Quotes` → `Connections`
+- **风格规范**：
+  - 删除 `—` 破折号连接词
+  - 删除 `**加粗**` 强调（除表格标题和特定术语）
+  - 使用 `humanizer-zh` skill 进行去 AI 味处理
+- **lint 通过**：source_frontmatter_errors: 0, table_errors: 0
+- **待办**：
+  - POSD/DoD PDF 内容提取
+  - DDD 官网（domainlanguage.com）交互访问
+
+## [2026-04-30] taxonomy | new shelf: software-fundamentals
+
+- 登记门类 `software-fundamentals`（软件工程基础理论：经典书籍、设计原则、架构方法论）
+- 调整 `sdd` 说明（移除"理论基础"，强调"框架生态、源码实现、Agentic Skills"）
+- 创建目录结构：`raw/software-fundamentals/{pdfs,articles,refs,notes}`、`wiki/software-fundamentals/{sources,concepts,entities,syntheses,comparisons}`
+- 创建 `wiki/software-fundamentals/index.md`（预设 POSD/TPP/DoD/DDD 四书视角）
+- 更新 `taxonomy.md`、`wiki/index.md`
+- 更新 candidates session 为 `software-fundamentals` shelf
+
+## [2026-04-29] optimize | llm-wiki GitHub 资源获取规范
+
+- 发现问题：llm-wiki 对 GitHub 仓库源码分析无正式流程，此前使用 `curl` ad-hoc 调用
+- 安装 `gh CLI` (v2.92.0) 作为 GitHub 资源首选工具
+- 更新规范（分层放置）：
+  - `CLAUDE.md` — 保持 schema 层级，**不添加** GitHub 相关小节（条件性工具细节不下沉到总纲）
+  - `docs/collect-workflow.md` — 新增「GitHub 资源获取」完整小节（含 `gh api` 三级优先级表格、认证说明、存储规范）；特殊来源处理规则表格新增「GitHub 仓库源码」行
+  - `raw/README.md` — `refs/` 含义扩展为包含 GitHub 源码指针，补充指针文件格式示例
+- **待办**：`gh auth login` 认证后，`gh api` 可获得更高 rate limit（5000 req/hour vs 未认证 60 req/hour）
+
+## [2026-04-29] ingest | sdd shelf Ingest 完成
+
+- **Sources**: 6 篇 source 摘要页
+  - Martin Fowler 团队 SDD 三工具评测、GitHub Blog Spec Kit 介绍、知乎框架全景
+  - Superpowers README、gstack README、Compound Engineering README
+- **Concepts**: 5 个核心概念页
+  - Spec-First、Spec-Anchored、Spec-as-Source、Agentic Skills、Compounding Knowledge
+- **Entities**: 3 个项目实体页（含 GitHub API 源码分析）
+  - Superpowers（14 skills，零依赖，强制 TDD）
+  - Gstack（23 skills，Chromium Daemon，多平台适配）
+  - Compound Engineering（36 skills + 51 agents，跨平台转换器）
+- **Syntheses**: 1 个框架全景综合
+  - SDD 框架金字塔结构、渐进式 Spec 策略、技能框架选择指南
+- **Comparisons**: 1 个框架对比
+  - 五大框架七维度横评 + 决策建议
+- 更新 `wiki/sdd/index.md`
+
+## [2026-04-29] taxonomy | new shelf: sdd
+
+- 登记门类 `sdd`（规范驱动开发：理论基础、框架生态、源码实现）
+- 创建 `raw/sdd/`、`wiki/sdd/` 目录结构
+- 更新 `taxonomy.md`、`wiki/index.md`
+
 ## [2026-04-26] collect | Prompt Engineering (OpenAI Prompt Engineering Guide)
 ## [2026-04-26] collect | RoPE - Rotary Position Embedding (arxiv 2104.09864)
 ## [2026-04-26] collect | Mixtral 8x7B - Mixture of Experts (arxiv 2401.04088)

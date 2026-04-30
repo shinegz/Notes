@@ -19,6 +19,8 @@
 |----------|------|------------|-------------|
 | ai-fundamentals | AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理 | `raw/ai-fundamentals/` | `wiki/ai-fundamentals/` |
 | agent | 编码智能体、Harness、工具链与仓库治理 | `raw/agent/` | `wiki/agent/` |
+| software-fundamentals | 软件工程基础理论：经典书籍、设计原则、架构方法论 | `raw/software-fundamentals/` | `wiki/software-fundamentals/` |
+| sdd | 规范驱动开发（Spec-Driven Development）：框架生态、源码实现、Agentic Skills | `raw/sdd/` | `wiki/sdd/` |
 
 ### 子主题（可选）
 
@@ -34,6 +36,8 @@
 
 ## 变更记录
 
+- 2026-04-30 — 新增门类 `software-fundamentals`（软件工程基础理论）；调整 `sdd` 说明（移除"理论基础"）
+- 2026-04-29 — 新增门类 `sdd`（规范驱动开发：框架生态、源码实现、Agentic Skills）
 - 2026-04-19 — 新增门类 `ai-fundamentals`（AI 理论基础）
 - 2026-04-14 — 新增门类 `agent`；子主题 `harness-engineering/`（用户确认）
 - （历史）— 初始化 taxonomy；移除占位 `_example` 行

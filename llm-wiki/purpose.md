@@ -8,6 +8,7 @@
 ## 核心问题（由你补充）
 
 - 当前最想深入的一条主线是？
+  - **规范驱动开发（Spec-Driven Development）**：AI 时代的软件工程方法论，从理论基础到框架源码实现（Superpowers、Gstack、Compound Engineering 等）
 
 ## In-scope
 

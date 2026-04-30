@@ -68,13 +68,28 @@ Skill tool 返回 SKILL.md → 找到 CLI 命令 → 在终端执行该命令
 | 视频字幕 | 提取字幕 | `baoyu-youtube-transcript` | YouTube 视频 URL |
 | 微信文章 | 专用抓取 | `wechat-article-to-markdown` | 微信文章链接 |
 | GitHub README | 下载源码/文档 | `baoyu-url-to-markdown` | GitHub 仓库 URL |
+| GitHub 仓库源码 | 结构/文件分析 | `gh api` / `curl` | 公开仓库 URL；指针存 `refs/` |
 
 **特别注意**：
 - arXiv 论文使用 `https://arxiv.org/pdf/<id>.pdf` 下载 PDF
 - 不要只抓取摘要页（`/abs/<id>`），摘要信息不完整
 - Collect 阶段仅下载 PDF，不转换；PDF 处理在 ingest 阶段按需进行
+- **GitHub 仓库源码分析**：不下载完整仓库，在 `raw/<shelf>/refs/` 创建指针文件，Ingest 阶段通过 `gh api` 或 `curl` 实时读取关键文件（详见 `CLAUDE.md` Ingest 阶段 "GitHub 资源获取"）
 
 > Agent 在执行 Collect 前，**必须强制检查**环境中是否已安装对应 skill。若缺失，**必须询问用户是否安装**，**未安装完成前不得执行 Collect 操作**。不允许跳过检查。
+
+### GitHub 资源获取
+
+当 Ingest 涉及 GitHub 仓库源码分析时，按以下优先级获取仓库结构和文件内容：
+
+| 优先级 | 工具 | 命令示例 | 适用场景 |
+|--------|------|---------|---------|
+| 1 | `gh CLI` | `gh api repos/<owner>/<repo>/contents/<path>` | 首选，输出格式友好，支持认证提升 rate limit |
+| 2 | `gh CLI` | `gh api repos/<owner>/<repo>/git/trees/<branch>?recursive=1` | 获取完整目录树 |
+| 3 | `curl` | `curl -s https://api.github.com/repos/<owner>/<repo>/contents/` | gh 不可用时回退 |
+
+**认证**：`gh auth login` 或设置 `GH_TOKEN` 环境变量。公开仓库无认证也可访问，但 rate limit 较低（60 req/hour），认证后提升至 5000 req/hour。
+**存储**：仓库指针放 `raw/<shelf>/refs/<repo-name>-repo.md`，不下载完整源码。详见 `raw/README.md`。
 
 ## 与 Ingest 成稿的分工
 
