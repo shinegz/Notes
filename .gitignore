@@ -9,3 +9,4 @@ node_modules
 
 # Sensitive config - API keys
 llm-wiki/.env
+llm-wiki/.env.tpl
