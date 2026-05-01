@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Optional, Tuple, List, Dict, Any
 
 # 导入共享模块
-from memory_utils import (
+from history.AI.promem.src.scripts.memory_utils import (
     load_config as load_config_utils,
     sanitize_sensitive,
     is_duplicate,

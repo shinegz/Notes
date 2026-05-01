@@ -22,7 +22,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 # 导入共享模块
-from memory_utils import (
+from history.AI.promem.src.scripts.memory_utils import (
     load_config as load_config_utils,
     calculate_similarity,
     extract_content_summary,

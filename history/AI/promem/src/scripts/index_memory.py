@@ -21,7 +21,7 @@ from typing import List, Dict, Any, Optional, Tuple, Callable
 
 # 导入共享日志模块
 try:
-    from memory_utils import write_log
+    from history.AI.promem.src.scripts.memory_utils import write_log
 except ImportError:
     def write_log(*args, **kwargs):
         pass

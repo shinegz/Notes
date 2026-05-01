@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
 # 导入共享模块
-from memory_utils import (
+from history.AI.promem.src.scripts.memory_utils import (
     load_config,
     log_info,
     log_warn,
