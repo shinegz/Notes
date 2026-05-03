@@ -1,3 +1,42 @@
+## [2026-05-03] ingest | agent/core-architecture 补充遗漏 source + 新增 concepts
+
+- **补充 ingest**：`openclaw-repo.md` → `wiki/agent/core-architecture/sources/openclaw-repo.md`
+- **新增 concepts**（2）：`A2A`（Agent-to-Agent Protocol）、`Reflection`（Agent 自我反思机制）
+- **更新 index**：Sources 12→13，Concepts 6→8
+
+## [2026-05-03] ingest | agent/core-architecture 补全 concepts + entities
+
+- ** Concepts**（6）：SimulatedAgency、TrueAutonomy、ReAct、MemoryTaxonomy、MultiAgentCoordinationPatterns、MCP
+- **Entities**（3）：KenMendoza、NousResearch、Mem0
+- **lint 通过**：source_frontmatter_errors: 0, orphan_pages: 0
+
+## [2026-05-03] ingest | agent/core-architecture 新建子主题
+
+- **新建 shelf**：`agent/core-architecture/`
+- **落地 13 个来源**（raw/）：
+  - pdfs/：`agentic-ai-comprehensive-survey.pdf`、`llm-enabled-multi-agent-systems.pdf`、`memory-autonomous-llm-agents.pdf`
+  - articles/：`core-agentic-ai-architectural-patterns.md`、`ultimate-guide-ai-agent-architectures-2025.md`、`aws-bedrock-agentcore-best-practices.md`、`multi-agent-system-architecture-guide.md`、`agent-memory-architectures.md`、`ai-agent-architecture-components-types.md`
+  - refs/：`pi-mono-repo.md`、`openclaw-repo.md`、`hermes-agent-repo.md`、`opencode-repo.md`
+- **Medium 两篇**原文需登录，已分别用 arXiv 2603.07670 PDF 和 PuppyGraph 替代
+- **Source pages**（13）：`wiki/agent/core-architecture/sources/` 下全部写完
+- **Ingest 问题记录**：arXiv 论文错误抓了 HTML 而非 PDF（已补下）；工具路由规则已更新到 candidates 模板
+
+## [2026-05-02] ingest | software-fundamentals 补全 POSD concepts + entity
+
+- **POSD 2nd Edition OCR 完成**：使用 pypdfium2 + PaddleOCR 提取扫描版 PDF 全文
+- **新增 Concepts**（4）：`InformationHiding.md`、`GeneralPurposeModules.md`、`BetterTogetherOrBetterApart.md`（来自 POSD Ch 6/9）
+- **新增 Entities**（1）：`JohnOusterhout.md`
+- **更新 CLAUDE.md 第 6 步**：强化 ingest 后概念/实体补全检查要求
+- **lint 通过**：source_frontmatter_errors: 0
+
+- **本次新增 Sources**（4）：
+  - `frederick-brooks-official-site.md` — Brooks UNC 教授主页出版物列表与荣誉
+  - `design-of-design-index.pdf` → `design-of-design-index.md` — Brooks 2010 设计的艺术（54 页 PDF）
+  - `design-of-design-part1.pdf` → `design-of-design-part1.md` — Anderson 课程讲义前三章（29 页 PDF）
+  - `posd-2nd-edition.pdf` → `posd-2nd-edition.md` — 扫描版，文本不可提取，待 OCR
+- **lint 通过**：source_frontmatter_errors: 0
+- **待办**：POSD 2nd Edition OCR 处理
+
 ## [2026-04-30] graph | rebuilt (wikilink-only)
 
 99 nodes, 441 edges.

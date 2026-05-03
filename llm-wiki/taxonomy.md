@@ -28,7 +28,8 @@
 
 | 子路径 | 说明 |
 |--------|------|
-| `harness-engineering/` | Harness Engineering相关素材与编译页 |
+| `harness-engineering/` | Harness Engineering 相关素材与编译页 |
+| `core-architecture/` | Agent 核心架构设计：架构模式、记忆系统、工具集成、多 Agent 协调 |
 
 **raw 子目录**：在子主题（或直接 shelf）下，按 TSV 的 **`raw_dir`** 落盘；命名含义见 **`raw/README.md`**。
 

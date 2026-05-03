@@ -98,10 +98,9 @@ Gstack 通过 `hosts/` 目录为每个目标平台生成适配配置：
 
 - [[sdd/concepts/Agentic-Skills|Agentic Skills]] — gstack 是 Agentic Skills 框架的最完整实现
 - [[sdd/sources/garrytan-gstack|Gstack README]] — 官方项目介绍
-- [[sdd/entities/Superpowers]] — 同为 Claude Code 技能框架，Superpowers 更轻量
-- [[sdd/entities/Compound-Engineering]] — 同为 Skills + Agents 架构，CE 侧重知识复利
+- [[sdd/entities/Superpowers|Superpowers]] — 同为 Claude Code 技能框架，Superpowers 更轻量
+- [[sdd/entities/Compound-Engineering|Compound Engineering]] — 同为 Skills + Agents 架构，CE 侧重知识复利
 
 ## Sources
 
 - [[sdd/sources/garrytan-gstack|Gstack README]] — 官方项目介绍
-- [[sdd/refs/gstack-repo]] — 源码指针

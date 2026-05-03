@@ -2,21 +2,23 @@
 title: "Domain-Driven Design"
 type: concept
 abbreviation: "DDD"
+sources:
+  - software-fundamentals/sources/domain-driven-design
 last_updated: "2026-04-30"
 ---
 
-## Epitome
+## 一句话理解
 
 Domain-Driven Design 是一套**通过深度理解业务领域来指导软件设计**的方法论。核心理念是让**领域模型**与**代码实现**保持紧密绑定，用**统一语言**（Ubiquitous Language）弥合业务与技术的鸿沟。
 
-## Boundary Clarification
+## 边界
 
 - DDD 不是关于 ORM 或 Entity 框架。战术工具只是实现手段。
 - DDD 不是微服务。Bounded Context 可以是 monolith 的内部划分，也可以是微服务的边界。
 - DDD 是关于业务认知的。模型是对业务知识的深刻提炼，不是数据结构。
 - DDD 是关于战略优先于战术的。先确定边界和子域，再谈具体模式。
 
-## Mechanism
+## 核心机制
 
 ### 战略设计（Strategic Design）
 
@@ -44,12 +46,11 @@ Domain-Driven Design 是一套**通过深度理解业务领域来指导软件设
 - **Open Host Service** — 开放主机服务，定义协议供外部调用
 - **Published Language** — 发布的语言（如 XML Schema、JSON Schema）
 
-## Connections
+## 关联概念
 
 - [[software-fundamentals/concepts/ObjectOrientedDesign|Object-Oriented Design]] — DDD 战术层大量使用 OOD 模式
 - [[software-fundamentals/concepts/DesignPatterns|Design Patterns]] — Repository/Aggregate/Factory 源自 GoF
-- [[software-fundamentals/sources/domain-driven-design|Domain-Driven Design]] — Eric Evans 原著（359 pages）
 
-## Sources
+## 来源
 
 - [[software-fundamentals/sources/domain-driven-design|Domain-Driven Design]] — Eric Evans, 2003

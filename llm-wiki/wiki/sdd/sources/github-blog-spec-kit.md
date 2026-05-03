@@ -29,6 +29,6 @@ GitHub 发布的开源工具包 Spec Kit 将 SDD 定义为四阶段流水线（S
 ## Connections
 
 - [[sdd/sources/martin-fowler-sdd-3-tools|Martin Fowler: SDD 三工具评测]] — 对 Spec Kit 的独立实测与质疑
-- [[sdd/entities/Spec-Kit]] — GitHub 官方 SDD 工具包实体页
-- [[sdd/concepts/Spec-First]] — Spec Kit 当前主要实现的层级
+- [[sdd/entities/Spec-Kit|Spec-Kit]] — GitHub 官方 SDD 工具包实体页
+- [[sdd/concepts/Spec-First|Spec-First]] — Spec Kit 当前主要实现的层级
 - [[sdd/syntheses/framework-landscape|SDD 框架全景分析]] — 将 Spec Kit 放入五大框架比较

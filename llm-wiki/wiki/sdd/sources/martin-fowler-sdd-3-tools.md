@@ -31,9 +31,9 @@ SDD（Spec-Driven Development）目前仍是一个语义扩散中的术语，但
 
 - [[sdd/sources/github-blog-spec-kit|GitHub Blog: Spec Kit 介绍]] — GitHub 官方对 Spec Kit 的阐述，本文对其做了独立实测验证
 - [[sdd/sources/zhihu-sdd-landscape|知乎：SDD 框架全景]] — 本文是该知乎文章的核心引用来源之一
-- [[sdd/concepts/Spec-First]] — 本文定义的 SDD 第一层级
-- [[sdd/concepts/Spec-Anchored]] — 本文定义的 SDD 第二层级
-- [[sdd/concepts/Spec-as-Source]] — 本文定义的 SDD 第三层级
-- [[sdd/entities/Kiro]] — AWS 推出的轻量级 SDD IDE
-- [[sdd/entities/Spec-Kit]] — GitHub 官方 SDD 工具包
-- [[sdd/entities/Tessl]] — 探索 Spec-as-Source 路线的商业化平台
+- [[sdd/concepts/Spec-First|Spec-First]] — 本文定义的 SDD 第一层级
+- [[sdd/concepts/Spec-Anchored|Spec-Anchored]] — 本文定义的 SDD 第二层级
+- [[sdd/concepts/Spec-as-Source|Spec-as-Source]] — 本文定义的 SDD 第三层级
+- [[sdd/entities/Kiro|Kiro]] — AWS 推出的轻量级 SDD IDE
+- [[sdd/entities/Spec-Kit|Spec-Kit]] — GitHub 官方 SDD 工具包
+- [[sdd/entities/Tessl|Tessl]] — 探索 Spec-as-Source 路线的商业化平台

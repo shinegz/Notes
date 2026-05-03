@@ -103,10 +103,9 @@ Compound Engineering 有一个严格的**技能隔离规则**：
 - [[sdd/concepts/Compounding-Knowledge|Compounding Knowledge]] — Compound Engineering 的核心理念
 - [[sdd/concepts/Agentic-Skills|Agentic Skills]] — Skills + Agents 分层架构
 - [[sdd/sources/everyinc-compound-engineering|Compound Engineering README]] — 官方项目介绍
-- [[sdd/entities/Superpowers]] — 同为 Skills 框架，CE 更侧重跨平台转换
-- [[sdd/entities/Gstack]] — 同为 Skills 框架，CE 更侧重知识复利
+- [[sdd/entities/Superpowers|Superpowers]] — 同为 Skills 框架，CE 更侧重跨平台转换
+- [[sdd/entities/Gstack|Gstack]] — 同为 Skills 框架，CE 更侧重知识复利
 
 ## Sources
 
 - [[sdd/sources/everyinc-compound-engineering|Compound Engineering README]] — 官方项目介绍
-- [[sdd/refs/compound-engineering-repo]] — 源码指针

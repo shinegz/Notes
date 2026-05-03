@@ -26,6 +26,6 @@ gstack 是 YC CEO Garry Tan 开源的 Claude Code 技能框架，包含 23 个 o
 
 - [[sdd/sources/obra-superpowers|Superpowers README]] — 同为 Claude Code 技能框架，gstack 更侧重"虚拟团队"角色分工
 - [[sdd/sources/everyinc-compound-engineering|Compound Engineering README]] — 同为 80/20 规划执行比的理念
-- [[sdd/entities/Gstack]] — gstack 项目实体页（含源码分析）
-- [[sdd/concepts/Agentic-Skills]] — Agentic Skills 框架概念页
+- [[sdd/entities/Gstack|Gstack]] — gstack 项目实体页（含源码分析）
+- [[sdd/concepts/Agentic-Skills|Agentic Skills]] — Agentic Skills 框架概念页
 - [[sdd/syntheses/framework-landscape|SDD 框架全景分析]] — 技能框架比较

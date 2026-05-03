@@ -85,11 +85,9 @@ Superpowers 通过**平台专属插件目录**实现多平台支持：
 
 - [[sdd/concepts/Agentic-Skills|Agentic Skills]] — Superpowers 是 Agentic Skills 框架的代表实现
 - [[sdd/concepts/Spec-First|Spec-First]] — 7 步工作流实现了 Spec-First 理念
-- [[sdd/sources/obra-superpowers|Superpowers README]] — 项目官方介绍
-- [[sdd/entities/Gstack]] — 同为 Claude Code 技能框架，设计哲学不同
-- [[sdd/entities/Compound-Engineering]] — 同为 Skills + Agents 架构
+- [[sdd/entities/Gstack|Gstack]] — 同为 Claude Code 技能框架，设计哲学不同
+- [[sdd/entities/Compound-Engineering|Compound Engineering]] — 同为 Skills + Agents 架构
 
 ## Sources
 
 - [[sdd/sources/obra-superpowers|Superpowers README]] — 官方项目介绍
-- [[sdd/refs/superpowers-repo]] — 源码指针

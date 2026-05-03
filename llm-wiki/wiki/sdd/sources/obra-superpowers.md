@@ -24,7 +24,7 @@ Superpowers 是 Jesse Vincent 为 Claude Code 设计的 Agentic Skills Framework
 
 - [[sdd/sources/zhihu-sdd-landscape|知乎：SDD 框架全景]] — 将 Superpowers 定位为"中型/质量优先"场景的最佳选择
 - [[sdd/sources/garrytan-gstack|Gstack README]] — 同为 Claude Code 生态的技能框架，但定位不同
-- [[sdd/entities/Superpowers]] — Superpowers 项目实体页（含源码分析）
-- [[sdd/concepts/Agentic-Skills]] — 可组合技能框架概念页
-- [[sdd/concepts/Test-Driven-Development]] — TDD 在 SDD 中的强制实践
+- [[sdd/entities/Superpowers|Superpowers]] — Superpowers 项目实体页（含源码分析）
+- [[sdd/concepts/Agentic-Skills|Agentic Skills]] — 可组合技能框架概念页
+- [[sdd/concepts/Test-Driven-Development|Test-Driven Development]] — TDD 在 SDD 中的强制实践
 - [[sdd/syntheses/framework-landscape|SDD 框架全景分析]] — 五大框架比较

@@ -7,4 +7,5 @@ wechat_article	微信公众号	optional	url	host:mp.weixin.qq.com	raw/wechat	wec
 youtube_video	YouTube	optional	url	host:youtube.com,youtu.be	raw/transcripts	youtube-transcript	youtube-transcript	install_time	失败则粘贴字幕文本到 raw/<门类>/transcripts/
 zhihu_article	知乎	optional	url	host:zhihu.com	raw/zhihu	baoyu-url-to-markdown	baoyu-url-to-markdown	install_time	失败则复制全文到 raw/<门类>/zhihu/
 xiaohongshu_post	小红书	manual	url	host:xiaohongshu.com,xhslink.com	raw/xiaohongshu	-	-	none	请先从 App 或网页复制内容，再粘贴到 raw/<门类>/xiaohongshu/
+arxiv_pdf	arXiv PDF	core	url	host:arxiv.org	raw/pdfs	-	-	none	arXiv URL 须转为 /pdf/<id>.pdf 后用 curl -L -o raw/<门类>/pdfs/<slug>.pdf 下载
 web_article	网页文章	optional	url	default	raw/articles	baoyu-url-to-markdown	baoyu-url-to-markdown	install_time	失败则复制全文或保存为本地 md 再入 raw/<门类>/articles/
