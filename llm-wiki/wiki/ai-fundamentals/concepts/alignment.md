@@ -4,7 +4,8 @@ type: concept
 tags: [alignment, rlhf, reinforcement-learning]
 sources:
   - ai-fundamentals/sources/instructgpt
-last_updated: 2026-04-24
+  - ai-fundamentals/sources/rlhf-sycophancy
+last_updated: 2026-05-07
 ---
 
 # Alignment
@@ -71,4 +72,5 @@ loss = -E[reward(prompt, response)] + β * KL(π || π_sft)
 ## 来源
 
 - [[ai-fundamentals/sources/instructgpt|InstructGPT]]
+- [[ai-fundamentals/sources/rlhf-sycophancy|RLHF Sycophancy]] — RLHF 副作用：谄媚行为放大
 - [[ai-fundamentals/concepts/direct-preference-optimization|DPO]] — 偏好优化的简化方法

@@ -24,6 +24,20 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 
 ### Prompt Engineering
 - [[ai-fundamentals/sources/openai-prompt-engineering|OpenAI Prompt Engineering]] — 官方 Prompt 最佳实践
+- [[ai-fundamentals/sources/anthropic-context-engineering|Anthropic Context Engineering]] — Prompt → Context 范式演进
+- [[ai-fundamentals/sources/prompt-engineering-frameworks-parloa|Prompt Engineering Frameworks]] — 8 大结构化框架（CO-STAR、CRISPE 等）
+- [[ai-fundamentals/sources/openai-prompt-guidance|OpenAI Help Center Best Practices]] — 实操策略与参数调优
+- [[ai-fundamentals/sources/prompt-engineering-2025-aakashg|Prompt Engineering in 2025]] — 产品实践与成本经济学
+- [[ai-fundamentals/sources/prompt-engineering-survey|Prompt Engineering Survey]] — 41 种 Prompt 技术系统性综述
+- [[ai-fundamentals/sources/prompt-from-first-principles-dev|Prompt From First Principles]] — 从 LLM 机制推导 Prompt 技巧
+
+### 上下文与注意力
+- [[ai-fundamentals/sources/lost-in-the-middle|Lost in the Middle]] — U 形位置偏差：中间信息召回率最低
+- [[ai-fundamentals/sources/context-dilution|Context Dilution]] — 注意力零和与上下文稀释
+- [[ai-fundamentals/sources/longllmlingua|LongLLMLingua]] — 问题感知 Prompt 压缩
+
+### 对齐与行为
+- [[ai-fundamentals/sources/rlhf-sycophancy|RLHF Sycophancy]] — RLHF 放大谄媚行为的机制分析
 
 ### 效率优化
 - [[ai-fundamentals/sources/flash-attention|Flash Attention]] — IO感知的精确注意力
@@ -73,6 +87,7 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 - [[ai-fundamentals/concepts/direct-preference-optimization|DPO]]
 - [[ai-fundamentals/concepts/lora|LoRA]]
 - [[ai-fundamentals/concepts/prompt-engineering|Prompt Engineering]]
+- [[ai-fundamentals/concepts/context-engineering|Context Engineering]]
 - [[ai-fundamentals/concepts/context-window|Context Window]]
 - [[ai-fundamentals/concepts/mixture-of-experts|Mixture of Experts]]
 - [[ai-fundamentals/concepts/llm-benchmark|LLM Benchmark]]
@@ -85,6 +100,7 @@ AI 理论基础：历史脉络、重要论文、技术演进、LLM 原理。
 
 ## 综合文
 
+- [[ai-fundamentals/syntheses/prompt-from-principles|从大模型原理出发谈 Prompt]] — 五条底层原理推导 Prompt 技巧为什么有效
 - [[ai-fundamentals/syntheses/token-lifecycle|一个 Token 的一生]] — 用图文故事解释 LLM 运行原理
 
 ## 参见

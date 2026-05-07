@@ -1,3 +1,36 @@
+## [2026-05-07] ingest | Source 摘要页补建（7 篇）
+
+- **Sources**（7）：lost-in-the-middle、icl-bayesian-inference、prompt-engineering-survey、longllmlingua、rlhf-sycophancy、context-dilution、prompt-from-first-principles-dev
+- 更新 `wiki/ai-fundamentals/index.md`（新增「上下文与注意力」「对齐与行为」分组）
+- 更新 `wiki/ai-fundamentals/syntheses/prompt-from-principles.md` 的 sources 引用，正文内链改指向新 source 页
+
+## [2026-05-07] ingest | 从大模型原理出发谈 Prompt
+
+- 新增 `wiki/ai-fundamentals/syntheses/prompt-from-principles.md`
+- **体裁**：框架综合（原理 → 技巧映射）
+- **核心内容**：从自回归预测、注意力机制、In-Context Learning、对齐训练、Context Window 五条底层原理推导 Prompt 技巧的有效性
+- **素材**：Collect 7 个新素材（5 PDF + 2 articles）
+  - PDFs：lost-in-the-middle、icl-bayesian-inference、prompt-engineering-survey、longllmlingua、rlhf-sycophancy
+  - Articles：prompt-from-first-principles-dev、context-dilution
+- 复用已有 wiki 内 11 个 source/concept 页
+- 更新 `wiki/ai-fundamentals/index.md`、`wiki/index.md`、`wiki/overview.md`、`wiki/log.md`
+
+## [2026-05-07] delete | Prompt 写作流程综合页
+
+- 删除 `wiki/ai-fundamentals/syntheses/prompt-writing-workflow.md`
+- 原因：内容被整合入 [[ai-fundamentals/syntheses/prompt-from-principles|从大模型原理出发谈 Prompt]] 原理导向综合页，避免重复
+- 清理引用：`wiki/index.md`、`wiki/ai-fundamentals/index.md`、`prompt-from-principles.md` 的关联概念
+
+## [2026-05-06] ingest | Prompt Engineering 系统理论补充
+
+- **Collect**：7 个新素材落盘
+  - Articles（4）：anthropic-context-engineering、openai-prompt-guidance、prompt-engineering-frameworks-parloa、prompt-engineering-2025-aakashg
+  - PDFs（3）：anthropic-prompt-best-practices、costar-a-framework、prompt-engineering-methodology
+- **Sources**：4 篇 source 摘要页
+  - anthropic-context-engineering、openai-prompt-guidance、prompt-engineering-frameworks-parloa、prompt-engineering-2025-aakashg
+- **Concepts**：更新 prompt-engineering 概念页（新增结构化框架、Context Engineering 演进、6 项核心原则）；新建 context-engineering 概念页
+- 更新 `wiki/ai-fundamentals/index.md`、`wiki/overview.md`、`wiki/log.md`
+
 ## [2026-05-03] ingest | agent/core-architecture 补充遗漏 source + 新增 concepts
 
 - **补充 ingest**：`openclaw-repo.md` → `wiki/agent/core-architecture/sources/openclaw-repo.md`
